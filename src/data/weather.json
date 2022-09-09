@@ -1,0 +1,32 @@
+[
+  {
+    "Date": "2022-08-31T16:35:59.4398966+12:00",
+    "TemperatureC": -3,
+    "TemperatureF": 27,
+    "Summary": "Freezing"
+  },
+  {
+    "Date": "2022-09-01T16:35:59.4399133+12:00",
+    "TemperatureC": -18,
+    "TemperatureF": 0,
+    "Summary": "Warm1"
+  },
+  {
+    "Date": "2022-09-02T16:35:59.4399137+12:00",
+    "TemperatureC": -18,
+    "TemperatureF": 0,
+    "Summary": "Warm2"
+  },
+  {
+    "Date": "2022-09-03T16:35:59.439914+12:00",
+    "TemperatureC": 4,
+    "TemperatureF": 39,
+    "Summary": "Mild"
+  },
+  {
+    "Date": "2022-09-04T16:35:59.4399143+12:00",
+    "TemperatureC": 46,
+    "TemperatureF": 114,
+    "Summary": "Balmy"
+  }
+]

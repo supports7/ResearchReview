@@ -1,0 +1,24 @@
+{
+  "name": "research-review",
+  "version": "1.0.0",
+  "private": true,
+  "description": "research-review",
+  "author": "SARAH SMITH",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "@netlify/functions": "^1.2.0",
+    "axios": "^0.27.2",
+    "gatsby": "^4.21.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  }
+}
