@@ -127,6 +127,7 @@ const links = [
 
 const IndexPage = () => {
   const [ weathers, setWeathers] = useState([]);
+  const [ showWeather, setShowWeather] = useState(false);
   
   useEffect(() => {
     axios.get('https://sonova.s05.system7.co.nz/api/weatherforecast').then(
@@ -145,7 +146,7 @@ const IndexPage = () => {
   }, [weathers]);
   
   const onClickFunction = () => {
-    console.log("TRIGGERED ON CLICK")
+    setShowWeather(!showWeather);
   };
 
   return (
@@ -163,7 +164,7 @@ const IndexPage = () => {
       </p>
       <ul style={listStyles}>
 
-        {weathers.map((weather, index) => (
+        {showWeather && weathers.map((weather, index) => (
           <li key={index}>
             <span>
               <Link
