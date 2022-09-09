@@ -10,7 +10,7 @@ const DatePage = ({pageContext}) => {
 
   return (
     <main>
-      <h1>DATE PAGE {weather.Summary}  {weather.TemperatureF}</h1>
+      <h1>DATE PAGE {weather && weather.Summary}  {weather && weather.TemperatureF}</h1>
       <Link to="/">Back to Home</Link>
       <p></p>
     </main>
