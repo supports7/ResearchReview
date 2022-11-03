@@ -11,6 +11,9 @@ module.exports = {
       twitter: `kylemathews`,
     },
   },
+  flags: {
+    DEV_SSR: true
+  },
   plugins: [
     `gatsby-plugin-image`,
     {
