@@ -38,9 +38,9 @@ const BlogIndex = ({ data, location }) => {
               >
                 <header>
                   <h2>
-                    <Link to={post.fields.slug} itemProp="url">
+                    {/* <Link to={post.fields.slug} itemProp="url">
                       <span itemProp="headline">{title}</span>
-                    </Link>
+                    </Link> */}
                   </h2>
                   <small>{post.frontmatter.date}</small>
                 </header>

@@ -1,15 +1,17 @@
-import * as React from "react"
-import { Link, graphql } from "gatsby"
+import * as React from "react";
+// import { Link, graphql } from "gatsby"
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+// import Bio from "../components/bio"
+// import Layout from "../components/layout"
+// import Seo from "../components/seo"
 
-const ClinicalAreaTemplate = ({ pageContext }) => {
+const ClinicalAreaTemplate = ({
+  location,
+  pageContext
+}) => {
 
-//   const siteTitle = site.siteMetadata?.title || `Title`
-  const siteTitle = `Title`
-  console.log(pageContext.reviewData);
+  // const siteTitle = site.siteMetadata?.title || `Title`
+  // const siteTitle = `Title`
 
   return (
     <div>
@@ -18,7 +20,7 @@ const ClinicalAreaTemplate = ({ pageContext }) => {
       {pageContext.reviewData && pageContext.reviewData.map((review, index) => {
        return (
           <div key={index}>
-            <h2>Review - {review.name}</h2>
+            <h2>Review - {review.name && review.name}</h2>
           </div>
        ) 
       })}

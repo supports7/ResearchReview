@@ -5,7 +5,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
   // Define a template for blog post
-  const clinicalAreaTemplate = path.resolve(`./src/templates/clinical-area.js`)
+  const clinicalAreaT = path.resolve(`./src/templates/clinical-area.js`)
 
   // Get all the content from Clinical Areas endpoint
   const result = await graphql(
@@ -41,66 +41,64 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // `context` is available in the template as a prop and as a variable in GraphQL
   if (clinicalAreas.length > 0) {
     clinicalAreas.forEach(async (clinicalArea, index) => {
-      if (clinicalArea.node.parent_Id != null) {
-        let str = clinicalArea.node.name.replace(/\s/g, "-")
-        str = str.replace(/[{()}]/g, "")
+      let str = clinicalArea.node.name.replace(/\s/g, "-")
+      str = str.replace(/[{()}]/g, "")
+
+      // if (clinicalArea.node.parent_Id != null) {
         
         createPage({
-          endpointId: clinicalArea.node.endpointId,
-          path: `/${str}/`,
-          component: clinicalAreaTemplate,
+          // endpointId: clinicalArea.node.endpointId,
+          path: `/clinical-area/${str}/`,
+          component: clinicalAreaT,
           context: {
             id: clinicalArea.node.id,
-            endpointId: clinicalArea.node.endpointId,
-            name: clinicalArea.node.name,
-            parent_Id: clinicalArea.node.parent_Id,
-            inactive: clinicalArea.node.inactive,
-            clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
+            // endpointId: clinicalArea.node.endpointId,
+            // name: clinicalArea.node.name,
+            // parent_Id: clinicalArea.node.parent_Id,
+            // inactive: clinicalArea.node.inactive,
+            // clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
           },
         })
-      } else {
-        let str = clinicalArea.node.name.replace(/\s/g, "-")
-        str = str.replace(/[{()}]/g, "")
+      // } else {
+      //   const reviewResult = await graphql(
+      //     `
+      //   {
+      //     allRestApiApiReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.node.endpointId}"}}) {
+      //       nodes {
+      //         endpointId
+      //         name
+      //         clinical_Area_Id
+      //         modified_Time
+      //       }
+      //     }
+      //   }
+      //   `
+      //   )
 
-        const reviewResult = await graphql(
-          `
-        {
-          allRestApiApiReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.node.endpointId}"}}) {
-            nodes {
-              endpointId
-              name
-              clinical_Area_Id
-              modified_Time
-            }
-          }
-        }
-        `
-        )
+      //   if (reviewResult.errors) {
+      //     reporter.panicOnBuild(
+      //       `There was an error loading your reviews`,
+      //       reviewResult.errors
+      //     )
+      //     return
+      //   }
+      //   const reviewData = reviewResult.data.allRestApiApiReviews.nodes
 
-        if (reviewResult.errors) {
-          reporter.panicOnBuild(
-            `There was an error loading your reviews`,
-            reviewResult.errors
-          )
-          return
-        }
-        const reviewData = reviewResult.data.allRestApiApiReviews.nodes
-
-        createPage({
-          endpointId: clinicalArea.node.endpointId,
-          path: `/${str}/`,
-          component: clinicalAreaTemplate,
-          context: {
-            id: clinicalArea.node.id,
-            endpointId: clinicalArea.node.endpointId,
-            name: clinicalArea.node.name,
-            parent_Id: clinicalArea.node.parent_Id,
-            inactive: clinicalArea.node.inactive,
-            clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
-            reviewData: reviewData,
-          },
-        })
-      }
+      //   createPage({
+      //     endpointId: clinicalArea.node.endpointId,
+      //     path: `/clinical-area/${str}/`,
+      //     component: clinicalArea,
+      //     context: {
+      //       id: clinicalArea.node.id,
+      //       endpointId: clinicalArea.node.endpointId,
+      //       name: clinicalArea.node.name,
+      //       parent_Id: clinicalArea.node.parent_Id,
+      //       inactive: clinicalArea.node.inactive,
+      //       clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
+      //       // reviewData: reviewData,
+      //     },
+      //   })
+      // }
     })
   }
 }

@@ -1,11 +1,11 @@
-import * as React from "react";
+import React from "react";
 import { Navbar, Container, Nav, NavDropdown, Row, Col } from "react-bootstrap";
-import logoResearchReview from "../images/logos/RRAUS leader no subs.png";
+// import logoResearchReview from "../images/logos/RRAUS leader no subs.png";
 import { Link } from "gatsby";
 import SearchIcon from '@mui/icons-material/Search';
 // import Cookies from "universal-cookie";
 
-export default function ResearchReviewNavbar() {
+const ResearchReviewNavbar = () => {
   //   const cookies = new Cookies();
   //   const loginToken = cookies.get("LoginToken");
   const handleSubmit = async event => {
@@ -37,7 +37,7 @@ export default function ResearchReviewNavbar() {
           <Col xs={5}>
             <div className="navbar-logo">
               <Link className="navbar-brand" to="/">
-                <img src={logoResearchReview} className="img-fluid" />
+                {/* <img src={logoResearchReview} className="img-fluid" /> */}
               </Link>
             </div>
           </Col>
@@ -132,3 +132,5 @@ export default function ResearchReviewNavbar() {
     </div>
   )
 }
+
+export default ResearchReviewNavbar
