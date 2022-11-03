@@ -44,22 +44,22 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       let str = clinicalArea.node.name.replace(/\s/g, "-")
       str = str.replace(/[{()}]/g, "")
 
-      // if (clinicalArea.node.parent_Id != null) {
+      // if (clinicalArea.node.parent_Id != null && str) {
         
         createPage({
-          // endpointId: clinicalArea.node.endpointId,
+          endpointId: clinicalArea.node.endpointId,
           path: `/clinical-area/${str}/`,
           component: clinicalAreaT,
           context: {
             id: clinicalArea.node.id,
-            // endpointId: clinicalArea.node.endpointId,
-            // name: clinicalArea.node.name,
-            // parent_Id: clinicalArea.node.parent_Id,
-            // inactive: clinicalArea.node.inactive,
-            // clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
+            endpointId: clinicalArea.node.endpointId,
+            name: clinicalArea.node.name,
+            parent_Id: clinicalArea.node.parent_Id,
+            inactive: clinicalArea.node.inactive,
+            clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
           },
         })
-      // } else {
+      // } else if (str){
       //   const reviewResult = await graphql(
       //     `
       //   {
@@ -95,7 +95,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       //       parent_Id: clinicalArea.node.parent_Id,
       //       inactive: clinicalArea.node.inactive,
       //       clinical_Area_Ref: clinicalArea.node.clinical_Area_Ref,
-      //       // reviewData: reviewData,
+      //       reviewData: reviewData,
       //     },
       //   })
       // }
