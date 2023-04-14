@@ -278,7 +278,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
     return
   }
-  
+
 
 
   const clinicalAreas = clinicalAreasResult.data.allZohoClinicalAreas.nodes
@@ -341,45 +341,47 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
                 let issues = [];
                 issues = await getIssues(review.alternative_id);
-                
+
                 let podcasts = [];
                 podcasts = await getPodcasts(review.alternative_id);
-                
+
                 let writersByReview = [];
                 writersByReview = await getWritersByReview(review.alternative_id);
 
-                createPage({
-                  path: `/podcasts/${reviewUrlTemp}/`,
-                  component: podcastsTemp,
-                  context: {
-                    podcasts: podcasts,
-                    review: review,
-                    advertisements: advertisementsContent,
-                    tempUrlPath: `/podcasts/${reviewUrlTemp}/`
-                  },
-                })
-
-                podcasts.forEach(async (podcast) => {
-                  
-                  let podcastUrlTemp = podcast.title.toLowerCase();
-                  podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
-
+                if (podcasts) {
                   createPage({
-                    path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
-                    component: podcastDetailTemp,
+                    path: `/podcasts/${reviewUrlTemp}/`,
+                    component: podcastsTemp,
                     context: {
-                      podcast: podcast,
+                      podcasts: podcasts,
                       review: review,
                       advertisements: advertisementsContent,
+                      tempUrlPath: `/podcasts/${reviewUrlTemp}/`
                     },
                   })
-                })
+
+                  podcasts.forEach(async (podcast) => {
+
+                    let podcastUrlTemp = podcast.title.toLowerCase();
+                    podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
+
+                    createPage({
+                      path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                      component: podcastDetailTemp,
+                      context: {
+                        podcast: podcast,
+                        review: review,
+                        advertisements: advertisementsContent,
+                      },
+                    })
+                  })
+                }
 
                 if (issues.length > 0) {
                   issues.forEach(async (issue) => {
                     let articles = [];
                     articles = await getArticles(issue.id);
-                    
+
                     createPage({
                       path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
                       component: issueTemp,
