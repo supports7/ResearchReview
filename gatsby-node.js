@@ -54,7 +54,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   }
 
   // Get all the content from Clinical Areas endpoint
-  const clinicalAreasResult = await graphql(
+  const clinicalAreasPromise = graphql(
     `
       {
         allZohoClinicalAreas {
@@ -69,9 +69,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const writerResult = await graphql(
+const writerPromise = graphql(
     `
       {
         allZohoWriters {
@@ -89,9 +89,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const featuredArticleResult = await graphql(
+const featuredArticlePromise = graphql(
     `
       {
         allZohoFeaturedArticle {
@@ -107,9 +107,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const partnersResult = await graphql(
+const partnersPromise = graphql(
     `
       {
         allZohoPartners {
@@ -125,9 +125,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const modulesResult = await graphql(
+const modulesPromise = graphql(
     `
       {
         allZohoModules {
@@ -142,9 +142,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const homeResult = await graphql(
+const homePromise = graphql(
     `
       {
         allZohoHome {
@@ -172,9 +172,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const joinResult = await graphql(
+const joinPromise = graphql(
     `
       {
         allZohoJoin {
@@ -199,9 +199,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
 
-  const advertisementsResult = await graphql(
+const advertisementsPromise = graphql(
     `
       {
         allZohoAdvertisements {
@@ -220,7 +220,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-  )
+);
+
+const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult, modulesResult, homeResult, joinResult, advertisementsResult] = await Promise.all([clinicalAreasPromise, writerPromise, featuredArticlePromise, partnersPromise, modulesPromise, homePromise, joinPromise, advertisementsPromise]);
 
   if (clinicalAreasResult.errors) {
     reporter.panicOnBuild(
