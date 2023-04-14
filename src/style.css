@@ -27,13 +27,13 @@
   --spacing-20: 5rem;
   --spacing-24: 6rem;
   --spacing-32: 8rem;
-  --fontFamily-sans: Montserrat, system-ui, -apple-system, BlinkMacSystemFont,
+  --fontFamily-sans: 'Gotham Book', Montserrat, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --fontFamily-serif: "Merriweather", "Georgia", Cambria, "Times New Roman",
+  --fontFamily-serif: 'Gotham Book', "Merriweather", "Georgia", Cambria, "Times New Roman",
     Times, serif;
-  --font-body: var(--fontFamily-serif);
-  --font-heading: var(--fontFamily-sans);
+  --font-body: 'Gotham Book';
+  --font-heading: 'Gotham Bold';
   --fontWeight-normal: 400;
   --fontWeight-medium: 500;
   --fontWeight-semibold: 600;
@@ -43,8 +43,8 @@
   --fontSize-root: 16px;
   --lineHeight-none: 1;
   --lineHeight-tight: 1.1;
-  --lineHeight-normal: 1.5;
-  --lineHeight-relaxed: 1.625;
+  --lineHeight-normal: 16px;
+  --lineHeight-relaxed: 16px;
   /* 1.200 Minor Third Type Scale */
   --fontSize-0: 0.833rem;
   --fontSize-1: 1rem;
@@ -64,6 +64,31 @@
 
 /* HTML elements */
 
+@font-face {
+  font-family: 'Gotham Book';
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+  font-named-instance: 'Regular';
+  src: url(/fonts/GothamBook.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Gotham Book Italic';
+  font-weight: 400;
+  font-display: swap;
+  font-style: italic;
+  font-named-instance: 'Italic';
+  src: url(/fonts/GothamBookItalic.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Gotham Bold';
+  font-weight: bold;
+  font-display: swap;
+  font-style: bold;
+  font-named-instance: 'Bold';
+  src: url(/fonts/GothamBold.woff2) format("woff2");
+}
+
 *,
 :after,
 :before {
@@ -78,9 +103,16 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
   font-size: var(--fontSize-1);
   color: var(--color-text);
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+em {
+  font-family: 'Gotham Book Italic';
 }
 
 footer {
@@ -106,6 +138,8 @@ h6 {
   margin-bottom: var(--spacing-6);
   line-height: var(--lineHeight-tight);
   letter-spacing: -0.025em;
+  text-transform: uppercase;
+  font-weight: bold !important;
 }
 
 h2,
@@ -334,42 +368,256 @@ a:focus {
 
 
 /* S7 - Research Review Custom Site Wide Styling */
+body {
+  font-family: 'Gotham Book';
+  line-height: 16px;
+}
+
+a.btn {
+  border-radius: 25px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 5px 20px;
+  min-width: 120px;
+}
+
+a.btn.btn-primary {
+  background-color: #1cb2a9;
+  border: 1px solid #1cb2a9;
+}
+
+a.btn.btn-primary:hover {
+  background-color: white;
+  color: #1cb2a9;
+  border: 1px solid #1cb2a9;
+}
+
+a.btn.btn-primary:active {
+  background-color: white !important;
+  color: #1cb2a9 !important;
+  border: 1px solid #1cb2a9 !important;
+}
+
+button.btn {
+  border-radius: 25px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 5px 20px;
+  min-width: 120px;
+}
+
+button.btn.btn-primary {
+  background-color: #1cb2a9;
+  border: 1px solid #1cb2a9;
+}
+
+button.btn.btn-primary:hover {
+  background-color: white;
+  color: #1cb2a9;
+  border: 1px solid #1cb2a9;
+}
+
+button.btn.btn-primary:active {
+  background-color: white !important;
+  color: #1cb2a9 !important;
+  border: 1px solid #1cb2a9 !important;
+}
+
+a.btn.btn-secondary {
+  background-color: #fff;
+  border: 1px solid black;
+  color: black;
+}
+
+a.btn.btn-secondary:hover {
+  background-color: black;
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.full-width-button .load-more-button {
+  width: 100%;
+  background-color: #bfbebe !important;
+  border: 1px solid #bfbebe !important;
+  color: white !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.full-width-button .load-more-button:hover {
+  background-color: white !important;
+  border: 1px solid #bfbebe !important;
+  color: #bfbebe !important;
+}
+
+.small-green-text {
+  color: #1cb2a9;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+section {
+  padding-top: 100px;
+}
+
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.full-width-button {
+  width: 100%;
+}
+
+/* navbar styling */
+
+.full-navbar {
+  padding-bottom: 20px;
+  border-bottom: 5px solid black;
+}
+
+.navbar-brand img{
+  width: 350px;
+  padding-top: 25px;
+}
+
 .navbar-login {
   margin-top: 80px;
 }
 
+.navbar-expand .navbar-nav {
+  justify-content: space-around;
+}
+
+.navbar-row{
+  background-color: #d8dae7;
+  border-radius: 25px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 10px !important;
+  margin-bottom: 20px !important;
+}
+
+.navbar-row .navbar-expand {
+  padding: 0;
+}
+
+#basic-navbar-nav {
+  width: 100%;
+}
+
+#basic-navbar-nav .navbar-nav {
+  width: 100%;
+}
+
+.navbar-row .navbar-nav a {
+  color: black;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 13px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 25px;
+}
+.navbar-row .navbar-nav a:hover {
+  background-color: black;
+  color: white; 
+}
 .navbar-login .login-form-title-div p {
   font-weight: bold;
   text-transform: uppercase;
   float: right;
-  margin-top: 10px;
+  margin-top: 15px;
   margin-bottom: 0;
+}
+
+.navbar-sign-up-div {
+  border-radius: 25px;
+  background-color: #1cb2a9;
+}
+
+.navbar-sign-up-div .navbar-sign-up {
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 13px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .navbar-login input {
   border: 1px solid #d9d9d9;
-  border-radius: 20px;
+  border-radius: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.navbar-login input:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .navbar-login .login-form-password-div {
   position: relative;
 }
 
-.navbar-login .login-form-password-div button{
+.navbar-login .login-form-password-div button.login-form-submit{
   position: absolute;
   top: 0;
   right: 0;
-  border-radius: 20px;
-  padding: 19px 14px;
+  border-radius: 25px;
+  padding: 11px 15px;
   line-height: 0px;
   background-color: #1cb2a9;
   border: none;
   color: white;
 }
 
+.navbar-login .login-form-password-div div.login-form-submit{
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 25px;
+  padding: 15px 15px;
+  line-height: 0px;
+  background-color: #1cb2a9;
+  border: none;
+  color: white;
+}
+
+.navbar-login .login-form-password-div .login-form-submit span{
+  display: inline;
+}
+
+.navbar-login .login-form-password-div .login-form-submit svg{
+  width: 15px;
+}
+
 .navbar-login .form-control::placeholder {
   color: #1cb2a9;
   font-style: italic;
+}
+
+.login-form-title-div a.logout-button {
+  margin-left: 5px;
+  text-decoration: none;
+  padding: 12px 20px;
+  float: right;
+}
+
+.login-form-title-div a.profile-button {
+  min-width: 0;
+  margin-left: 5px;
+  padding: 12px 20px;
+  float: right;
 }
 
 .search-form {
@@ -378,9 +626,18 @@ a:focus {
 
 .search-form input {
   border: 1px solid #d9d9d9;
-  border-radius: 20px;
+  border-radius: 25px;
   padding-left: 40px;
   color: #1cb2a9;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 0 !important;
+}
+
+.search-form input:focus {
+  outline: none;
+  box-shadow: none;
+
 }
 
 .search-form .form-control::placeholder {
@@ -394,10 +651,682 @@ a:focus {
 
 .search-form .search-form-input-div .search-form-submit {
   position: absolute;
-  top: 0;
+  top: 4px;
   left: 0;
   border: none;
   background: none;
   color: #1cb2a9;
   padding: 6px 10px;
+}
+
+/* BANNER STYLING */
+
+.banner-content {
+  padding-top: 300px;
+}
+
+.banner-content h1{
+  font-size: 60px;
+  color: white;
+}
+
+/* FOOTER STYLING */
+footer {
+  border-top: 2px solid #d8dae7;
+}
+
+footer .footer-brand {
+  width: 360px;
+}
+
+footer .footer-col-padding {
+  padding-top: 26px;
+}
+
+footer .footer-social-media-links span a{
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  padding-right: 20px;
+} 
+
+footer .footer-col-ul ul li {
+  margin-bottom: 0px;
+  text-decoration: underline;
+}
+
+footer .footer-col-ul ul li a {
+  color: black;
+}
+
+footer .footer-col-ul ul li::marker {
+  font-size: 20px;
+}
+
+@media only screen and (max-width: 425px) {
+  .footer-logo {
+    
+  }
+}
+
+/* Site Styles */
+.research-review-section-line {
+  border-bottom: 1px solid black;
+  margin-bottom: 30px !important;
+  margin-top: 0 !important;
+}
+
+.research-review-section-line-box {
+  width: 100px;
+  height: 10px;
+  background-color: black;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.nobreaking {
+  /* This is the default, you don't need to
+     explicitly declare it unless overriding
+     another declaration */
+  white-space: nowrap; 
+}
+
+/* Home Page */
+.home-page-featured-section .featured-section-image {
+  position: relative;
+}
+
+.home-page-featured-section .featured-section-image .featured-image-corner-triangle {
+  position: absolute;
+  transform: rotate(-45deg);
+  left: -65px;
+  top: -15px;
+  border-left: 100px solid transparent;
+  border-right: 100px solid transparent;
+  border-bottom: 100px solid yellow;
+}
+
+.home-page-featured-section .featured-section-image .featured-image-corner-triangle .featured-image-corner-text {
+  position: absolute;
+  left: -45px;
+  top: 60px;
+  font-weight: bold;
+  font-family: "Gothem";
+}
+
+.home-page-featured-section .featured-section-content .featured-paragraph-text {
+  font-size: 14px;
+  line-height: 15px;
+}
+
+.home-page-featured-section .featured-section-content .btn-secondary {
+  margin-right: 10px;
+}
+
+.home-page-connect-section .connect-section-main-div {
+  min-height: 700px;
+}
+
+.home-page-connect-section .connect-section-main-div .connect-section-content {
+  position: relative;
+  min-height: 400px;
+}
+
+
+@media only screen and (max-width: 767px) {
+  .connect-section-main-div {
+    padding-top: 50px;
+  }
+}
+
+.connect-section-main-div .connect-section-content {
+  padding-top: 20px;
+}
+
+.connect-section-main-div .connect-section-content .connect-section-list {
+  padding-left: 18px;
+}
+
+.connect-section-main-div .connect-section-content .connect-section-list .connect-section-list-item {
+  margin-bottom: 0;
+  color: #1cb2a9;
+  text-decoration: underline;
+}
+
+.connect-section-main-div .connect-section-content .connect-section-list .connect-section-list-item a {
+  color: #1cb2a9;
+}
+
+.home-page-connect-section .connect-section-main-div .connect-section-content .btn {
+  position: absolute;
+  bottom: 0;
+  padding: 5px 150px;
+}
+
+.connect-section-main-div .connect-section-content .btn {
+  width: 100%;
+}
+
+.connect-section-main-div .connect-section-content .latest-videos {
+  padding-top: 20px;
+}
+
+.connect-section-main-div .connect-section-content .latest-videos .latest-video {
+  padding-top: 10px;
+  border-bottom: 1px solid black;
+}
+
+.connect-section-main-div .connect-section-content .latest-videos .latest-video a {
+  color: black !important;
+}
+
+.connect-section-main-div .connect-section-content .latest-videos .latest-video a {
+  text-decoration: none !important;
+}
+
+.connect-section-main-div .connect-section-content .latest-videos .latest-video a:hover h4{
+  text-decoration: underline !important;
+}
+
+.home-page-ad-section .home-page-ad-section-image {
+  position: relative;
+}
+
+.home-page-ad-section .home-page-ad-section-image .home-page-ad-section-link {
+  position: absolute;
+  bottom: 10px;
+  left: 50px;
+  width: 100%;
+}
+
+.home-page-ad-section .home-page-ad-section-image .home-page-ad-section-link .btn {
+  padding: 5px 20px;
+  width: 70%;
+}
+
+@media only screen and (max-width: 575px) {
+  .home-page-ad-section .home-page-ad-section-image {
+    padding-top: 20px;
+  }
+
+  .home-page-ad-section .home-page-ad-section-image .home-page-ad-section-link {
+    left: 5px;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .home-page-ad-section .home-page-ad-section-image .home-page-ad-section-link {
+    text-align: center;
+  }
+}
+
+.home-page-about-section {
+  padding-bottom: 100px;
+}
+
+.home-page-about-section .featured-paragraph-text {
+  padding-right: 100px;
+}
+
+.full-screen-ad .full-screen-ad-content h2 {
+  color: white;
+  font-size: 50px;
+}
+
+.full-screen-ad .full-screen-ad-content {
+  width: 450px;
+  color: white;
+}
+
+.full-screen-ad .full-screen-ad-content .btn {
+  padding: 10px 120px;
+  margin-top: 20px;
+}
+
+.supporters-section {
+  background-color: #1cb2a9;
+  padding-bottom: 100px;
+}
+
+.supporters-section .supporters-heading {
+  text-align: center;
+  color: white;
+  font-size: 30px;
+  margin-bottom: 100px;
+}
+
+.join-research-review-form-section {
+  padding-bottom: 100px;
+}
+
+.join-research-review-form-section .join-rr-form {
+  padding-right: 130px;
+  padding-top: 50px;
+}
+
+@media only screen and (max-width: 767px) {
+  .join-research-review-form-section .join-rr-form {
+    padding-right: 0;
+    padding-top: 0;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .join-research-review-form-section .img-fluid {
+    padding-top: 30px;
+  }
+}
+
+.join-research-review-form-section .join-rr-form input {
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  margin-bottom: 25px;
+  color: black;
+
+}
+
+.join-research-review-form-section .join-rr-form input:focus {
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  margin-bottom: 25px;
+  outline: none;
+}
+
+.join-research-review-form-section .join-rr-form input::placeholder {
+  /* color: black; */
+  font-family: "Gotham Book Italic";
+  font-size: 20px;
+}
+
+.join-research-review-form-section .join-rr-form button {
+  margin-top: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Clinical Areas List */
+.clinical-areas-area-selection, .clinical-areas-top-content {
+  padding-top: 40px;
+}
+
+.clinical-area-section-main-div {
+  background-color: #cdf8ef;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-bottom: 40px;
+}
+
+.clinical-area-section-main-div .clinical-area-section-top-div {
+  border-radius: 50px;
+  background-color: #1cb2a9;
+}
+
+.clinical-area-section-main-div .clinical-area-section-top-div h3 {
+  margin-bottom: 0;
+  margin-left: 20px;
+  padding-top: 8px;
+  height: 50px;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* .clinical-area-section-main-div .clinical-area-section-middle-div {
+  background-color: #cdf8ef;
+} */
+
+.clinical-area-section-main-div .clinical-area-section-second-middle-div {
+  background-color: #d1d1d1;
+}
+
+.clinical-area-section-main-div .clinical-area-section-bottom-div {
+  background-color: #ededed;
+}
+
+.bottom-clinical-area-section {
+  border-bottom-left-radius: 20px;  
+  border-bottom-right-radius: 20px;
+}
+
+.pill-level-1 {
+  background-color: #cdf8ef;
+}
+
+.pill-level-2 {
+  background-color: #d1d1d1;
+}
+
+.pill-level-3 {
+  background-color: #ededed;
+}
+
+.clinical-area-pill {
+  background-color: white;
+  margin: 25px 15px;
+  border-radius: 50px;
+  padding: 10px 0;
+}
+
+.clinical-area-pill p {
+  padding: 10px;
+}
+
+.clinical-area-pill:hover, .clinical-area-pill.active {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.clinical-area-pill p {
+  margin: 0 15px;
+}
+
+.clinical-area-pill p span {
+  float: right;
+}
+
+.promoted-content-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Writer List */
+
+.writers-list-area-selection .writer {
+  padding-bottom: 40px;
+}
+
+.writers-list-area-selection .writer .writer-image {
+  min-height: 300px;
+}
+
+.writers-list-area-selection .writer .writer-content {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.writers-list-area-selection .writer .writer-content h3 {
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.writers-list-area-selection .writer .writer-content p {
+  margin-bottom: 20px;
+}
+
+.writer-content .btn.btn-primary {
+  padding: 5px 100px;
+}
+
+/* Contact Us Page */
+.contact-content-right-side p {
+  font-size: 14px;
+}
+
+.contact-content {
+  margin-bottom: 20px;
+}
+
+.contact-content-right-side .underline {
+  margin-bottom: 5px;
+}
+
+.contact-content p {
+  margin-bottom: 0;
+}
+
+.contact-us-left-side {
+  padding-right: 200px;
+}
+
+.contact-us-form {
+  padding-top: 30px;
+}
+
+.contact-us-form input {
+  width: 100%;
+  margin-bottom: 25px;
+  border: none;
+  background-color: #f2f2f2;
+  width: 100%;
+  color: black;
+  padding: 10px 20px;
+}
+
+.contact-us-form textarea {
+  width: 100%;
+  margin-bottom: 25px;
+  border: none;
+  background-color: #f2f2f2;
+  width: 100%;
+  color: black;
+  padding: 10px 20px;
+}
+
+.contact-us-form button {
+  padding: 10px 100px;
+}
+
+.contact-us-other-sites-section {
+  padding-bottom: 100px;
+}
+
+.contact-us-other-sites-section .site-content {
+  padding-top: 10px;
+}
+
+.contact-us-other-sites-section .site-content a {
+  padding: 10px 100px;
+  text-transform: none;
+}
+
+/* Join research review page */
+
+.join-research-review .join-research-review-popup-box {
+  background: black;
+  padding: 10px;
+  text-align: center;
+}
+
+.join-research-review .join-research-review-heading {
+  color: white;
+  margin-bottom: 0;
+}
+
+.join-research-review .join-research-review-col {
+  border: 5px solid black;
+  background-color: white;
+  padding: 0;
+}
+
+.join-research-review .join-research-review-form{
+  padding: 40px 100px;
+}
+
+.join-research-review .join-research-review-form input {
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  margin-bottom: 25px;
+  color: black;
+  border-radius: 0;
+}
+
+.join-research-review .join-research-review-form input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.join-research-review .join-research-review-form .join-research-review-form-submit {
+  padding: 15px;
+  width: 200px;
+  margin-top: 17px;
+}
+
+.join-rr-second-section .join-rr-content-right-side .small-green-text{
+  text-transform: uppercase;
+}
+
+.join-rr-second-section .join-rr-content-right-side .btn{
+  text-transform: uppercase;
+}
+
+.join-rr-second-section .join-rr-content-right-side .btn-secondary {
+  margin-right: 10px;
+}
+
+.promoted-content {
+  margin-bottom: 100px;
+}
+
+.promoted-content h3{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.promoted-content .btn{
+  padding: 5px 130px;
+}
+
+
+/* REVIEW PAGE */
+.review-page-ad-section {
+  padding-bottom: 100px;
+}
+
+
+/* ARTICLE PAGE */
+.article-summary {
+  padding-top: 50px;
+  white-space: "pre-line";
+}
+
+.not-logged-in {
+  padding-top: 50px;
+}
+
+.encrypted-panel {
+  padding-top: 25px;
+}
+
+.other-articles {
+  padding-top: 20px;
+}
+
+.other-articles .other-article a {
+  color: black !important;
+  text-decoration: none;
+}
+
+.other-articles .other-article a:hover{
+  text-decoration: underline;
+}
+
+/* FORGOTTEN & RESET PASSWORD */
+.password-page-form-section .password-page-form-main-div {
+  box-shadow: 0 19px 38px rgb(0 0 0 / 30%), 0 15px 12px rgb(0 0 0 / 22%);
+  padding: 50px;
+}
+
+.password-page-form-section .password-page-form-main-div .password-page-form {
+  padding-top: 20px;
+}
+
+.password-page-form-section .password-page-form-main-div .password-page-form input{
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  margin-bottom: 25px;
+  color: black;
+}
+
+.password-page-form-section .password-page-form-main-div .password-page-form input:focus {
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  margin-bottom: 25px;
+  outline: none;
+}
+
+.password-page-form-section .password-page-form-main-div .password-page-form input::placeholder {
+  /* color: black; */
+  font-family: "Gotham Book Italic";
+  font-size: 20px;
+}
+
+.password-page-form-section .password-page-form-main-div .password-page-form button {
+  width: 100%;
+}
+
+/* SUBSCRIPTION PAGE */
+.review-div-of-cols {
+  padding: 20px;
+}
+
+.review-col {
+  padding-bottom: 10px;
+}
+
+.review-col .review-label {
+  margin-left: 5px;
+}
+
+.save-changes-button-div {
+  width: 100%;
+  padding-top: 40px;
+}
+
+.save-changes-button-div .btn-primary {
+  float: right;
+}
+
+.modules-page-modules-list {
+  padding-bottom: 100px;
+}
+
+.modules-page-modules-list .module{
+  border-bottom: 1px solid black;
+  padding: 20px 10px;
+}
+
+.modules-page-modules-list .module a{
+  color: black;
+  text-decoration: none !important;
+}
+
+.modules-page-modules-list .research-review-section-line {
+  margin: 0 !important;
+}
+
+.partners-page-partners-list {
+  padding-bottom: 100px;
+}
+
+.partners-page-partners-list .partner{
+  border-bottom: 1px solid black;
+  padding: 20px 10px;
+}
+
+.partners-page-partners-list .partner a{
+  color: black;
+  text-decoration: none !important;
+}
+
+.partners-page-partners-list .partner p a{
+  text-decoration: underline !important;
+}
+
+.partners-page-partners-list .research-review-section-line {
+  margin: 0 !important;
+}
+
+.podcast-embedded-video {
+  height: 40vw;
+  width: 100%;
 }

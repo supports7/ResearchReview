@@ -1,14 +1,10 @@
+const config = require('./config');
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `Research Review`,
     author: {
-      name: `Kyle Mathews`,
-      summary: `who lives and works in San Francisco building useful things.`,
-    },
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
-    social: {
-      twitter: `kylemathews`,
+      name: `System7`,
     },
   },
   flags: {
@@ -31,34 +27,160 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-source-rest-api',
+      resolve: "gatsby-source-apiserver",
       options: {
-        endpoints: [
-          'https://researchreview.dev.s05.system7.co.nz/api/clinicalAreas',
-          'https://researchreview.dev.s05.system7.co.nz/api/reviews',
-        ],
-      },
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/clinicalAreas`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `ClinicalAreas`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/writers`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Writers`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/reviews`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Reviews`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/sections/featured`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `FeaturedArticle`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/professionaldevelopment/modules`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Modules`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/professionaldevelopment/partners`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Partners`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/home`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Home`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    }, 
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/join`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Join`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/advertisements`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.countryCode,
+        },
+        name: `Advertisements`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
     },
     // {
-    //   resolve: 'gatsby-source-multi-api',
+    //   resolve: 'gatsby-source-rest-api',
     //   options: {
-    //     apis: [
-    //       {
-    //         //Prefix for your node. Will override the default prefix "multiApiSource[endpoint]" in your queries i.e AllResearchReviewAPIClinicalAreas
-    //         prefix: "ResearchReview",
-    //         baseUrl: "https://researchreview.dev.s05.system7.co.nz/api/clinicalAreas",
-    //       },
-    //       {
-    //         prefix: "SpaceX",
-    //         baseUrl: "https://api.spacex.land/rest/",
-    //         endpoints: ["rockets", "ships", "dragon/dragon1"],
-    //       },
-    //       // {
-    //       //   prefix: 'ResearchReview',
-    //       //   baseUrl: 'https://researchreview.dev.s05.system7.co.nz/api/',
-    //       //   endpoints: ["reviews",],
-    //       // },
-    //     ],
+    //     endpoints: [
+    //       `https://researchreview.dev.s05.system7.co.nz/api/clinicalAreas`,
+    //       // `https://researchreview.dev.s05.system7.co.nz/api/writers`,
+    //       // `https://researchreview.dev.s05.system7.co.nz/api/reviews`,
+    //     ]
+    //   },
+    //   headers: {
+    //     "Country": `${config.countryCode}`
     //   },
     // },
     {

@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-blog",
+  "name": "research-review",
   "private": true,
-  "description": "A starter for a blog powered by Gatsby and Markdown",
+  "description": "Research Review",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "System 7",
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
   },
@@ -12,7 +12,13 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
+    "atob": "^2.1.2",
+    "axios": "^1.2.0",
     "bootstrap": "^5.2.2",
+    "btoa": "^1.2.1",
+    "buffer": "^6.0.3",
+    "crypto-js": "^4.1.1",
+    "dompurify": "^3.0.1",
     "gatsby": "^4.23.0",
     "gatsby-plugin-feed": "^4.23.0",
     "gatsby-plugin-image": "^2.23.0",
@@ -23,18 +29,23 @@
     "gatsby-remark-prismjs": "^6.23.0",
     "gatsby-remark-responsive-iframe": "^5.23.0",
     "gatsby-remark-smartypants": "^5.23.0",
+    "gatsby-source-apiserver": "^2.1.2",
     "gatsby-source-filesystem": "^4.23.0",
-    "gatsby-source-multi-api": "^1.0.5",
     "gatsby-source-rest-api": "^0.2.3",
     "gatsby-transformer-remark": "^5.23.0",
     "gatsby-transformer-sharp": "^4.23.0",
+    "html-react-parser": "^3.0.4",
+    "jsdom": "^21.1.1",
+    "lodash": "^4.17.21",
     "prismjs": "^1.29.0",
     "react": "^18.1.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.1.0",
+    "react-google-recaptcha": "^2.1.0",
     "react-router-dom": "^6.4.3",
     "typeface-merriweather": "0.0.72",
-    "typeface-montserrat": "0.0.75"
+    "typeface-montserrat": "0.0.75",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
