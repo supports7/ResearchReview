@@ -349,7 +349,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 writersByReview = await getWritersByReview(review.alternative_id);
 
                 if (podcasts) {
-                  createPage({
+                  await createPage({
                     path: `/podcasts/${reviewUrlTemp}/`,
                     component: podcastsTemp,
                     context: {
@@ -365,7 +365,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     let podcastUrlTemp = podcast.title.toLowerCase();
                     podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
-                    createPage({
+                    await createPage({
                       path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
                       component: podcastDetailTemp,
                       context: {
@@ -382,7 +382,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     let articles = [];
                     articles = await getArticles(issue.id);
 
-                    createPage({
+                    await createPage({
                       path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
                       component: issueTemp,
                       context: {
@@ -410,7 +410,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   })
                 }
 
-                createPage({
+                await createPage({
                   path: `/clinical-areas/${reviewUrlTemp}/`,
                   component: reviewTemp,
                   context: {
@@ -421,7 +421,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     advertisements: advertisementsContent,
                   },
                 })
-                createPage({
+                await createPage({
                   path: `/expert-writers/${reviewUrlTemp}/`,
                   component: writerListTemp,
                   context: {
@@ -490,7 +490,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     // 
 
 
-    createPage({
+    await createPage({
       path: `/clinical-areas/`,
       component: clinicalAreasTemp,
       context: {
@@ -501,7 +501,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
 
-    createPage({
+    await createPage({
       path: `/expert-writers/`,
       component: clinicalAreasTemp,
       context: {
@@ -512,7 +512,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
 
-    createPage({
+    await createPage({
       path: `/podcasts/`,
       component: clinicalAreasTemp,
       context: {
@@ -523,7 +523,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
 
-    createPage({
+    await createPage({
       path: `/subscriptions/`,
       component: subscriptionsTemp,
       context: {
@@ -532,7 +532,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
 
-    createPage({
+    await createPage({
       path: `/`,
       component: indexTemp,
       context: {
@@ -542,7 +542,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
 
-    createPage({
+    await createPage({
       path: `/partners`,
       component: partnersTemp,
       context: {
@@ -551,7 +551,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
 
-    createPage({
+    await createPage({
       path: `/modules`,
       component: modulesTemp,
       context: {
@@ -562,7 +562,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     // Create Contact Us Page
     const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
-    createPage({
+    await createPage({
       path: `/contact-us/`,
       component: contactUsTemp,
       context: {
@@ -572,7 +572,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     // Create Join Research Review Page
     const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
-    createPage({
+    await createPage({
       path: `/join-research-review/`,
       component: JoinRRTemp,
       context: {
