@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkresearch_review=self.webpackChunkresearch_review||[]).push([[53],{4603:function(e,t,n){n.r(t),n.d(t,{Head:function(){return l}});n(6633);var r=n(7294),a=n(1597);t.default=function(e){e.data;return r.createElement("main",null,r.createElement("h1",null,"DATE PAGE"),r.createElement(a.rU,{to:"/"},"Back to Home"),r.createElement("p",null))};var l=function(){return r.createElement("title",null,"Date Page")}}}]);
-//# sourceMappingURL=component---src-pages-weather-summary-js-498ed547dd91908b24e6.js.map
