@@ -237,7 +237,7 @@ const ResearchReviewNavbar = () => {
                       Professional Development
                     </Nav.Link>
                     <Nav.Link href="/industry-resources">
-                      Industry Resourcers
+                      Industry Resources
                     </Nav.Link>
                     {/* <Nav.Link href="/links">Links</Nav.Link> */}
                     {/* <Nav.Link href="/advertise">Advertise</Nav.Link> */}
