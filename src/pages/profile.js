@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react"
 import { navigate, Link } from 'gatsby'
 import { Container, Row, Col } from "react-bootstrap"
 import Layout from "../components/layout"
-import Supporters from "../components/Supporters"
+import Supporters from "../components/supporters"
 // import JoinRR from "../components/JoinRR"
 import Cookies from "universal-cookie"
 

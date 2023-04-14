@@ -2,8 +2,8 @@ import React, { useEffect, useState, useCallback } from "react"
 import { navigate } from 'gatsby'
 import { Container, Row, Col } from "react-bootstrap"
 import Layout from "../components/layout"
-import Supporters from "../components/Supporters"
-import JoinRR from "../components/JoinRR"
+import Supporters from "../components/supporters"
+// import JoinRR from "../components/JoinRR"
 
 const ForgottenPassword = () => {
   const [email, setEmail] = useState("");
