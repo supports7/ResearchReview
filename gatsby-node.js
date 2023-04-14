@@ -395,8 +395,8 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
                       },
                     })
                     if (articles.length > 0) {
-                      articles.forEach((article) => {
-                        createPage({
+                      articles.forEach(async (article) => {
+                        await createPage({
                           path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
                           component: articleTemp,
                           context: {
@@ -435,10 +435,10 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
                 })
                 const topTwoWriters = writers.slice(0, 2);
 
-                topTwoWriters.forEach((writer) => {
+                topTwoWriters.forEach(async (writer) => {
                   let writerUrlTemp = writer.name.toLowerCase();
                   writerUrlTemp = writerUrlTemp.split(' ').join('-');
-                  createPage({
+                  await createPage({
                     path: `/expert-writers/${reviewUrlTemp}/${writerUrlTemp}`,
                     component: writerTemp,
                     context: {
