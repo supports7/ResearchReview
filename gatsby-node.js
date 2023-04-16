@@ -354,34 +354,34 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
                 let writersByReview = [];
                 writersByReview = await getWritersByReview(review.alternative_id);
 
-                if (podcasts) {
-                  await createPage({
-                    path: `/podcasts/${reviewUrlTemp}/`,
-                    component: podcastsTemp,
-                    context: {
-                      podcasts: podcasts,
-                      review: review,
-                      advertisements: advertisementsContent,
-                      tempUrlPath: `/podcasts/${reviewUrlTemp}/`
-                    },
-                  })
+                // if (podcasts) {
+                //   await createPage({
+                //     path: `/podcasts/${reviewUrlTemp}/`,
+                //     component: podcastsTemp,
+                //     context: {
+                //       podcasts: podcasts,
+                //       review: review,
+                //       advertisements: advertisementsContent,
+                //       tempUrlPath: `/podcasts/${reviewUrlTemp}/`
+                //     },
+                //   })
 
-                  podcasts.forEach(async (podcast) => {
+                //   podcasts.forEach(async (podcast) => {
 
-                    let podcastUrlTemp = podcast.title.toLowerCase();
-                    podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
+                //     let podcastUrlTemp = podcast.title.toLowerCase();
+                //     podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
-                    await createPage({
-                      path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
-                      component: podcastDetailTemp,
-                      context: {
-                        podcast: podcast,
-                        review: review,
-                        advertisements: advertisementsContent,
-                      },
-                    })
-                  })
-                }
+                //     await createPage({
+                //       path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                //       component: podcastDetailTemp,
+                //       context: {
+                //         podcast: podcast,
+                //         review: review,
+                //         advertisements: advertisementsContent,
+                //       },
+                //     })
+                //   })
+                // }
 
                 if (issues.length > 0) {
                   issues.forEach(async (issue) => {
