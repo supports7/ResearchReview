@@ -24,7 +24,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getIssues(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/issues`).then(
       (response) => {
-        console.log("getIssues - ", response.data)
+        console.log("getIssues - ", reviewId, response.data)
         return response.data;
       })
     return responseData;
@@ -33,7 +33,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getArticles(issueId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/issues/${issueId}/sections`).then(
       (response) => {
-        console.log("getArticles - ", response.data)
+        console.log("getArticles - ", issueId, response.data)
         return response.data;
       })
     return responseData;
@@ -42,7 +42,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getPodcasts(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/podcasts`).then(
       (response) => {
-        console.log("getPodcasts - ", response.data)
+        console.log("getPodcasts - ", reviewId, response.data)
         return response.data;
       })
     return responseData;
@@ -51,7 +51,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getWritersByReview(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/writers`).then(
       (response) => {
-        console.log("getWritersByReview - ", response.data)
+        console.log("getWritersByReview - ", reviewId, response.data)
         return response.data;
       })
     return responseData;
