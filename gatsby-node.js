@@ -276,7 +276,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
     return
   }
-  
+
 
 
   const clinicalAreas = clinicalAreasResult.data.allZohoClinicalAreas.nodes
@@ -289,18 +289,19 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const advertisementsContent = advertisementsResult.data.allZohoAdvertisements.nodes
   // Create clinical area pages
 
-  function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
+  async function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
     // function code
     const clinicalAreasTemp = clinicalAreas.filter(clinicalArea => { return clinicalArea.parent_Id == alternative_id });
 
     if (clinicalAreasTemp.length > 0) {
-      clinicalAreasTemp.forEach(async (clinicalArea) => {
+      await Promise.all(clinicalAreasTemp.map(async (clinicalArea) => {
+        // clinicalAreasTemp.forEach(async (clinicalArea) => {
         clinicalArea.name = clinicalArea.name.split(" (")[0];
         let urlTemp = clinicalArea.name.toLowerCase();
         urlTemp = urlTemp.split(' ').join('-');
         urlTemp = url + "/" + urlTemp;
 
-        const children = getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, urlTemp);
+        const children = await getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, urlTemp);
 
         if (children) {
           clinicalArea['children'] = children;
@@ -329,7 +330,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           if (reviewResult.data.allZohoReviews.nodes) {
             let reviews = [...reviewResult.data.allZohoReviews.nodes];
 
-            reviews.forEach(async (review) => {
+            await Promise.all(reviews.map(async (review) => {
+              // reviews.forEach(async (review) => {
               // Create URL
               review.name = review.name.split(" (")[0];
               let reviewUrlTemp = review.name.toLowerCase();
@@ -338,10 +340,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
               let issues = [];
               issues = await getIssues(review.alternative_id);
-              
+
               let podcasts = [];
               podcasts = await getPodcasts(review.alternative_id);
-              
+
               let writersByReview = [];
               writersByReview = await getWritersByReview(review.alternative_id);
 
@@ -357,8 +359,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 },
               })
 
-              podcasts.forEach(async (podcast) => {
-                
+              await Promise.all(podcasts.map(async (podcast) => {
+                // podcasts.forEach(async (podcast) => {
+
                 let podcastUrlTemp = podcast.title.toLowerCase();
                 podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
@@ -371,10 +374,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     advertisements: advertisementsContent,
                   },
                 })
-              })
+              }))
 
               if (issues.length > 0) {
-                issues.forEach(async (issue) => {
+                await Promise.all(issues.map(async (issue) => {
+                  // issues.forEach(async (issue) => {
                   let articles = [];
                   articles = await getArticles(issue.id);
 
@@ -387,7 +391,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   //   },
                   // })
                   if (articles.length > 0) {
-                    articles.forEach((article) => {
+                    await Promise.all(articles.map((article) => {
+                      // articles.forEach((article) => {
                       createPage({
                         path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
                         component: articleTemp,
@@ -399,12 +404,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                           tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                         },
                       })
-                    })
+                    }))
                   }
-                })
+                }))
               }
 
-              
               createPage({
                 path: `/expert-writers/${reviewUrlTemp}/`,
                 component: writerListTemp,
@@ -417,7 +421,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               })
               const topTwoWriters = writers.slice(0, 2);
 
-              topTwoWriters.forEach((writer) => {
+
+              await Promise.all(topTwoWriters.map((writer) => {
+                // topTwoWriters.forEach((writer) => {
                 let writerUrlTemp = writer.name.toLowerCase();
                 writerUrlTemp = writerUrlTemp.split(' ').join('-');
                 createPage({
@@ -428,203 +434,205 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     advertisements: advertisementsContent,
                   },
                 })
-              });
+              }));
 
-              review['url'] = reviewUrlTemp;
-            })
-            clinicalArea['children'] = reviews;
-          }
-        }
+            review['url'] = reviewUrlTemp;
+          }))
+      clinicalArea['children'] = reviews;
+    }
+  }
 
-      })
-
-      return clinicalAreas;
+}))
+//Return updated clinical areas
+//Have add reviews under children nodes
+return clinicalAreas;
     }
     else {
-      return;
-    }
+  return;
+}
     // function code
   }
 
-  if (clinicalAreas.length > 0) {
-
-    
-
-    let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
-    clinicalAreaTree.forEach((clinicalArea) => {
-      if (clinicalArea.name) {
-        clinicalArea.name = clinicalArea.name.split(" (")[0];
-        let url = clinicalArea.name.toLowerCase();
-        url = url.split(' ').join('-');
-        // console.log("before getSubClinicalAreas", clinicalArea.name);
-        const children = getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, url);
-        clinicalArea['children'] = children;
-      }
-    })
-
-    // phil hack
-    //let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);    
-    //console.log(clinicalAreaTree);
-    clinicalAreas.forEach((clinicalArea) => {
-
-      // if (clinicalArea.name) {
-      //   clinicalArea.name = clinicalArea.name.split(" (")[0];
-      //   // console.log("before getSubClinicalAreas", clinicalArea.name);
-      const clinicalAreasTemp = filter(clinicalAreas, { parent_Id: clinicalArea.alternative_id }, []);
-      clinicalArea['children'] = clinicalAreasTemp;
-    })
-
-    let clinicalAreaTreePhil = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
-    // 
+if (clinicalAreas.length > 0) {
 
 
-    createPage({
-      path: `/clinical-areas/`,
-      component: clinicalAreasTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        advertisements: advertisementsContent,
-      },
-    })
 
-    createPage({
-      path: `/expert-writers/`,
-      component: clinicalAreasTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        advertisements: advertisementsContent,
-      },
-    })
+  let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
+  await Promise.all(clinicalAreaTree.map(async (clinicalArea) => {
+    // clinicalAreaTree.forEach((clinicalArea) => {
+    if (clinicalArea.name) {
+      clinicalArea.name = clinicalArea.name.split(" (")[0];
+      let url = clinicalArea.name.toLowerCase();
+      url = url.split(' ').join('-');
+      // console.log("before getSubClinicalAreas", clinicalArea.name);
+      const children = await getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, url);
+      clinicalArea['children'] = children;
+    }
+  }))
 
-    createPage({
-      path: `/subscriptions/`,
-      component: subscriptionsTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        advertisements: advertisementsContent,
-      },
-    })
+  // phil hack
+  //let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);    
+  //console.log(clinicalAreaTree);
+  clinicalAreas.forEach((clinicalArea) => {
 
-    createPage({
-      path: `/`,
-      component: indexTemp,
-      context: {
-        featuredArticle: featuredArticle,
-        homeContent: homeContent,
-        advertisements: advertisementsContent,
-      },
-    })
+    // if (clinicalArea.name) {
+    //   clinicalArea.name = clinicalArea.name.split(" (")[0];
+    //   // console.log("before getSubClinicalAreas", clinicalArea.name);
+    const clinicalAreasTemp = filter(clinicalAreas, { parent_Id: clinicalArea.alternative_id }, []);
+    clinicalArea['children'] = clinicalAreasTemp;
+  })
 
-    createPage({
-      path: `/partners`,
-      component: partnersTemp,
-      context: {
-        partners: partners,
-        advertisements: advertisementsContent,
-      },
-    })
-
-    createPage({
-      path: `/modules`,
-      component: modulesTemp,
-      context: {
-        modules: modules,
-        advertisements: advertisementsContent,
-      },
-    })
+  let clinicalAreaTreePhil = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
+  // 
 
 
-    // clinicalAreas.forEach(async (clinicalArea, index) => {
-    //   let str = clinicalArea.name;
+  createPage({
+    path: `/clinical-areas/`,
+    component: clinicalAreasTemp,
+    context: {
+      clinicalAreas: clinicalAreaTree,
+      advertisements: advertisementsContent,
+    },
+  })
+
+  createPage({
+    path: `/expert-writers/`,
+    component: clinicalAreasTemp,
+    context: {
+      clinicalAreas: clinicalAreaTree,
+      advertisements: advertisementsContent,
+    },
+  })
+
+  createPage({
+    path: `/subscriptions/`,
+    component: subscriptionsTemp,
+    context: {
+      clinicalAreas: clinicalAreaTree,
+      advertisements: advertisementsContent,
+    },
+  })
+
+  createPage({
+    path: `/`,
+    component: indexTemp,
+    context: {
+      featuredArticle: featuredArticle,
+      homeContent: homeContent,
+      advertisements: advertisementsContent,
+    },
+  })
+
+  createPage({
+    path: `/partners`,
+    component: partnersTemp,
+    context: {
+      partners: partners,
+      advertisements: advertisementsContent,
+    },
+  })
+
+  createPage({
+    path: `/modules`,
+    component: modulesTemp,
+    context: {
+      modules: modules,
+      advertisements: advertisementsContent,
+    },
+  })
 
 
-    //   if (clinicalArea.parent_Id != null && str) {
-
-    //     createPage({
-    //       alternative_id: clinicalArea.alternative_id,
-    //       path: `/clinical-areas/${str}/`,
-    //       component: reviewTemp,
-    //       context: {
-    //         id: clinicalArea.id,
-    //         alternative_id: clinicalArea.alternative_id,
-    //         name: clinicalArea.name,
-    //         parent_Id: clinicalArea.parent_Id,
-    //         inactive: clinicalArea.inactive,
-    //         clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
-    //       },
-    //     })
-    //   } else if (str){
-    //     const reviewResult = await graphql(
-    //       `
-    //         {
-    //           allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
-    //             nodes {
-    //               alternative_id
-    //               name
-    //               clinical_Area_Id
-    //               modified_Time
-    //             }
-    //           }
-    //         }
-    //       `
-    //     )
-
-    //     if (reviewResult.errors) {
-    //       reporter.panicOnBuild(
-    //         `There was an error loading your reviews`,
-    //         reviewResult.errors
-    //       )
-    //       return
-    //     }
-    //     const reviewData = reviewResult.data.allZohoReviews.nodes
-    //     console.log(reviewData)
-    //     // if(!clinicalArea.inactive){
-
-    //     //   createPage({
-    //     //     alternative_id: clinicalArea.alternative_id,
-    //     //     path: `/clinical-areas/${str}/`,
-    //     //     component: clinicalAreaTemp,
-    //     //     context: {
-    //     //       id: clinicalArea.id,
-    //     //       alternative_id: clinicalArea.alternative_id,
-    //     //       name: clinicalArea.name,
-    //     //       parent_Id: clinicalArea.parent_Id,
-    //     //       inactive: clinicalArea.inactive,
-    //     //       clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
-    //     //       reviewData: reviewData,
-    //     //     },
-    //     //   })
-    //     // }
-    //   }
-
-    //   // Create Writers List
-    //   // clinicalArea
-    // })
-
-    // const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
+  // clinicalAreas.forEach(async (clinicalArea, index) => {
+  //   let str = clinicalArea.name;
 
 
-    // Create Contact Us Page
-    const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
-    createPage({
-      path: `/contact-us/`,
-      component: contactUsTemp,
-      context: {
-        advertisements: advertisementsContent,
-      },
-    })
+  //   if (clinicalArea.parent_Id != null && str) {
 
-    // Create Join Research Review Page
-    const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
-    createPage({
-      path: `/join-research-review/`,
-      component: JoinRRTemp,
-      context: {
-        content: joinContent,
-        advertisements: advertisementsContent,
-      },
-    })
-  }
+  //     createPage({
+  //       alternative_id: clinicalArea.alternative_id,
+  //       path: `/clinical-areas/${str}/`,
+  //       component: reviewTemp,
+  //       context: {
+  //         id: clinicalArea.id,
+  //         alternative_id: clinicalArea.alternative_id,
+  //         name: clinicalArea.name,
+  //         parent_Id: clinicalArea.parent_Id,
+  //         inactive: clinicalArea.inactive,
+  //         clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
+  //       },
+  //     })
+  //   } else if (str){
+  //     const reviewResult = await graphql(
+  //       `
+  //         {
+  //           allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
+  //             nodes {
+  //               alternative_id
+  //               name
+  //               clinical_Area_Id
+  //               modified_Time
+  //             }
+  //           }
+  //         }
+  //       `
+  //     )
+
+  //     if (reviewResult.errors) {
+  //       reporter.panicOnBuild(
+  //         `There was an error loading your reviews`,
+  //         reviewResult.errors
+  //       )
+  //       return
+  //     }
+  //     const reviewData = reviewResult.data.allZohoReviews.nodes
+  //     console.log(reviewData)
+  //     // if(!clinicalArea.inactive){
+
+  //     //   createPage({
+  //     //     alternative_id: clinicalArea.alternative_id,
+  //     //     path: `/clinical-areas/${str}/`,
+  //     //     component: clinicalAreaTemp,
+  //     //     context: {
+  //     //       id: clinicalArea.id,
+  //     //       alternative_id: clinicalArea.alternative_id,
+  //     //       name: clinicalArea.name,
+  //     //       parent_Id: clinicalArea.parent_Id,
+  //     //       inactive: clinicalArea.inactive,
+  //     //       clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
+  //     //       reviewData: reviewData,
+  //     //     },
+  //     //   })
+  //     // }
+  //   }
+
+  //   // Create Writers List
+  //   // clinicalArea
+  // })
+
+  // const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
+
+
+  // Create Contact Us Page
+  const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
+  createPage({
+    path: `/contact-us/`,
+    component: contactUsTemp,
+    context: {
+      advertisements: advertisementsContent,
+    },
+  })
+
+  // Create Join Research Review Page
+  const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
+  createPage({
+    path: `/join-research-review/`,
+    component: JoinRRTemp,
+    context: {
+      content: joinContent,
+      advertisements: advertisementsContent,
+    },
+  })
+}
 
 
 
