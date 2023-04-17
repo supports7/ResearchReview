@@ -345,6 +345,18 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               let writersByReview = [];
               writersByReview = await getWritersByReview(review.alternative_id);
 
+              createPage({
+                path: `/clinical-areas/${reviewUrlTemp}/`,
+                component: reviewTemp,
+                context: {
+                  review: review,
+                  issues: issues,
+                  podcasts: podcasts,
+                  writersByReview: writersByReview,
+                  advertisements: advertisementsContent,
+                },
+              })
+
               podcasts.forEach(async (podcast) => {
                 
                 let podcastUrlTemp = podcast.title.toLowerCase();
@@ -392,17 +404,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 })
               }
 
-              createPage({
-                path: `/clinical-areas/${reviewUrlTemp}/`,
-                component: reviewTemp,
-                context: {
-                  review: review,
-                  issues: issues,
-                  podcasts: podcasts,
-                  writersByReview: writersByReview,
-                  advertisements: advertisementsContent,
-                },
-              })
+              
               createPage({
                 path: `/expert-writers/${reviewUrlTemp}/`,
                 component: writerListTemp,
