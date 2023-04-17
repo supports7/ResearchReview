@@ -107,9 +107,6 @@ const ForgottenPassword = () => {
           <Supporters />
         </Container>
       </section>
-      <Container>
-        <JoinRR />
-      </Container>
     </Layout>
   )
 }
