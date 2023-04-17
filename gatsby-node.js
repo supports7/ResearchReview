@@ -12,19 +12,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
   const clinicalAreasTemp = path.resolve(`./src/templates/clinical-areas.js`)
   const writerTemp = path.resolve(`./src/templates/writer.js`)
-  const issueTemp = path.resolve(`./src/templates/issue.js`)
   const articleTemp = path.resolve(`./src/templates/article.js`)
   const modulesTemp = path.resolve(`./src/templates/modules.js`)
   const partnersTemp = path.resolve(`./src/templates/partners.js`)
   const subscriptionsTemp = path.resolve(`./src/templates/subscriptions.js`)
   //TODO - Set up podcast page
-  const podcastsTemp = path.resolve(`./src/templates/podcasts.js`)
-  const podcastDetailTemp = path.resolve(`./src/templates/podcastDetails.js`)
+  const podcastTemp = path.resolve(`./src/templates/review.js`)
 
   async function getIssues(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/issues`).then(
       (response) => {
-        console.log("getIssues - ", reviewId, response.data)
         return response.data;
       })
     return responseData;
@@ -33,7 +30,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getArticles(issueId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/issues/${issueId}/sections`).then(
       (response) => {
-        console.log("getArticles - ", issueId, response.data)
         return response.data;
       })
     return responseData;
@@ -42,7 +38,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getPodcasts(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/podcasts`).then(
       (response) => {
-        console.log("getPodcasts - ", reviewId, response.data)
         return response.data;
       })
     return responseData;
@@ -51,14 +46,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   async function getWritersByReview(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/writers`).then(
       (response) => {
-        console.log("getWritersByReview - ", reviewId, response.data)
         return response.data;
       })
     return responseData;
   }
 
   // Get all the content from Clinical Areas endpoint
-  const clinicalAreasPromise = graphql(
+  const clinicalAreasResult = await graphql(
     `
       {
         allZohoClinicalAreas {
@@ -73,9 +67,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         }
       }
     `
-);
+  )
 
-const writerPromise = graphql(
+  const writerResult = await graphql(
     `
       {
         allZohoWriters {
@@ -93,9 +87,9 @@ const writerPromise = graphql(
         }
       }
     `
-);
+  )
 
-const featuredArticlePromise = graphql(
+  const featuredArticleResult = await graphql(
     `
       {
         allZohoFeaturedArticle {
@@ -111,9 +105,9 @@ const featuredArticlePromise = graphql(
         }
       }
     `
-);
+  )
 
-const partnersPromise = graphql(
+  const partnersResult = await graphql(
     `
       {
         allZohoPartners {
@@ -129,9 +123,9 @@ const partnersPromise = graphql(
         }
       }
     `
-);
+  )
 
-const modulesPromise = graphql(
+  const modulesResult = await graphql(
     `
       {
         allZohoModules {
@@ -146,9 +140,9 @@ const modulesPromise = graphql(
         }
       }
     `
-);
+  )
 
-const homePromise = graphql(
+  const homeResult = await graphql(
     `
       {
         allZohoHome {
@@ -176,9 +170,9 @@ const homePromise = graphql(
         }
       }
     `
-);
+  )
 
-const joinPromise = graphql(
+  const joinResult = await graphql(
     `
       {
         allZohoJoin {
@@ -203,9 +197,9 @@ const joinPromise = graphql(
         }
       }
     `
-);
+  )
 
-const advertisementsPromise = graphql(
+  const advertisementsResult = await graphql(
     `
       {
         allZohoAdvertisements {
@@ -224,9 +218,7 @@ const advertisementsPromise = graphql(
         }
       }
     `
-);
-
-const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult, modulesResult, homeResult, joinResult, advertisementsResult] = await Promise.all([clinicalAreasPromise, writerPromise, featuredArticlePromise, partnersPromise, modulesPromise, homePromise, joinPromise, advertisementsPromise]);
+  )
 
   if (clinicalAreasResult.errors) {
     reporter.panicOnBuild(
@@ -284,7 +276,7 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
     )
     return
   }
-
+  
 
 
   const clinicalAreas = clinicalAreasResult.data.allZohoClinicalAreas.nodes
@@ -296,178 +288,165 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
   const joinContent = joinResult.data.allZohoJoin.nodes
   const advertisementsContent = advertisementsResult.data.allZohoAdvertisements.nodes
   // Create clinical area pages
-  if (clinicalAreas.length > 0) {
 
-    function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
-      // function code
-      const clinicalAreasTemp = clinicalAreas.filter(clinicalArea => { return clinicalArea.parent_Id == alternative_id });
+  function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
+    // function code
+    const clinicalAreasTemp = clinicalAreas.filter(clinicalArea => { return clinicalArea.parent_Id == alternative_id });
 
-      if (clinicalAreasTemp.length > 0) {
-        clinicalAreasTemp.forEach(async (clinicalArea) => {
-          clinicalArea.name = clinicalArea.name.split(" (")[0];
-          let urlTemp = clinicalArea.name.toLowerCase();
-          urlTemp = urlTemp.split(' ').join('-');
-          urlTemp = url + "/" + urlTemp;
+    if (clinicalAreasTemp.length > 0) {
+      clinicalAreasTemp.forEach(async (clinicalArea) => {
+        clinicalArea.name = clinicalArea.name.split(" (")[0];
+        let urlTemp = clinicalArea.name.toLowerCase();
+        urlTemp = urlTemp.split(' ').join('-');
+        urlTemp = url + "/" + urlTemp;
 
-          const children = getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, urlTemp);
+        const children = getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, urlTemp);
 
-          if (children) {
-            clinicalArea['children'] = children;
-          } else {
-            const reviewResult = await graphql(
-              `
-                {
-                  allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
-                    nodes {
-                      alternative_id
-                      name
-                      clinical_Area_Id
-                      modified_Time
-                    }
+        if (children) {
+          clinicalArea['children'] = children;
+        } else {
+          const reviewResult = await graphql(
+            `
+              {
+                allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
+                  nodes {
+                    alternative_id
+                    name
+                    clinical_Area_Id
+                    modified_Time
                   }
                 }
-              `
+              }
+            `
+          )
+          if (reviewResult.errors) {
+            reporter.panicOnBuild(
+              `There was an error loading your clinical areas`,
+              reviewResult.errors
             )
-            if (reviewResult.errors) {
-              reporter.panicOnBuild(
-                `There was an error loading your clinical areas`,
-                reviewResult.errors
-              )
-              return
-            }
-            if (reviewResult.data.allZohoReviews.nodes) {
-              let reviews = [...reviewResult.data.allZohoReviews.nodes];
-
-              reviews.forEach(async (review) => {
-                // Create URL
-                review.name = review.name.split(" (")[0];
-                let reviewUrlTemp = review.name.toLowerCase();
-                reviewUrlTemp = reviewUrlTemp.split(' ').join('-');
-                reviewUrlTemp = urlTemp + "/" + reviewUrlTemp;
-
-                let issues = [];
-                issues = await getIssues(review.alternative_id);
-
-                let podcasts = [];
-                podcasts = await getPodcasts(review.alternative_id);
-
-                let writersByReview = [];
-                writersByReview = await getWritersByReview(review.alternative_id);
-
-                // if (podcasts) {
-                //   await createPage({
-                //     path: `/podcasts/${reviewUrlTemp}/`,
-                //     component: podcastsTemp,
-                //     context: {
-                //       podcasts: podcasts,
-                //       review: review,
-                //       advertisements: advertisementsContent,
-                //       tempUrlPath: `/podcasts/${reviewUrlTemp}/`
-                //     },
-                //   })
-
-                //   podcasts.forEach(async (podcast) => {
-
-                //     let podcastUrlTemp = podcast.title.toLowerCase();
-                //     podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
-
-                //     await createPage({
-                //       path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
-                //       component: podcastDetailTemp,
-                //       context: {
-                //         podcast: podcast,
-                //         review: review,
-                //         advertisements: advertisementsContent,
-                //       },
-                //     })
-                //   })
-                // }
-
-                if (issues.length > 0) {
-                  issues.forEach(async (issue) => {
-                    let articles = [];
-                    articles = await getArticles(issue.id);
-
-                    await createPage({
-                      path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
-                      component: issueTemp,
-                      context: {
-                        issue: issue,
-                        articles: articles,
-                        advertisements: advertisementsContent,
-                        tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                      },
-                    })
-                    if (articles.length > 0) {
-                      articles.forEach(async (article) => {
-                        await createPage({
-                          path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
-                          component: articleTemp,
-                          context: {
-                            article: article,
-                            otherArticles: articles,
-                            writersByReview: writersByReview,
-                            advertisements: advertisementsContent,
-                            tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                          },
-                        })
-                      })
-                    }
-                  })
-                }
-
-                await createPage({
-                  path: `/clinical-areas/${reviewUrlTemp}/`,
-                  component: reviewTemp,
-                  context: {
-                    review: review,
-                    issues: issues,
-                    // podcasts: podcasts,
-                    podcasts: [],
-                    writersByReview: writersByReview,
-                    advertisements: advertisementsContent,
-                  },
-                })
-                await createPage({
-                  path: `/expert-writers/${reviewUrlTemp}/`,
-                  component: writerListTemp,
-                  context: {
-                    review: review,
-                    writers: writers,
-                    url: `/expert-writers/${reviewUrlTemp}/`,
-                    advertisements: advertisementsContent,
-                  },
-                })
-                const topTwoWriters = writers.slice(0, 2);
-
-                topTwoWriters.forEach(async (writer) => {
-                  let writerUrlTemp = writer.name.toLowerCase();
-                  writerUrlTemp = writerUrlTemp.split(' ').join('-');
-                  await createPage({
-                    path: `/expert-writers/${reviewUrlTemp}/${writerUrlTemp}`,
-                    component: writerTemp,
-                    context: {
-                      writer: writer,
-                      advertisements: advertisementsContent,
-                    },
-                  })
-                });
-
-                review['url'] = reviewUrlTemp;
-              })
-              clinicalArea['children'] = reviews;
-            }
+            return
           }
+          if (reviewResult.data.allZohoReviews.nodes) {
+            let reviews = [...reviewResult.data.allZohoReviews.nodes];
 
-        })
+            reviews.forEach(async (review) => {
+              // Create URL
+              review.name = review.name.split(" (")[0];
+              let reviewUrlTemp = review.name.toLowerCase();
+              reviewUrlTemp = reviewUrlTemp.split(' ').join('-');
+              reviewUrlTemp = urlTemp + "/" + reviewUrlTemp;
 
-        return clinicalAreas;
-      }
-      else {
-        return;
-      }
-      // function code
+              let issues = [];
+              issues = await getIssues(review.alternative_id);
+              
+              let podcasts = [];
+              podcasts = await getPodcasts(review.alternative_id);
+              
+              let writersByReview = [];
+              writersByReview = await getWritersByReview(review.alternative_id);
+
+              podcasts.forEach(async (podcast) => {
+                
+                let podcastUrlTemp = podcast.title.toLowerCase();
+                podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
+
+                createPage({
+                  path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                  component: podcastTemp,
+                  context: {
+                    podcast: podcast,
+                    review: review,
+                    advertisements: advertisementsContent,
+                  },
+                })
+              })
+
+              if (issues.length > 0) {
+                issues.forEach(async (issue) => {
+                  let articles = [];
+                  articles = await getArticles(issue.id);
+
+                  // createPage({
+                  //   path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
+                  //   component: issueTemp,
+                  //   context: {
+                  //     issue: issue,
+                  //     articles: articles,
+                  //   },
+                  // })
+                  if (articles.length > 0) {
+                    articles.forEach((article) => {
+                      createPage({
+                        path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
+                        component: articleTemp,
+                        context: {
+                          article: article,
+                          otherArticles: articles,
+                          writersByReview: writersByReview,
+                          advertisements: advertisementsContent,
+                          tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
+                        },
+                      })
+                    })
+                  }
+                })
+              }
+
+              createPage({
+                path: `/clinical-areas/${reviewUrlTemp}/`,
+                component: reviewTemp,
+                context: {
+                  review: review,
+                  issues: issues,
+                  podcasts: podcasts,
+                  writersByReview: writersByReview,
+                  advertisements: advertisementsContent,
+                },
+              })
+              createPage({
+                path: `/expert-writers/${reviewUrlTemp}/`,
+                component: writerListTemp,
+                context: {
+                  review: review,
+                  writers: writers,
+                  url: `/expert-writers/${reviewUrlTemp}/`,
+                  advertisements: advertisementsContent,
+                },
+              })
+              const topTwoWriters = writers.slice(0, 2);
+
+              topTwoWriters.forEach((writer) => {
+                let writerUrlTemp = writer.name.toLowerCase();
+                writerUrlTemp = writerUrlTemp.split(' ').join('-');
+                createPage({
+                  path: `/expert-writers/${reviewUrlTemp}/${writerUrlTemp}`,
+                  component: writerTemp,
+                  context: {
+                    writer: writer,
+                    advertisements: advertisementsContent,
+                  },
+                })
+              });
+
+              review['url'] = reviewUrlTemp;
+            })
+            clinicalArea['children'] = reviews;
+          }
+        }
+
+      })
+
+      return clinicalAreas;
     }
+    else {
+      return;
+    }
+    // function code
+  }
+
+  if (clinicalAreas.length > 0) {
+
+    
 
     let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
     clinicalAreaTree.forEach((clinicalArea) => {
@@ -497,40 +476,25 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
     // 
 
 
-    await createPage({
+    createPage({
       path: `/clinical-areas/`,
       component: clinicalAreasTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
         advertisements: advertisementsContent,
-        pageName: "Clinical Areas",
-        pageUrl: "/clinical-areas/"
       },
     })
 
-    await createPage({
+    createPage({
       path: `/expert-writers/`,
       component: clinicalAreasTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
         advertisements: advertisementsContent,
-        pageName: "Expert Writers",
-        pageUrl: "/expert-writers/"
       },
     })
 
-    await createPage({
-      path: `/podcasts/`,
-      component: clinicalAreasTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        advertisements: advertisementsContent,
-        pageName: "Podcasts",
-        pageUrl: "/podcasts/"
-      },
-    })
-
-    await createPage({
+    createPage({
       path: `/subscriptions/`,
       component: subscriptionsTemp,
       context: {
@@ -539,7 +503,7 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
       },
     })
 
-    await createPage({
+    createPage({
       path: `/`,
       component: indexTemp,
       context: {
@@ -549,7 +513,7 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
       },
     })
 
-    await createPage({
+    createPage({
       path: `/partners`,
       component: partnersTemp,
       context: {
@@ -558,7 +522,7 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
       },
     })
 
-    await createPage({
+    createPage({
       path: `/modules`,
       component: modulesTemp,
       context: {
@@ -567,9 +531,80 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
       },
     })
 
+
+    // clinicalAreas.forEach(async (clinicalArea, index) => {
+    //   let str = clinicalArea.name;
+
+
+    //   if (clinicalArea.parent_Id != null && str) {
+
+    //     createPage({
+    //       alternative_id: clinicalArea.alternative_id,
+    //       path: `/clinical-areas/${str}/`,
+    //       component: reviewTemp,
+    //       context: {
+    //         id: clinicalArea.id,
+    //         alternative_id: clinicalArea.alternative_id,
+    //         name: clinicalArea.name,
+    //         parent_Id: clinicalArea.parent_Id,
+    //         inactive: clinicalArea.inactive,
+    //         clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
+    //       },
+    //     })
+    //   } else if (str){
+    //     const reviewResult = await graphql(
+    //       `
+    //         {
+    //           allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
+    //             nodes {
+    //               alternative_id
+    //               name
+    //               clinical_Area_Id
+    //               modified_Time
+    //             }
+    //           }
+    //         }
+    //       `
+    //     )
+
+    //     if (reviewResult.errors) {
+    //       reporter.panicOnBuild(
+    //         `There was an error loading your reviews`,
+    //         reviewResult.errors
+    //       )
+    //       return
+    //     }
+    //     const reviewData = reviewResult.data.allZohoReviews.nodes
+    //     console.log(reviewData)
+    //     // if(!clinicalArea.inactive){
+
+    //     //   createPage({
+    //     //     alternative_id: clinicalArea.alternative_id,
+    //     //     path: `/clinical-areas/${str}/`,
+    //     //     component: clinicalAreaTemp,
+    //     //     context: {
+    //     //       id: clinicalArea.id,
+    //     //       alternative_id: clinicalArea.alternative_id,
+    //     //       name: clinicalArea.name,
+    //     //       parent_Id: clinicalArea.parent_Id,
+    //     //       inactive: clinicalArea.inactive,
+    //     //       clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
+    //     //       reviewData: reviewData,
+    //     //     },
+    //     //   })
+    //     // }
+    //   }
+
+    //   // Create Writers List
+    //   // clinicalArea
+    // })
+
+    // const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
+
+
     // Create Contact Us Page
     const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
-    await createPage({
+    createPage({
       path: `/contact-us/`,
       component: contactUsTemp,
       context: {
@@ -579,7 +614,7 @@ const [clinicalAreasResult, writerResult, featuredArticleResult, partnersResult,
 
     // Create Join Research Review Page
     const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
-    await createPage({
+    createPage({
       path: `/join-research-review/`,
       component: JoinRRTemp,
       context: {
