@@ -412,20 +412,19 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                       articles: articles,
                     },
                   })
-
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
-                      articles.forEach((article) => {
-                      // createPage({
-                      //   path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
-                      //   component: articleTemp,
-                      //   context: {
-                      //     article: article,
-                      //     otherArticles: articles,
-                      //     writersByReview: writersByReview,
-                      //     advertisements: advertisementsContent,
-                      //     tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                      //   },
+                      // articles.forEach((article) => {
+                      createPage({
+                        path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
+                        component: articleTemp,
+                        context: {
+                          article: article,
+                          otherArticles: articles,
+                          writersByReview: writersByReview,
+                          advertisements: advertisementsContent,
+                          tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
+                        },
                       })
                     }))
                   }
@@ -442,7 +441,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   advertisements: advertisementsContent,
                 },
               })
-
               const topTwoWriters = writers.slice(0, 2);
               await Promise.all(topTwoWriters.map((writer) => {
                 // topTwoWriters.forEach((writer) => {
