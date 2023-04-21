@@ -404,14 +404,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   let articles = [];
                   articles = await getArticles(issue.id);
 
-                  // createPage({
-                  //   path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
-                  //   component: issueTemp,
-                  //   context: {
-                  //     issue: issue,
-                  //     articles: articles,
-                  //   },
-                  // })
+                  createPage({
+                    path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
+                    component: issueTemp,
+                    context: {
+                      issue: issue,
+                      articles: articles,
+                    },
+                  })
 
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
