@@ -370,16 +370,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
               //Check if any podcasts related to this review
               if (podcasts) {
-                // createPage({
-                //   path: `/podcasts/${reviewUrlTemp}/`,
-                //   component: podcastsTemp,
-                //   context: {
-                //     podcasts: podcasts,
-                //     review: review,
-                //     advertisements: advertisementsContent,
-                //     tempUrlPath: `/podcasts/${reviewUrlTemp}/`
-                //   },
-                // })
+                createPage({
+                  path: `/podcasts/${reviewUrlTemp}/`,
+                  component: podcastsTemp,
+                  context: {
+                    podcasts: podcasts,
+                    review: review,
+                    advertisements: advertisementsContent,
+                    tempUrlPath: `/podcasts/${reviewUrlTemp}/`
+                  },
+                })
 
                 await Promise.all(podcasts.map(async (podcast) => {
                   let podcastUrlTemp = podcast.title.toLowerCase();
