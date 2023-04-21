@@ -12,12 +12,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
   const clinicalAreasTemp = path.resolve(`./src/templates/clinical-areas.js`)
   const writerTemp = path.resolve(`./src/templates/writer.js`)
+  const issueTemp = path.resolve(`./src/templates/issue.js`)
   const articleTemp = path.resolve(`./src/templates/article.js`)
   const modulesTemp = path.resolve(`./src/templates/modules.js`)
   const partnersTemp = path.resolve(`./src/templates/partners.js`)
   const subscriptionsTemp = path.resolve(`./src/templates/subscriptions.js`)
-  //TODO - Set up podcast page
-  const podcastTemp = path.resolve(`./src/templates/review.js`)
+  const podcastsTemp = path.resolve(`./src/templates/podcasts.js`)
+  const podcastDetailTemp = path.resolve(`./src/templates/podcastDetails.js`)
 
   async function getIssues(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/issues`).then(
@@ -291,25 +292,32 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   async function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
     // function code
-    const clinicalAreasTemp = clinicalAreas.filter(clinicalArea => { return clinicalArea.parent_Id == alternative_id });
+    // Gatsby creates own Id. Save Id value from API into new field called alternative_id.
+    const childClinicalAreas = clinicalAreas.filter(clinicalArea => { 
+      if(!clinicalArea.parent_Id){
+        return false;
+      }
+      return clinicalArea.parent_Id === alternative_id;
+    });
 
-    if (clinicalAreasTemp.length > 0) {
-      await Promise.all(clinicalAreasTemp.map(async (clinicalArea) => {
-        // clinicalAreasTemp.forEach(async (clinicalArea) => {
-        clinicalArea.name = clinicalArea.name.split(" (")[0];
-        let urlTemp = clinicalArea.name.toLowerCase();
+    if (childClinicalAreas.length > 0) {
+      await Promise.all(childClinicalAreas.map(async (childClinicalArea) => {
+        // childClinicalAreas.forEach(async (clinicalArea) => {
+        childClinicalArea.name = childClinicalArea.name.split(" (")[0];
+        let urlTemp = childClinicalArea.name.toLowerCase();
         urlTemp = urlTemp.split(' ').join('-');
         urlTemp = url + "/" + urlTemp;
 
-        const children = await getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, urlTemp);
+        //Checks to see if there are children of this child clinical area
+        const children = await getSubClinicalAreas(clinicalAreas, childClinicalArea.alternative_id, urlTemp);
 
         if (children) {
-          clinicalArea['children'] = children;
+          childClinicalArea['children'] = children;
         } else {
           const reviewResult = await graphql(
             `
               {
-                allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
+                allZohoReviews(filter: {clinical_Area_Id: {eq: "${childClinicalArea.alternative_id}"}}) {
                   nodes {
                     alternative_id
                     name
@@ -347,6 +355,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               let writersByReview = [];
               writersByReview = await getWritersByReview(review.alternative_id);
 
+              //create the review page
               createPage({
                 path: `/clinical-areas/${reviewUrlTemp}/`,
                 component: reviewTemp,
@@ -359,37 +368,50 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 },
               })
 
-              await Promise.all(podcasts.map(async (podcast) => {
-                // podcasts.forEach(async (podcast) => {
-
-                let podcastUrlTemp = podcast.title.toLowerCase();
-                podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
-
+              //Check if any podcasts related to this review
+              if (podcasts) {
                 createPage({
-                  path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
-                  component: podcastTemp,
+                  path: `/podcasts/${reviewUrlTemp}/`,
+                  component: podcastsTemp,
                   context: {
-                    podcast: podcast,
+                    podcasts: podcasts,
                     review: review,
                     advertisements: advertisementsContent,
+                    tempUrlPath: `/podcasts/${reviewUrlTemp}/`
                   },
                 })
-              }))
 
+                await Promise.all(podcasts.map(async (podcast) => {
+                  let podcastUrlTemp = podcast.title.toLowerCase();
+                  podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
+
+                  createPage({
+                    path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                    component: podcastDetailTemp,
+                    context: {
+                      podcast: podcast,
+                      review: review,
+                      advertisements: advertisementsContent,
+                    },
+                  })
+                }))
+              }
+
+              //Check if this review has any issues
               if (issues.length > 0) {
                 await Promise.all(issues.map(async (issue) => {
                   // issues.forEach(async (issue) => {
                   let articles = [];
                   articles = await getArticles(issue.id);
 
-                  // createPage({
-                  //   path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
-                  //   component: issueTemp,
-                  //   context: {
-                  //     issue: issue,
-                  //     articles: articles,
-                  //   },
-                  // })
+                  createPage({
+                    path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
+                    component: issueTemp,
+                    context: {
+                      issue: issue,
+                      articles: articles,
+                    },
+                  })
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
                       // articles.forEach((article) => {
@@ -420,8 +442,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 },
               })
               const topTwoWriters = writers.slice(0, 2);
-
-
               await Promise.all(topTwoWriters.map((writer) => {
                 // topTwoWriters.forEach((writer) => {
                 let writerUrlTemp = writer.name.toLowerCase();
@@ -435,204 +455,226 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   },
                 })
               }));
+              review['url'] = reviewUrlTemp;
+            }))
+            childClinicalArea['children'] = reviews;
+          }
+        }
 
-            review['url'] = reviewUrlTemp;
-          }))
-      clinicalArea['children'] = reviews;
-    }
-  }
-
-}))
-//Return updated clinical areas
-//Have add reviews under children nodes
-return clinicalAreas;
+      }))
+      //Return updated clinical areas
+      //Have add reviews under children nodes
+      return childClinicalAreas;
     }
     else {
-  return;
-}
-    // function code
-  }
-
-if (clinicalAreas.length > 0) {
-
-
-
-  let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
-  await Promise.all(clinicalAreaTree.map(async (clinicalArea) => {
-    // clinicalAreaTree.forEach((clinicalArea) => {
-    if (clinicalArea.name) {
-      clinicalArea.name = clinicalArea.name.split(" (")[0];
-      let url = clinicalArea.name.toLowerCase();
-      url = url.split(' ').join('-');
-      // console.log("before getSubClinicalAreas", clinicalArea.name);
-      const children = await getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, url);
-      clinicalArea['children'] = children;
+      return;
     }
-  }))
+  }
+  // This is end of the getSubClinicalAreas function
 
-  // phil hack
-  //let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);    
-  //console.log(clinicalAreaTree);
-  clinicalAreas.forEach((clinicalArea) => {
+  if (clinicalAreas.length > 0) {
+    let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
+    console.log("clinicalAreaTree - ", clinicalAreaTree);
+    await Promise.all(clinicalAreaTree.map(async (clinicalArea, index) => {
+      // clinicalAreaTree.forEach((clinicalArea) => {
+      if (clinicalArea.name && clinicalArea.alternative_id) {
+        clinicalArea.name = clinicalArea.name.split(" (")[0];
+        let url = clinicalArea.name.toLowerCase();
+        url = url.split(' ').join('-');
+        const children = await getSubClinicalAreas(clinicalAreas, clinicalArea.alternative_id, url);
+        clinicalArea.children = children;
+      }
+    }))
 
-    // if (clinicalArea.name) {
-    //   clinicalArea.name = clinicalArea.name.split(" (")[0];
-    //   // console.log("before getSubClinicalAreas", clinicalArea.name);
-    const clinicalAreasTemp = filter(clinicalAreas, { parent_Id: clinicalArea.alternative_id }, []);
-    clinicalArea['children'] = clinicalAreasTemp;
-  })
+    createPage({
+      path: `/clinical-areas/`,
+      component: clinicalAreasTemp,
+      context: {
+        clinicalAreas: clinicalAreaTree,
+        advertisements: advertisementsContent,
+        pageName: "Clinical Areas",
+        pageUrl: "/clinical-areas/"
+      },
+    })
 
-  let clinicalAreaTreePhil = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
-  // 
+    createPage({
+      path: `/expert-writers/`,
+      component: clinicalAreasTemp,
+      context: {
+        clinicalAreas: clinicalAreaTree,
+        advertisements: advertisementsContent,
+        pageName: "Expert Writers",
+        pageUrl: "/expert-writers/"
+      },
+    })
 
+    createPage({
+      path: `/podcasts/`,
+      component: clinicalAreasTemp,
+      context: {
+        clinicalAreas: clinicalAreaTree,
+        advertisements: advertisementsContent,
+        pageName: "Podcasts",
+        pageUrl: "/podcasts/"
+      },
+    })
 
-  createPage({
-    path: `/clinical-areas/`,
-    component: clinicalAreasTemp,
-    context: {
-      clinicalAreas: clinicalAreaTree,
-      advertisements: advertisementsContent,
-    },
-  })
-
-  createPage({
-    path: `/expert-writers/`,
-    component: clinicalAreasTemp,
-    context: {
-      clinicalAreas: clinicalAreaTree,
-      advertisements: advertisementsContent,
-    },
-  })
-
-  createPage({
-    path: `/subscriptions/`,
-    component: subscriptionsTemp,
-    context: {
-      clinicalAreas: clinicalAreaTree,
-      advertisements: advertisementsContent,
-    },
-  })
-
-  createPage({
-    path: `/`,
-    component: indexTemp,
-    context: {
-      featuredArticle: featuredArticle,
-      homeContent: homeContent,
-      advertisements: advertisementsContent,
-    },
-  })
-
-  createPage({
-    path: `/partners`,
-    component: partnersTemp,
-    context: {
-      partners: partners,
-      advertisements: advertisementsContent,
-    },
-  })
-
-  createPage({
-    path: `/modules`,
-    component: modulesTemp,
-    context: {
-      modules: modules,
-      advertisements: advertisementsContent,
-    },
-  })
+    createPage({
+      path: `/subscriptions/`,
+      component: subscriptionsTemp,
+      context: {
+        clinicalAreas: clinicalAreaTree,
+        advertisements: advertisementsContent,
+      },
+    })
+    console.log("BUILT PAGES WITH CLINICAL AREA TREE");
 
 
-  // clinicalAreas.forEach(async (clinicalArea, index) => {
-  //   let str = clinicalArea.name;
+    // clinicalAreas.forEach((clinicalArea) => {
+
+    //     // if (clinicalArea.name) {
+    //       //   clinicalArea.name = clinicalArea.name.split(" (")[0];
+    //       //   // console.log("before getSubClinicalAreas", clinicalArea.name);
+    //       const clinicalAreasTemp = filter(clinicalAreas, { parent_Id: clinicalArea.alternative_id }, []);
+    //   clinicalArea['children'] = clinicalAreasTemp;
+    // })
+    // phil hack
+    // let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);    
+    // console.log(clinicalAreaTree);
+
+    // let clinicalAreaTreePhil = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
+    // 
 
 
-  //   if (clinicalArea.parent_Id != null && str) {
-
-  //     createPage({
-  //       alternative_id: clinicalArea.alternative_id,
-  //       path: `/clinical-areas/${str}/`,
-  //       component: reviewTemp,
-  //       context: {
-  //         id: clinicalArea.id,
-  //         alternative_id: clinicalArea.alternative_id,
-  //         name: clinicalArea.name,
-  //         parent_Id: clinicalArea.parent_Id,
-  //         inactive: clinicalArea.inactive,
-  //         clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
-  //       },
-  //     })
-  //   } else if (str){
-  //     const reviewResult = await graphql(
-  //       `
-  //         {
-  //           allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
-  //             nodes {
-  //               alternative_id
-  //               name
-  //               clinical_Area_Id
-  //               modified_Time
-  //             }
-  //           }
-  //         }
-  //       `
-  //     )
-
-  //     if (reviewResult.errors) {
-  //       reporter.panicOnBuild(
-  //         `There was an error loading your reviews`,
-  //         reviewResult.errors
-  //       )
-  //       return
-  //     }
-  //     const reviewData = reviewResult.data.allZohoReviews.nodes
-  //     console.log(reviewData)
-  //     // if(!clinicalArea.inactive){
-
-  //     //   createPage({
-  //     //     alternative_id: clinicalArea.alternative_id,
-  //     //     path: `/clinical-areas/${str}/`,
-  //     //     component: clinicalAreaTemp,
-  //     //     context: {
-  //     //       id: clinicalArea.id,
-  //     //       alternative_id: clinicalArea.alternative_id,
-  //     //       name: clinicalArea.name,
-  //     //       parent_Id: clinicalArea.parent_Id,
-  //     //       inactive: clinicalArea.inactive,
-  //     //       clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
-  //     //       reviewData: reviewData,
-  //     //     },
-  //     //   })
-  //     // }
-  //   }
-
-  //   // Create Writers List
-  //   // clinicalArea
-  // })
-
-  // const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
 
 
-  // Create Contact Us Page
-  const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
-  createPage({
-    path: `/contact-us/`,
-    component: contactUsTemp,
-    context: {
-      advertisements: advertisementsContent,
-    },
-  })
 
-  // Create Join Research Review Page
-  const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
-  createPage({
-    path: `/join-research-review/`,
-    component: JoinRRTemp,
-    context: {
-      content: joinContent,
-      advertisements: advertisementsContent,
-    },
-  })
-}
+
+    console.log("before creating home page")
+    createPage({
+      path: `/`,
+      component: indexTemp,
+      context: {
+        featuredArticle: featuredArticle,
+        homeContent: homeContent,
+        advertisements: advertisementsContent,
+      },
+    })
+
+    console.log("before creating partners page")
+    createPage({
+      path: `/partners`,
+      component: partnersTemp,
+      context: {
+        partners: partners,
+        advertisements: advertisementsContent,
+      },
+    })
+
+    console.log("before creating modules page")
+    createPage({
+      path: `/modules`,
+      component: modulesTemp,
+      context: {
+        modules: modules,
+        advertisements: advertisementsContent,
+      },
+    })
+
+
+    // clinicalAreas.forEach(async (clinicalArea, index) => {
+    //   let str = clinicalArea.name;
+
+
+    //   if (clinicalArea.parent_Id != null && str) {
+
+    //     createPage({
+    //       alternative_id: clinicalArea.alternative_id,
+    //       path: `/clinical-areas/${str}/`,
+    //       component: reviewTemp,
+    //       context: {
+    //         id: clinicalArea.id,
+    //         alternative_id: clinicalArea.alternative_id,
+    //         name: clinicalArea.name,
+    //         parent_Id: clinicalArea.parent_Id,
+    //         inactive: clinicalArea.inactive,
+    //         clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
+    //       },
+    //     })
+    //   } else if (str){
+    //     const reviewResult = await graphql(
+    //       `
+    //         {
+    //           allZohoReviews(filter: {clinical_Area_Id: {eq: "${clinicalArea.alternative_id}"}}) {
+    //             nodes {
+    //               alternative_id
+    //               name
+    //               clinical_Area_Id
+    //               modified_Time
+    //             }
+    //           }
+    //         }
+    //       `
+    //     )
+
+    //     if (reviewResult.errors) {
+    //       reporter.panicOnBuild(
+    //         `There was an error loading your reviews`,
+    //         reviewResult.errors
+    //       )
+    //       return
+    //     }
+    //     const reviewData = reviewResult.data.allZohoReviews.nodes
+    //     console.log(reviewData)
+    //     // if(!clinicalArea.inactive){
+
+    //     //   createPage({
+    //     //     alternative_id: clinicalArea.alternative_id,
+    //     //     path: `/clinical-areas/${str}/`,
+    //     //     component: clinicalAreaTemp,
+    //     //     context: {
+    //     //       id: clinicalArea.id,
+    //     //       alternative_id: clinicalArea.alternative_id,
+    //     //       name: clinicalArea.name,
+    //     //       parent_Id: clinicalArea.parent_Id,
+    //     //       inactive: clinicalArea.inactive,
+    //     //       clinical_Area_Ref: clinicalArea.clinical_Area_Ref,
+    //     //       reviewData: reviewData,
+    //     //     },
+    //     //   })
+    //     // }
+    //   }
+
+    //   // Create Writers List
+    //   // clinicalArea
+    // })
+
+    // const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
+
+
+    // Create Contact Us Page
+    console.log("before creating contactUs page")
+    const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
+    createPage({
+      path: `/contact-us/`,
+      component: contactUsTemp,
+      context: {
+        advertisements: advertisementsContent,
+      },
+    })
+
+    // Create Join Research Review Page
+    console.log("before creating JoinRR page")
+    const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
+    createPage({
+      path: `/join-research-review/`,
+      component: JoinRRTemp,
+      context: {
+        content: joinContent,
+        advertisements: advertisementsContent,
+      },
+    })
+  }
 
 
 
