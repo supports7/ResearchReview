@@ -46,15 +46,21 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
         return;
       }
       console.log("clincalArea - ", clinicalArea)
-      let numberOfChildren = clinicalArea.children.length;
       let redirecting = false;
-      if (numberOfChildren == 1) {
-        //Need to check if the only child has a url and if it has a url Redriect to that url
-        let firstChild = clinicalArea.children[0];
-        if (firstChild.url && firstChild.url.length > 0) {
-          redirecting = true;
-          navigate(`${pageContext.pageUrl}${firstChild.url}`);
+      if(clinicalArea.children){
+        let numberOfChildren = clinicalArea.children.length;
+        if (numberOfChildren == 1) {
+          //Need to check if the only child has a url and if it has a url Redriect to that url
+          let firstChild = clinicalArea.children[0];
+          if (firstChild.url && firstChild.url.length > 0) {
+            redirecting = true;
+            navigate(`${pageContext.pageUrl}${firstChild.url}`);
+          }
         }
+      }
+      else {
+        redirecting = true;
+        navigate(clinicalArea.url)
       }
       if (!redirecting) {
         setSelectedChildNode(clinicalArea);
