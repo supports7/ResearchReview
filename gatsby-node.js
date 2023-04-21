@@ -415,7 +415,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
-                      // articles.forEach((article) => {
+                      articles.forEach((article) => {
                       // createPage({
                       //   path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
                       //   component: articleTemp,
@@ -426,36 +426,36 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                       //     advertisements: advertisementsContent,
                       //     tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                       //   },
-                      // })
+                      })
                     }))
                   }
                 }))
               }
 
-              // createPage({
-              //   path: `/expert-writers/${reviewUrlTemp}/`,
-              //   component: writerListTemp,
-              //   context: {
-              //     review: review,
-              //     writers: writers,
-              //     url: `/expert-writers/${reviewUrlTemp}/`,
-              //     advertisements: advertisementsContent,
-              //   },
-              // })
+              createPage({
+                path: `/expert-writers/${reviewUrlTemp}/`,
+                component: writerListTemp,
+                context: {
+                  review: review,
+                  writers: writers,
+                  url: `/expert-writers/${reviewUrlTemp}/`,
+                  advertisements: advertisementsContent,
+                },
+              })
 
               const topTwoWriters = writers.slice(0, 2);
               await Promise.all(topTwoWriters.map((writer) => {
                 // topTwoWriters.forEach((writer) => {
                 let writerUrlTemp = writer.name.toLowerCase();
                 writerUrlTemp = writerUrlTemp.split(' ').join('-');
-                // createPage({
-                //   path: `/expert-writers/${reviewUrlTemp}/${writerUrlTemp}`,
-                //   component: writerTemp,
-                //   context: {
-                //     writer: writer,
-                //     advertisements: advertisementsContent,
-                //   },
-                // })
+                createPage({
+                  path: `/expert-writers/${reviewUrlTemp}/${writerUrlTemp}`,
+                  component: writerTemp,
+                  context: {
+                    writer: writer,
+                    advertisements: advertisementsContent,
+                  },
+                })
               }));
               review['url'] = reviewUrlTemp;
             }))
