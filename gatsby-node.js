@@ -385,15 +385,15 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   let podcastUrlTemp = podcast.title.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
-                  // createPage({
-                  //   path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
-                  //   component: podcastDetailTemp,
-                  //   context: {
-                  //     podcast: podcast,
-                  //     review: review,
-                  //     advertisements: advertisementsContent,
-                  //   },
-                  // })
+                  createPage({
+                    path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                    component: podcastDetailTemp,
+                    context: {
+                      podcast: podcast,
+                      review: review,
+                      advertisements: advertisementsContent,
+                    },
+                  })
                 }))
               }
 
