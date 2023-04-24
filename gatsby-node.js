@@ -1,6 +1,6 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
-const { filter } = require('lodash');
+const { filter, first } = require('lodash');
 const axios = require('axios');
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
@@ -19,6 +19,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const subscriptionsTemp = path.resolve(`./src/templates/subscriptions.js`)
   const podcastsTemp = path.resolve(`./src/templates/podcasts.js`)
   const podcastDetailTemp = path.resolve(`./src/templates/podcastDetails.js`)
+
+  let featuredArticleUrl = "";
 
   async function getIssues(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/issues`).then(
@@ -282,14 +284,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   const clinicalAreas = clinicalAreasResult.data.allZohoClinicalAreas.nodes
   const writers = writerResult.data.allZohoWriters.nodes
-  const featuredArticle = featuredArticleResult.data.allZohoFeaturedArticle.nodes
+  const featuredArticleArray = featuredArticleResult.data.allZohoFeaturedArticle.nodes
   const partners = partnersResult.data.allZohoPartners.nodes
   const modules = modulesResult.data.allZohoModules.nodes
   const homeContent = homeResult.data.allZohoHome.nodes
   const joinContent = joinResult.data.allZohoJoin.nodes
   const advertisementsContent = advertisementsResult.data.allZohoAdvertisements.nodes
+  const featuredArticle = first(featuredArticleArray);
   // Create clinical area pages
-
   async function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
     // function code
     // Gatsby creates own Id. Save Id value from API into new field called alternative_id.
@@ -410,11 +412,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     context: {
                       issue: issue,
                       articles: articles,
+                      advertisements: advertisementsContent,
+                      tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                     },
                   })
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
                       // articles.forEach((article) => {
+                        if(article.id == featuredArticle.section_Id) {
+                          featuredArticle.url = `/clinical-areas/${reviewUrlTemp}/${issue.name}/`;
+                        }
                         try {
                           createPage({
                             path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,

@@ -45,7 +45,7 @@ const ReviewTemplate = ({
     <Layout>
       <Banner name={pageContext.review.name} bannerImage={bannerImage} />
       <Container>
-        <section className="home-page-featured-section">
+        {/* <section className="home-page-featured-section">
           <Row>
             <Col md={8} sm={6} xs={12}>
               <div className="featured-section-image">
@@ -89,7 +89,7 @@ const ReviewTemplate = ({
               </div>
             </Col>
           </Row>
-        </section>
+        </section> */}
 
         <section className="home-page-connect-section">
           <Row>

@@ -41,7 +41,7 @@ const Index = ({ pageContext }) => {
                   </div>
                   <img
                     alt="placeholder"
-                    src={`${pageContext.featuredArticle[0].image}`}
+                    src={`${pageContext.featuredArticle.image}`}
                     className="img-fluid featured-image"
                   />
                 </div>
@@ -51,15 +51,17 @@ const Index = ({ pageContext }) => {
                   <SectionLine />
                   <div>
                     <h2>
-                      {pageContext.featuredArticle[0].title}
+                      {pageContext.featuredArticle.title}
                     </h2>
-                    <p className="small-green-text">{pageContext.featuredArticle[0].subtitle}</p>
+                    <p className="small-green-text">{pageContext.featuredArticle.subtitle}</p>
                     <p className="featured-paragraph-text">
-                      {pageContext.featuredArticle[0].text}
+                      {pageContext.featuredArticle.text}
                     </p>
-                    <a href="/" className="btn btn-secondary">
-                      READ MORE
-                    </a>
+                    {pageContext.featuredArticle.url &&
+                      <a href={pageContext.featuredArticle.url} className="btn btn-secondary">
+                        READ MORE
+                      </a>
+                    }
                     <a href="/join-research-review" className="btn btn-primary">
                       SIGN UP
                     </a>
@@ -96,10 +98,10 @@ const Index = ({ pageContext }) => {
                       Clinical Areas
                     </p>
                     <ul className="connect-section-list">
-                      {pageContext.homeContent[0].clinicalAreas.map((clinicalArea) => {
+                      {pageContext.homeContent[0].clinicalAreas.map((clinicalArea, index) => {
                         return (
                           <li className="connect-section-list-item" key={clinicalArea.id}>
-                            <a href={`/clinical-areas/${clinicalArea.name}`}>{clinicalArea.name}</a>
+                            <a href={`/clinical-areas/#top-level-clinical-area-${index}`}>{clinicalArea.name}</a>
                           </li>
                         )
                       })}
@@ -187,7 +189,7 @@ const Index = ({ pageContext }) => {
                   <br />
                   Research Review makes keeping up to date easy whether you're a Physician, Surgeon, General Practitioner or Nurse. 50 regular subject specific reviews, over 50 international medical conferences every year and advice from over 200 Australian medical specialists.
                 </p>
-                <a href="/" className="btn btn-secondary">
+                <a href="/contact" className="btn btn-secondary">
                   READ MORE
                 </a>
               </div>

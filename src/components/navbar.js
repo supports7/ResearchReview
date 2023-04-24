@@ -35,10 +35,10 @@ const ResearchReviewNavbar = () => {
   }, [])
 
   const startLogout = () => {
+    cookies.remove("userData", { path: '/' })
+    cookies.remove("EncryptionKey", { path: '/' })
     setUserData()
     setLoggedIn(false)
-    cookies.remove("userData")
-    cookies.remove("EncryptionKey")
   }
 
   const handleSubmit = async event => {
@@ -63,7 +63,7 @@ const ResearchReviewNavbar = () => {
         .then(
           result => {
             console.log("result", result)
-            if(!result.errors) {
+            if (!result.errors) {
               console.log("TESTING")
             }
             setLoadingLogin(false)
@@ -74,6 +74,10 @@ const ResearchReviewNavbar = () => {
               expires: new Date(Date.now() + 8640000),
             })
             cookies.set("EncryptionKey", result.encryptionKey, {
+              path: "/",
+              expires: new Date(Date.now() + 8640000),
+            })
+            cookies.set("LoginToken", result.token, {
               path: "/",
               expires: new Date(Date.now() + 8640000),
             })
@@ -119,7 +123,7 @@ const ResearchReviewNavbar = () => {
                 <Link className="navbar-brand" to="/">
                   <img
                     alt="research review logo"
-                    src={logoResearchReview} 
+                    src={logoResearchReview}
                     className="img-fluid" />
                 </Link>
               </div>
@@ -173,11 +177,6 @@ const ResearchReviewNavbar = () => {
                                   <ArrowForwardIosIcon />
                                 </button>
                               )}
-                              {loadingLogin && (
-                                <div className="loading login-form-submit">
-                                  <CircularProgress color="inherit" />
-                                </div>
-                              )}
                             </div>
                           </Col>
                         </Row>
@@ -193,6 +192,11 @@ const ResearchReviewNavbar = () => {
                         </Col>
                       </Row>
                     )}
+                  </div>
+                )}
+                {loadingLogin && (
+                  <div className="loading login-form-submit float-right">
+                    <CircularProgress color="inherit" />
                   </div>
                 )}
               </div>
@@ -236,9 +240,9 @@ const ResearchReviewNavbar = () => {
                     <Nav.Link href="/partners">
                       Professional Development
                     </Nav.Link>
-                    <Nav.Link href="/industry-resources">
+                    {/* <Nav.Link href="/industry-resources">
                       Industry Resources
-                    </Nav.Link>
+                    </Nav.Link> */}
                     {/* <Nav.Link href="/links">Links</Nav.Link> */}
                     {/* <Nav.Link href="/advertise">Advertise</Nav.Link> */}
                     {/* <Nav.Link href="/about">About</Nav.Link> */}

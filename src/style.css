@@ -1330,3 +1330,8 @@ footer .footer-col-ul ul li::marker {
   height: 40vw;
   width: 100%;
 }
+
+.loading {
+  float: right;
+  margin-right: 70px;
+}

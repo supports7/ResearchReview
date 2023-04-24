@@ -26,7 +26,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
     const [isActive, setIsActive] = useState();
 
     return (
-      <Col xs={12} key={index}>
+      <Col xs={12} key={index} id={`top-level-clinical-area-${index}`}>
         <div className="clinical-area-section-main-div">
           <div className="clinical-area-section-top-div">
             <h3>{clinicalArea.name}</h3>

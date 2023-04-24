@@ -8,7 +8,8 @@ import Cookies from "universal-cookie"
 
 const ChangePassword = () => {
   const cookies = new Cookies()
-  
+  const loginToken = cookies.get("LoginToken");
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmPassword] = useState("");
@@ -47,6 +48,7 @@ const ChangePassword = () => {
         // mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + loginToken,
         },
         body: JSON.stringify(jsonData),
       })

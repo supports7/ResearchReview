@@ -8,7 +8,8 @@ import Cookies from "universal-cookie"
 
 const Profile = () => {
   const cookies = new Cookies()
-
+  const loginToken = cookies.get("LoginToken");
+  
   const [profileData, setProfileData] = useState("");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
@@ -64,6 +65,7 @@ const Profile = () => {
         // mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + loginToken,
         },
         body: JSON.stringify(jsonData),
       })

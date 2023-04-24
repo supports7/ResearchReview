@@ -43,8 +43,8 @@ const PartnersTemplate = ({
 									Specialist opinions on guidlines, medicines and conferences.
 									All Research Review publications are free to receive.
 								</p>
-								<a href="/" className="btn btn-secondary">
-									READ MORE
+								<a href="/modules" className="btn btn-secondary">
+									Modules
 								</a>
 							</div>
 						</Col>

@@ -46,7 +46,7 @@ const PodcastDetailsTemplate = ({
                   src={videoUrl}
                   // https://www.youtube.com/embed/cZN32QazNH4
                   title={`Research Review | ${pageContext.podcast.title}`}
-                  frameborder="0"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen></iframe>
               </div>
