@@ -43,8 +43,8 @@
   --fontSize-root: 16px;
   --lineHeight-none: 1;
   --lineHeight-tight: 1.1;
-  --lineHeight-normal: 16px;
-  --lineHeight-relaxed: 16px;
+  --lineHeight-normal: 22px;
+  --lineHeight-relaxed: 22px;
   /* 1.200 Minor Third Type Scale */
   --fontSize-0: 0.833rem;
   --fontSize-1: 1rem;
@@ -67,7 +67,7 @@
 @font-face {
   font-family: 'Gotham Book';
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   font-style: normal;
   font-named-instance: 'Regular';
   src: url(/fonts/GothamBook.woff2) format("woff2");
@@ -75,7 +75,7 @@
 @font-face {
   font-family: 'Gotham Book Italic';
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   font-style: italic;
   font-named-instance: 'Italic';
   src: url(/fonts/GothamBookItalic.woff2) format("woff2");
@@ -83,7 +83,7 @@
 @font-face {
   font-family: 'Gotham Bold';
   font-weight: bold;
-  font-display: swap;
+  font-display: block;
   font-style: bold;
   font-named-instance: 'Bold';
   src: url(/fonts/GothamBold.woff2) format("woff2");
@@ -117,6 +117,13 @@ em {
 
 footer {
   padding: var(--spacing-6) var(--spacing-0);
+}
+
+.jrr-cta-main-div {
+  display: grid;
+}
+.jrr-cta-logo {
+  align-self: center;
 }
 
 hr {
@@ -370,30 +377,30 @@ a:focus {
 /* S7 - Research Review Custom Site Wide Styling */
 body {
   font-family: 'Gotham Book';
-  line-height: 16px;
+  line-height: 22px;
 }
 
-a.btn {
-  border-radius: 25px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 13px;
+.btn {
+  border-radius: 25px !important;
+  text-transform: uppercase !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
   padding: 5px 20px;
-  min-width: 120px;
+  min-width: 120px !important;
 }
 
-a.btn.btn-primary {
+.btn.btn-primary {
   background-color: #1cb2a9;
   border: 1px solid #1cb2a9;
 }
 
-a.btn.btn-primary:hover {
+.btn.btn-primary:hover {
   background-color: white;
   color: #1cb2a9;
   border: 1px solid #1cb2a9;
 }
 
-a.btn.btn-primary:active {
+.btn.btn-primary:active {
   background-color: white !important;
   color: #1cb2a9 !important;
   border: 1px solid #1cb2a9 !important;
@@ -408,30 +415,30 @@ button.btn {
   min-width: 120px;
 }
 
-button.btn.btn-primary {
+.btn.btn-primary {
   background-color: #1cb2a9;
   border: 1px solid #1cb2a9;
 }
 
-button.btn.btn-primary:hover {
+.btn.btn-primary:hover {
   background-color: white;
   color: #1cb2a9;
   border: 1px solid #1cb2a9;
 }
 
-button.btn.btn-primary:active {
+.btn.btn-primary:active {
   background-color: white !important;
   color: #1cb2a9 !important;
   border: 1px solid #1cb2a9 !important;
 }
 
-a.btn.btn-secondary {
+.btn.btn-secondary {
   background-color: #fff;
   border: 1px solid black;
   color: black;
 }
 
-a.btn.btn-secondary:hover {
+.btn.btn-secondary:hover {
   background-color: black;
   border: 1px solid #fff;
   color: #fff;
@@ -523,8 +530,7 @@ section {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 13px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding: 15px 20px !important;
   border-radius: 25px;
 }
 .navbar-row .navbar-nav a:hover {
@@ -662,7 +668,7 @@ section {
 /* BANNER STYLING */
 
 .banner-content {
-  padding-top: 300px;
+  padding-top: 210px;
 }
 
 .banner-content h1{
@@ -717,7 +723,7 @@ footer .footer-col-ul ul li::marker {
 }
 
 .research-review-section-line-box {
-  width: 100px;
+  width: 120px;
   height: 10px;
   background-color: black;
 }
@@ -758,7 +764,7 @@ footer .footer-col-ul ul li::marker {
 
 .home-page-featured-section .featured-section-content .featured-paragraph-text {
   font-size: 14px;
-  line-height: 15px;
+  line-height: 20px;
 }
 
 .home-page-featured-section .featured-section-content .btn-secondary {
@@ -771,7 +777,7 @@ footer .footer-col-ul ul li::marker {
 
 .home-page-connect-section .connect-section-main-div .connect-section-content {
   position: relative;
-  min-height: 400px;
+  min-height: 320px;
 }
 
 
@@ -870,6 +876,10 @@ footer .footer-col-ul ul li::marker {
   padding-right: 100px;
 }
 
+.full-screen-ad-link  {
+  text-decoration: none !important;
+}
+
 .full-screen-ad .full-screen-ad-content h2 {
   color: white;
   font-size: 50px;
@@ -919,6 +929,12 @@ footer .footer-col-ul ul li::marker {
   }
 }
 
+input::placeholder {
+  font-family: 'Gotham Book' !important;
+  font-style: normal !important;
+  font-weight: 500;
+}
+
 .join-research-review-form-section .join-rr-form input {
   border: none;
   border-bottom: 1px solid black;
@@ -938,7 +954,7 @@ footer .footer-col-ul ul li::marker {
 
 .join-research-review-form-section .join-rr-form input::placeholder {
   /* color: black; */
-  font-family: "Gotham Book Italic";
+  font-family: "Gotham Book";
   font-size: 20px;
 }
 
@@ -1185,6 +1201,19 @@ footer .footer-col-ul ul li::marker {
   margin-bottom: 100px;
 }
 
+.promoted-content a{
+  text-decoration: none;
+  color: black;
+}
+
+.promoted-content a:hover {
+  color: black;
+}
+
+.promoted-content a:hover h3{
+  text-decoration: underline;
+}
+
 .promoted-content h3{
   margin-top: 20px;
   margin-bottom: 20px;
@@ -1256,7 +1285,7 @@ footer .footer-col-ul ul li::marker {
 
 .password-page-form-section .password-page-form-main-div .password-page-form input::placeholder {
   /* color: black; */
-  font-family: "Gotham Book Italic";
+  font-family: "Gotham Book";
   font-size: 20px;
 }
 

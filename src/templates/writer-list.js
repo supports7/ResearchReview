@@ -51,19 +51,18 @@ const WritersListTemplate = ({ pageContext, location }) => {
                   return (
                     <Col md={4} sm={6} xs={12} key={index}>
                       <div className="writer">
-                        <div className="writer-image">
-                          <img
-                            alt={writer.name}
-                            src={writer.image ? writer.image : "https://via.placeholder.com/400x300"} 
-                            className="img-fluid" />
-                        </div>
-                        <div className="writer-content">
-                          <h3>{writer.name}</h3>
-                          <p>Expert Writer</p>
-                          <a href={pageContext.url + writerUrlTemp} className="btn btn-primary">
-                            READ MORE
-                          </a>
-                        </div>
+                        <a href={pageContext.url + writerUrlTemp}>
+                          <div className="writer-image">
+                            <img
+                              alt={writer.name}
+                              src={writer.image ? writer.image : "https://via.placeholder.com/400x300"}
+                              className="img-fluid" />
+                          </div>
+                          <div className="writer-content">
+                            <h3>{writer.name}</h3>
+                            <p>Expert Writer</p>
+                          </div>
+                        </a>
                       </div>
                     </Col>
                   )

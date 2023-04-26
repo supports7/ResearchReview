@@ -10,6 +10,7 @@ import DoubleAd from "../components/doubleAd"
 import FullScreenAd from "../components/fullScreenAd"
 import Banner from "../components/banner";
 import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
+import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
 
 const Index = ({ pageContext }) => {
 
@@ -244,12 +245,14 @@ const Index = ({ pageContext }) => {
                 </Row>
               </form>
             </Col>
-            <Col md={4} sm={6} xs={12}>
-              <img
-                alt="placeholder"
-                src="https://via.placeholder.com/400x300"
-                className="img-fluid"
-              />
+            <Col md={4} sm={6} xs={12} className="jrr-cta-main-div">
+              <div className="jrr-cta-logo">
+                <img
+                  alt="research review logo"
+                  src={logoResearchReview}
+                  className="img-fluid"
+                />
+              </div>
             </Col>
           </Row>
         </section>

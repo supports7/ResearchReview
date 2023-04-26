@@ -1,6 +1,7 @@
 import React from "react"
 import { Row, Col } from "react-bootstrap"
 import SectionLine from "./sectionLine"
+import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
 
 const JoinRR = () => {
   return (
@@ -29,11 +30,14 @@ const JoinRR = () => {
                 </Row>
               </form>
             </Col>
-            <Col md={4} sm={6} xs={12}>
-              <img
-                src="https://via.placeholder.com/400x300"
-                className="img-fluid"
-              />
+            <Col md={4} sm={6} xs={12} className="jrr-cta-main-div">
+              <div className="jrr-cta-logo">
+                <img
+                  alt="research review logo"
+                  src={logoResearchReview}
+                  className="img-fluid"
+                />
+              </div>
             </Col>
           </Row>
         </section>

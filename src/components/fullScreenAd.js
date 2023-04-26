@@ -11,6 +11,7 @@ const FullScreenAd = ({advertisements}) => {
   }, [])
 
   return (
+    <a className="full-screen-ad-link" href={largeAd.link} target="_blank" >
     <section
       className="full-screen-ad"
       style={{
@@ -35,15 +36,13 @@ const FullScreenAd = ({advertisements}) => {
                   global medical journals to your inbox every issue with
                   commentary from New Zealand experts.
                 </p>
-                <a href={largeAd.link} target="_blank" className="btn btn-light">
-                  Full Details {">"}
-                </a>
               </div>
             </div>
           </Col>
         </Row>
       </Container>
     </section>
+    </a>
   )
 }
 

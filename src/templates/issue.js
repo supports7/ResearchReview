@@ -26,7 +26,7 @@ const IssueTemplate = ({
 
   return (
     <Layout>
-      <Banner name={pageContext.issue.name} bannerImage={bannerImage} pdfDownloadLink={pageContext.issue.pdfDownloadUrl}/>
+      <Banner name={pageContext.issue.name} bannerImage={bannerImage} pdfDownloadLink={pageContext.issue.pdfDownloadUrl} />
       <Container>
         <section className="home-page-connect-section">
           <Row>
@@ -40,26 +40,26 @@ const IssueTemplate = ({
                   return (
                     <Col md={4} sm={6} xs={12} key={index}>
                       <div className="promoted-content">
-                        <div className="promoted-content-image">
-                          <img
-                            alt="research review image showing a medical practice"
-                            src={randomImage(index)}
-                            className="img-fluid"
-                            width="400"
-                            height="230"
-                          />
-                        </div>
-                        <div className="promoted-content-content">
-                          <h3>{article.name}</h3>
-                          {article.authors &&
-                            <p>
-                              Authors: {article.authors}
-                            </p>
-                          }
-                          <a href={`${pageContext.tempUrlPath}${article.name}`} className="btn btn-primary">
-                            Read More
-                          </a>
-                        </div>
+                        <a href={`${pageContext.tempUrlPath}${article.name}`}>
+                          <div className="promoted-content-image">
+                            <img
+                              alt="research review image showing a medical practice"
+                              src={randomImage(index)}
+                              className="img-fluid"
+                              width="400"
+                              height="230"
+                            />
+                          </div>
+                          <div className="promoted-content-content">
+                            <h3>{article.name}</h3>
+                            {article.authors &&
+                              <p>
+                                Authors: {article.authors}
+                              </p>
+                            }
+                            <span href={`${pageContext.tempUrlPath}${article.name}`} className="btn btn-primary">Read More</span>
+                          </div>
+                        </a>
                       </div>
                     </Col>
                   )

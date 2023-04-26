@@ -6,7 +6,8 @@ import { Row, Col, Container } from "react-bootstrap"
 import Supporters from "../components/supporters"
 // import { SettingsSystemDaydreamOutlined } from "@mui/icons-material"
 import ReCAPTCHA from "react-google-recaptcha"
-
+import Banner from "../components/banner";
+import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 const ContactUsTemplate = ({ pageContext, location }) => {
   const siteTitle = `Clinical Areas`
 
@@ -65,6 +66,7 @@ const ContactUsTemplate = ({ pageContext, location }) => {
 
   return (
     <Layout>
+      <Banner name={"Contact Us"} bannerImage={bannerImage} />
       <Container>
         <section className="contact-us-form-section">
           <Row>

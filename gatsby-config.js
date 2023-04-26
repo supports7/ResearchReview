@@ -269,3 +269,13 @@ module.exports = {
     },
   ],
 }
+
+exports.shouldUpdateScroll = ({ routerProps: { location } }) => {
+  // Prevent scrolling to top on page change
+  if (location.action === 'PUSH') {
+    return false;
+  }
+
+  // Default behavior (scroll to top)
+  return false;
+};

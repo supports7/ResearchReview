@@ -45,52 +45,6 @@ const ReviewTemplate = ({
     <Layout>
       <Banner name={pageContext.review.name} bannerImage={bannerImage} />
       <Container>
-        {/* <section className="home-page-featured-section">
-          <Row>
-            <Col md={8} sm={6} xs={12}>
-              <div className="featured-section-image">
-                <div className="featured-image-corner-triangle">
-                  <p className="featured-image-corner-text text-uppercase">
-                    FEATURED
-                  </p>
-                </div>
-                <img
-                  alt="placeholder"
-                  src="https://via.placeholder.com/900x400"
-                  className="img-fluid featured-image"
-                />
-              </div>
-            </Col>
-            <Col md={4} sm={6} xs={12}>
-              <div className="featured-section-content">
-                <SectionLine />
-                <div>
-                  <h2>
-                    Research Review <br />
-                    New Zealand
-                  </h2>
-                  <p className="small-green-text">Company Name Reference</p>
-                  <p className="featured-paragraph-text">
-                    Research Review publications bring the best of 10,000 global
-                    medical journals to your inbox every issue with commentary
-                    from New Zealand experts. Over 50 areas including
-                    Cardiology, Diabetes, Oncology, General Practice and
-                    Psychiatry. Specialist opinions on guidlines, medicines and
-                    conferences. All Research Review publications are free to
-                    receive.
-                  </p>
-                  <a href="/" className="btn btn-secondary">
-                    READ MORE
-                  </a>
-                  <a href="/" className="btn btn-primary">
-                    SIGN UP
-                  </a>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </section> */}
-
         <section className="home-page-connect-section">
           <Row>
             <Col xs={12}>
@@ -105,26 +59,26 @@ const ReviewTemplate = ({
                   return (
                     <Col md={4} sm={6} xs={12} key={index}>
                       <div className="promoted-content">
-                        <div className="promoted-content-image">
-                          <img
-                            alt="research review image showing a medical practice"
-                            src={randomImage(index)}
-                            className="img-fluid"
-                            width="400"
-                            height="250"
-                          />
-                        </div>
-                        <div className="promoted-content-content">
-                          <h3>{issue.name}</h3>
-                          {issue.issue_No &&
-                            <p>
-                              Issue No: {issue.issue_No}
-                            </p>
-                          }
-                          <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`} className="btn btn-primary">
-                            Read More
-                          </a>
-                        </div>
+                        <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
+                          <div className="promoted-content-image">
+                            <img
+                              alt="research review image showing a medical practice"
+                              src={randomImage(index)}
+                              className="img-fluid"
+                              width="400"
+                              height="250"
+                            />
+                          </div>
+                          <div className="promoted-content-content">
+                            <h3>{issue.name}</h3>
+                            {issue.issue_No &&
+                              <p>
+                                Issue No: {issue.issue_No}
+                              </p>
+                            }
+                            <span className="btn btn-primary" href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>Read More</span>
+                          </div>
+                        </a>
                       </div>
                     </Col>
                   )
@@ -168,24 +122,24 @@ const ReviewTemplate = ({
 
                           <Col md={4} sm={6} xs={12} key={index}>
                             <div className="promoted-content">
-                              <div className="promoted-content-image">
-                                <img
-                                  alt="research review image showing a medical practice"
-                                  src={randomImage(index)}
-                                  className="img-fluid"
-                                  width="400"
-                                  height="230"
-                                />
-                              </div>
-                              <div className="promoted-content-content">
-                                <h3>{podcast.title}</h3>
-                                <p>
-                                  {podcast.introText}
-                                </p>
-                                <a href={`/podcasts/${reviewUrlTemp}/${podcastUrlTemp}`} className="btn btn-primary">
-                                  Read More
-                                </a>
-                              </div>
+                              <a href={`/podcasts/${reviewUrlTemp}/${podcastUrlTemp}`}>
+                                <div className="promoted-content-image">
+                                  <img
+                                    alt="research review image showing a medical practice"
+                                    src={randomImage(index)}
+                                    className="img-fluid"
+                                    width="400"
+                                    height="230"
+                                  />
+                                </div>
+                                <div className="promoted-content-content">
+                                  <h3>{podcast.title}</h3>
+                                  <p>
+                                    {podcast.introText}
+                                  </p>
+                                  <span className="btn btn-primary" href={`/podcasts/${reviewUrlTemp}/${podcastUrlTemp}`}>Watch</span>
+                                </div>
+                              </a>
                             </div>
                           </Col>
                         )

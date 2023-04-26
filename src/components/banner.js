@@ -9,7 +9,7 @@ const Banner = ({name, bannerImage, pdfDownloadLink}) => {
         className="banner-fullwidth-container"
         style={{
             backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('${bannerImage}')`,
-            height: "800px",
+            height: "600px",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

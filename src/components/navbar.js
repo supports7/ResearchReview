@@ -39,6 +39,7 @@ const ResearchReviewNavbar = () => {
     cookies.remove("EncryptionKey", { path: '/' })
     setUserData()
     setLoggedIn(false)
+    window.location.reload();
   }
 
   const handleSubmit = async event => {
@@ -81,6 +82,7 @@ const ResearchReviewNavbar = () => {
               path: "/",
               expires: new Date(Date.now() + 8640000),
             })
+            window.location.reload();
           },
           // Note: it's important to handle errors here
           // instead of a catch() block so that we don't swallow
@@ -150,7 +152,7 @@ const ResearchReviewNavbar = () => {
                               <input
                                 type="text"
                                 name="username"
-                                className="form-control mt-1"
+                                className="form-control"
                                 placeholder="Email"
                                 required
                                 value={username}
@@ -163,7 +165,7 @@ const ResearchReviewNavbar = () => {
                               <input
                                 type="password"
                                 name="password"
-                                className="form-control mt-1"
+                                className="form-control"
                                 placeholder="Password"
                                 required
                                 value={password}

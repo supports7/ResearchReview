@@ -26,7 +26,7 @@ const PodcastTemplate = ({
 
   return (
     <Layout>
-      <Banner name={pageContext.review.name} bannerImage={bannerImage}/>
+      <Banner name={pageContext.review.name} bannerImage={bannerImage} />
       <Container>
         <section className="home-page-connect-section">
           <Row>
@@ -39,26 +39,25 @@ const PodcastTemplate = ({
                 {pageContext.podcasts.map((podcast, index) => {
                   let podcastUrlTemp = podcast.title.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
-                  
+
                   return (
                     <Col md={4} sm={6} xs={12} key={index}>
                       <div className="promoted-content">
-                        <div className="promoted-content-image">
-                          <img
-                            alt="research review image showing a medical practice"
-                            src={randomImage(index)}
-                            className="img-fluid"
-                            width="400"
-                            height="230"
-                          />
-                        </div>
-                        <div className="promoted-content-content">
-                          <h3>{podcast.title}</h3>
-                          <p>{podcast.introText}</p>
-                          <a href={`${pageContext.tempUrlPath}${podcastUrlTemp}`} className="btn btn-primary">
-                            Watch
-                          </a>
-                        </div>
+                        <a href={`${pageContext.tempUrlPath}${podcastUrlTemp}`}>
+                          <div className="promoted-content-image">
+                            <img
+                              alt="research review image showing a medical practice"
+                              src={randomImage(index)}
+                              className="img-fluid"
+                              width="400"
+                              height="230"
+                            />
+                          </div>
+                          <div className="promoted-content-content">
+                            <h3>{podcast.title}</h3>
+                            <p>{podcast.introText}</p>
+                          </div>
+                        </a>
                       </div>
                     </Col>
                   )
