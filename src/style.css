@@ -43,8 +43,8 @@
   --fontSize-root: 16px;
   --lineHeight-none: 1;
   --lineHeight-tight: 1.1;
-  --lineHeight-normal: 22px;
-  --lineHeight-relaxed: 22px;
+  --lineHeight-normal: 26px;
+  --lineHeight-relaxed: 26px;
   /* 1.200 Minor Third Type Scale */
   --fontSize-0: 0.833rem;
   --fontSize-1: 1rem;
@@ -104,7 +104,7 @@ html {
 
 body {
   font-family: var(--font-body) !important;
-  font-weight: 600 !important;
+  font-weight: 400 !important;
   font-size: var(--fontSize-1);
   color: var(--color-text);
   width: 100vw;
@@ -321,7 +321,7 @@ a:focus {
 }
 
 .header-link-home {
-  font-weight: var(--fontWeight-bold);
+  font-weight: var(--fontWeight-normal);
   font-family: var(--font-heading);
   text-decoration: none;
   font-size: var(--fontSize-2);
@@ -529,9 +529,10 @@ section {
   color: black;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 14px;
   padding: 15px 20px !important;
   border-radius: 25px;
+  font-family: 'Gotham Bold';
 }
 .navbar-row .navbar-nav a:hover {
   background-color: black;
@@ -541,7 +542,7 @@ section {
   font-weight: bold;
   text-transform: uppercase;
   float: right;
-  margin-top: 15px;
+  margin-top: 12px;
   margin-bottom: 0;
 }
 
