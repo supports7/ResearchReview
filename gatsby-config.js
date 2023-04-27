@@ -28,7 +28,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          "Country": config.countryCode,
+          // "Country": config.countryCode,
+          "Country": "Australia",
         },
         name: `ClinicalAreas`,
         verboseOutput: true, // For debugging purposes
@@ -60,7 +61,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          "Country": config.countryCode,
+          // "Country": config.countryCode,
+          "Country": "Australia",
         },
         name: `Reviews`,
         verboseOutput: true, // For debugging purposes
