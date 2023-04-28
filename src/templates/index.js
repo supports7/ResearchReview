@@ -79,7 +79,7 @@ const Index = ({ pageContext }) => {
                 <h2>CONNECT</h2>
               </Col>
               <SectionLine />
-              <Col sm={4} xs={12}>
+              <Col lg={4} xs={12}>
                 <div className="connect-section-main-div">
                   <div className="connect-section-image-div">
                     <img
@@ -113,7 +113,7 @@ const Index = ({ pageContext }) => {
                   </div>
                 </div>
               </Col>
-              <Col sm={4} xs={12}>
+              <Col lg={4} xs={12}>
                 <div className="connect-section-main-div">
                   <div className="connect-section-image-div">
                     <img
@@ -147,7 +147,7 @@ const Index = ({ pageContext }) => {
                   </div>
                 </div>
               </Col>
-              <Col sm={4} xs={12}>
+              <Col lg={4} xs={12}>
                 <div className="connect-section-main-div">
                   <div className="connect-section-image-div">
                     <img

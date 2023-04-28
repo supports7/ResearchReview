@@ -51,7 +51,7 @@ const IssueTemplate = ({
                             />
                           </div>
                           <div className="promoted-content-content">
-                            <h3>{article.name}</h3>
+                            <h3>{article.title}</h3>
                             {article.authors &&
                               <p>
                                 Authors: {article.authors}

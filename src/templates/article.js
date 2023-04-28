@@ -32,14 +32,14 @@ const ArticleTemplate = ({ pageContext, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Banner name={pageContext.article.name} bannerImage={bannerImage} />
+      <div className="article-banner">
+      <Banner name={pageContext.article.title} bannerImage={bannerImage} />
+      </div>
       <Container>
         <section className="section-top-content">
           <Row>
-            <Col md={8} xs={12}>
-              <Col xs={4}>
-                <SectionLine />
-              </Col>
+            <Col lg={8} xs={12}>
+              <SectionLine />
               <h3>{pageContext.article.title}</h3>
               {pageContext.article.authors &&
                 <div className="article-summary">
@@ -54,7 +54,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
               {decryptedComment ?
                 <div>
                   <div className="encrypted-panel">
-                    <strong className="bold">Comment: </strong><div className="encrypted-data">{decryptedComment}</div>
+                    <strong className="bold">Comment: </strong><div className="encrypted-data">{decryptedComment && <div  dangerouslySetInnerHTML={{ __html: decryptedComment }} ></div>}</div>
                   </div>
                   {pageContext.article.reference &&
                     <div className="encrypted-panel">
@@ -75,7 +75,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
                 </div>
               }
             </Col>
-            <Col md={4} xs={12}>
+            <Col lg={4} xs={12}>
               <div className="section-ad-image">
                 <img
                   alt="placeholder"

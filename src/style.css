@@ -64,6 +64,72 @@
 
 /* HTML elements */
 
+.desktop {
+  display: block;
+}
+
+.mobile {
+  display: none;
+}
+
+@media only screen and (max-width: 991px) {
+  .mobile {
+      display: block;
+  }
+
+  .desktop {
+      display: none;
+  }
+
+  .full-navbar .navbar-row {
+    border-radius: 0;
+  }
+
+  .navbar-logo {
+    text-align: center;
+  }
+
+  .navbar>.container {
+    justify-content: end !important;
+  }
+
+  .bottom-navbar .navbar-row .navbar {
+    background-color: transparent !important;
+  }
+
+  .mobile .navbar-row .navbar-login {
+    margin-top: 0;
+  }
+  .mobile .navbar-row .search-form {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .login-form-username-div {
+    margin-bottom: 10px;
+  }
+
+  .menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+  }
+
+  .menu-button .navbar-toggler {
+    margin-top: 10px;
+    margin-left: 10px
+  }
+
+  .menu-button p {
+    font-weight: bold;
+    text-transform: uppercase;
+    float: right;
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+}
+
 @font-face {
   font-family: 'Gotham Book';
   font-weight: 400;
@@ -677,6 +743,25 @@ section {
   color: white;
 }
 
+.article-banner .banner-content h1 {
+  font-size: 34px;
+  text-transform: initial;
+}
+
+@media only screen and (max-width: 991px) {
+  .banner-content h1{
+    font-size: 40px;
+  }
+
+  .article-banner .banner-content {
+    padding-top: 20px;
+  }
+
+  .article-banner .banner-content h1 {
+    font-size: 25px;
+  }
+}
+
 /* FOOTER STYLING */
 footer {
   border-top: 2px solid #d8dae7;
@@ -708,12 +793,6 @@ footer .footer-col-ul ul li a {
 
 footer .footer-col-ul ul li::marker {
   font-size: 20px;
-}
-
-@media only screen and (max-width: 425px) {
-  .footer-logo {
-    
-  }
 }
 
 /* Site Styles */
@@ -780,7 +859,15 @@ footer .footer-col-ul ul li::marker {
   position: relative;
   min-height: 320px;
 }
+@media only screen and (max-width: 991px) {
+  .home-page-connect-section .connect-section-main-div .connect-section-content {
+    min-height: auto;
+  }
 
+  .home-page-connect-section .connect-section-main-div .connect-section-content .btn {
+    position: unset !important;
+  }
+}
 
 @media only screen and (max-width: 767px) {
   .connect-section-main-div {
@@ -876,6 +963,21 @@ footer .footer-col-ul ul li::marker {
 .home-page-about-section .featured-paragraph-text {
   padding-right: 100px;
 }
+@media only screen and (max-width: 991px) {
+  .home-page-about-section .featured-paragraph-text {
+    padding-right: 0;
+  }
+
+  .container-fluid .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .full-screen-ad-link {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
 
 .full-screen-ad-link  {
   text-decoration: none !important;
@@ -889,6 +991,12 @@ footer .footer-col-ul ul li::marker {
 .full-screen-ad .full-screen-ad-content {
   width: 450px;
   color: white;
+}
+
+@media only screen and (max-width: 991px) {
+  .full-screen-ad .full-screen-ad-content {
+    width: 100%;
+  }
 }
 
 .full-screen-ad .full-screen-ad-content .btn {
@@ -1100,6 +1208,20 @@ input::placeholder {
 
 .contact-us-left-side {
   padding-right: 200px;
+}
+
+@media only screen and (max-width: 991px) {
+  .contact-us-left-side {
+    padding-right: 0;
+  } 
+
+  .contact-content-right-side {
+    padding-top: 20px;
+  }
+
+  .join-research-review-form {
+    padding: 5px !important;
+  }
 }
 
 .contact-us-form {
@@ -1361,7 +1483,38 @@ input::placeholder {
   width: 100%;
 }
 
+@media only screen and (max-width: 991px) {
+  .podcast-embedded-video {
+    height: 60vw;
+  }
+}
+
 .loading {
   float: right;
   margin-right: 70px;
+}
+
+.search-page-search-bar .search-form-input-div {
+  display: block;
+  position: relative;
+}
+
+.search-page-search-bar .search-form-submit {
+  position: absolute;
+  bottom: 0;
+  right: 6px;
+  border: none;
+  background: none;
+  color: #1cb2a9;
+  padding: 6px 10px;
+}
+
+.search-loading {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.promoted-content-content h3 {
+  text-transform: initial !important;
 }

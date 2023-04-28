@@ -109,7 +109,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
             <Col xs={12}>
               <Container>
                 <Row className="justify-content-center">
-                  <Col xs={8} className="join-research-review-col">
+                  <Col lg={8} xs={12} className="join-research-review-col">
                     <div className="join-research-review-popup-box">
                       <h2 className="join-research-review-heading">Join Research Review</h2>
                     </div>
@@ -209,14 +209,14 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={12} lg={6}>
                           <ReCAPTCHA
                             ref={recaptchaRef}
                             sitekey="6Lc4jGIjAAAAAGliVhOH19tHcMT5PS4LprB0qK2U"
                             onChange={onChangeRecaptcha}
                           />
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={12} lg={6}>
                           <button type="submit" className="btn btn-primary join-research-review-form-submit">
                             Submit
                           </button>
