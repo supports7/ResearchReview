@@ -24,7 +24,8 @@ const ArticleTemplate = ({ pageContext, location }) => {
     if (encryptionKey) {
       // Decrypt
       const tempDecryptedComment = decrypt(pageContext.article.comment, encryptionKey);
-      setDecryptedComment(tempDecryptedComment);
+      const sanitizedHTML = tempDecryptedComment.replace(/\n/g, '<br>');
+      setDecryptedComment(sanitizedHTML);
       // Show that section
       // Hide register button
     }
