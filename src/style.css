@@ -1518,3 +1518,24 @@ input::placeholder {
 .promoted-content-content h3 {
   text-transform: initial !important;
 }
+
+
+.result-main-div {
+  padding-top: 50px;
+}
+
+.result-main-div .result-title{
+  color: black;
+  font-family: "Gotham Bold";
+  font-size: 28px;
+  text-decoration: none;
+}
+
+
+.result-main-div .result-title:hover{
+  text-decoration: underline;
+}
+
+.result-main-div .result-title p{
+  line-height: 38px;
+}

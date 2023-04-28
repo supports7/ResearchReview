@@ -26,7 +26,7 @@ const IssueTemplate = ({
 
   return (
     <Layout>
-      <Banner name={pageContext.issue.name} bannerImage={bannerImage} pdfDownloadLink={pageContext.issue.pdfDownloadUrl} />
+      <Banner name={pageContext.issue.issue1} bannerImage={bannerImage} pdfDownloadLink={pageContext.issue.pdfDownloadUrl} />
       <Container>
         <section className="home-page-connect-section">
           <Row>

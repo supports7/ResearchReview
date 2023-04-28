@@ -70,7 +70,7 @@ const ReviewTemplate = ({
                             />
                           </div>
                           <div className="promoted-content-content">
-                            <h3>{issue.name}</h3>
+                            <h3>{issue.issue1}</h3>
                             {issue.issue_No &&
                               <p>
                                 Issue No: {issue.issue_No}
