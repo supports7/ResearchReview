@@ -41,7 +41,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
           <Row>
             <Col lg={8} xs={12}>
               <SectionLine />
-              <h3>{pageContext.article.title}</h3>
+              <h3>{pageContext.article.longTitle}</h3>
               {pageContext.article.authors &&
                 <div className="article-summary">
                   <strong className="bold">Author: </strong>{pageContext.article.authors}
