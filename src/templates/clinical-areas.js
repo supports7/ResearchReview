@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { navigate, Link } from "gatsby";
+import he from 'he';
 import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import { Container, Row, Col } from "react-bootstrap"
@@ -14,7 +15,15 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
   const clinicalAreasData = pageContext.clinicalAreas;
   const [childrenClinicalAreas, setChildrenClinicalAreas] = useState({});
 
+  const bannerContent = {
+    bannerImage: pageContext.content.bannerImage,
+    bannerText: pageContext.content.bannerText,
+    buttonLink: pageContext.content.buttonLink,
+    buttonText: pageContext.content.buttonText,
+  };
 
+  const introTextLeft = he.decode(pageContext.content.introTextLeft);
+  const introTextRight = he.decode(pageContext.content.introTextRight);
 
   useEffect(() => {
     console.log(pageContext);
@@ -24,6 +33,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
     let url = clinicalArea.name;
     const [children, setChildren] = useState();
     const [isActive, setIsActive] = useState();
+
 
     return (
       <Col xs={12} key={index} id={`top-level-clinical-area-${index}`}>
@@ -47,7 +57,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
       }
       console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
-      if(clinicalArea.children){
+      if (clinicalArea.children) {
         let numberOfChildren = clinicalArea.children.length;
         if (numberOfChildren == 1) {
           //Need to check if the only child has a url and if it has a url Redriect to that url
@@ -118,20 +128,16 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Banner name={pageContext.pageName} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <div className="clinical-areas-top-content">
           <Row>
             <SectionLine />
             <Col md={8} xs={12}>
-              <p>
-                Select your interest areas below, and explore our extensive back catalogue in over 50 clinical areas. Register now for the free monthly update.
-              </p>
+              <div dangerouslySetInnerHTML={{ __html: introTextLeft }} />
             </Col>
             <Col md={4} xs={12}>
-              <p className="small-text">
-                Research Review highlights critical studies from 10,000 worldwide mediacl journals with commentary from Australian experts
-              </p>
+              <div dangerouslySetInnerHTML={{ __html: introTextRight }} />
             </Col>
           </Row>
         </div>
@@ -153,7 +159,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
       </Container>
       <Container fluid>
         <Row>
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

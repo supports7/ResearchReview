@@ -920,6 +920,10 @@ footer .footer-col-ul ul li::marker {
   text-decoration: none !important;
 }
 
+.connect-section-main-div .connect-section-content .latest-videos .latest-video a h4{
+  font-size: 1.2rem;
+}
+
 .connect-section-main-div .connect-section-content .latest-videos .latest-video a:hover h4{
   text-decoration: underline !important;
 }
@@ -1263,6 +1267,7 @@ input::placeholder {
 .contact-us-other-sites-section .site-content a {
   padding: 10px 100px;
   text-transform: none;
+  width: 100%;
 }
 
 /* Join research review page */
@@ -1538,4 +1543,31 @@ input::placeholder {
 
 .result-main-div .result-title p{
   line-height: 38px;
+}
+
+.list-links a {
+  text-decoration: none !important;
+  color: black !important;
+}
+
+.list-links a:hover {
+  text-decoration: underline !important;
+}
+
+.list-links a h4 {
+  margin-bottom: 25px;
+}
+
+.site-image{
+  display: grid;
+}
+
+.site-name {
+  position: absolute;
+  align-self: center;
+  justify-self: center;
+}
+
+.site-name h3 {
+  color: white;
 }

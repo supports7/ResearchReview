@@ -172,7 +172,7 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
       </Container>
       <section>
         <Container fluid>
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Container>
       </section>
     </Layout>

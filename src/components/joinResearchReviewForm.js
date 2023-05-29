@@ -22,12 +22,12 @@ const JoinResearchReviewForm = () => {
     if (firstName.value && lastName.value && email.value && profession.value) {
       // loadLogin();
       // Send email and password entered to store/saga
-      console.log(
-        firstName.value,
-        lastName.value,
-        email.value,
-        profession.value
-      )
+      // console.log(
+      //   firstName.value,
+      //   lastName.value,
+      //   email.value,
+      //   profession.value
+      // )
       const jsonData = {
         FisrtName: firstName.value,
         LastName: lastName.value,

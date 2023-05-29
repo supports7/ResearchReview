@@ -30,17 +30,25 @@ const ArticleTemplate = ({ pageContext, location }) => {
       // Hide register button
     }
   }, [pageContext, cookies])
+  
+  const bannerContent = {
+    bannerImage: bannerImage,
+    bannerText: pageContext.article.title,
+    buttonLink: "",
+    buttonText: "",
+  };
 
   return (
     <Layout location={location} title={siteTitle}>
       <div className="article-banner">
-      <Banner name={pageContext.article.title} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       </div>
       <Container>
         <section className="section-top-content">
           <Row>
             <Col lg={8} xs={12}>
               <SectionLine />
+              {pageContext.article.longTitle ? <h3>{pageContext.article.longTitle}</h3> : <h3>{pageContext.article.title}</h3>}
               <h3>{pageContext.article.longTitle}</h3>
               {pageContext.article.authors &&
                 <div className="article-summary">
@@ -107,7 +115,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
 
         <DoubleAd advertisements={pageContext.advertisements} />
 
-        <section className="section-list-area-selection">
+        {/* <section className="section-list-area-selection">
           <Row>
             <h2>Related Articles</h2>
             <SectionLine />
@@ -178,12 +186,12 @@ const ArticleTemplate = ({ pageContext, location }) => {
               </div>
             </Col>
           </Row>
-        </section>
+        </section> */}
       </Container>
 
       <section>
         <Container fluid>
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Container>
       </section>
 

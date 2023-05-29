@@ -16,9 +16,16 @@ const WritersListTemplate = ({ pageContext, location }) => {
     console.log(pageContext.writers)
   }, [pageContext])
 
+  const bannerContent = {
+    bannerImage: bannerImage,
+    bannerText: pageContext.review.name,
+    buttonLink: "",
+    buttonText: "",
+  };
+
   return (
     <Layout location={location} title={siteTitle}>
-      <Banner name={pageContext.review.name} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <section className="writers-list-top-content">
           <Row>
@@ -79,7 +86,7 @@ const WritersListTemplate = ({ pageContext, location }) => {
       </Container>
 
       <Container fluid>
-        <Supporters />
+        <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
       </Container>
 
       <Container>

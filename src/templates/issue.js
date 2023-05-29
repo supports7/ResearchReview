@@ -24,9 +24,16 @@ const IssueTemplate = ({
     console.log("pageContext", pageContext);
   }, [pageContext]);
 
+  const bannerContent = {
+    bannerImage: bannerImage,
+    bannerText: pageContext.issue.issue1,
+    buttonLink: pageContext.issue.pdfDownloadUrl,
+    buttonText: "Download Latest Issue",
+  };
+
   return (
     <Layout>
-      <Banner name={pageContext.issue.issue1} bannerImage={bannerImage} pdfDownloadLink={pageContext.issue.pdfDownloadUrl} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <section className="home-page-connect-section">
           <Row>
@@ -75,7 +82,7 @@ const IssueTemplate = ({
         <Row>
           <FullScreenAd advertisements={pageContext.advertisements} />
 
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

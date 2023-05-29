@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
+import he from 'he';
 // import { Link, graphql } from "gatsby"
 import { Container, Row, Col } from "react-bootstrap"
 // import Bio from "../components/bio"
@@ -22,9 +23,19 @@ const ModulesTemplate = ({
     console.log("pageContext", pageContext);
   }, [pageContext]);
 
+  const bannerContent = {
+    bannerImage: pageContext.modulesContent.bannerImage,
+    bannerText: pageContext.modulesContent.bannerText,
+    buttonLink: pageContext.modulesContent.buttonLink,
+    buttonText: pageContext.modulesContent.buttonText,
+  };
+
+  const introTextLeft = he.decode(pageContext.modulesContent.introTextLeft);
+  const introTextRight = he.decode(pageContext.modulesContent.introTextRight);
+
   return (
     <Layout>
-      <Banner name="Modules" bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <section className="home-page-about-section">
           <Row>
@@ -35,40 +46,12 @@ const ModulesTemplate = ({
 
             <Col md={8} sm={6} xs={12}>
               <div className="about-section-left">
-                <p className="featured-paragraph-text">
-                  Research Review publications bring the best of 10,000 global
-                  medical journals to your inbox every issue with commentary
-                  from New Zealand experts. Over 50 areas including Cardiology,
-                  Diabetes, Oncology, General Practice and Psychiatry.
-                  Specialist opinions on guidlines, medicines and conferences.
-                  All Research Review publications are free to receive.
-                </p>
-                <a href="/partners" className="btn btn-secondary">
-                  Partners
-                </a>
+                <div dangerouslySetInnerHTML={{ __html: introTextLeft }} />
               </div>
             </Col>
             <Col md={4} sm={6} xs={12}>
               <div className="about-section-right">
-                <p className="featured-paragraph-text">
-                  Research Review publications bring the best of 10,000 global
-                  medical journals to your inbox every issue with commentary
-                  from New Zealand experts.
-                </p>
-                <p>
-                  Phone number
-                  <br />
-                  Email address
-                  <br />
-                  Website link
-                </p>
-                <p>
-                  Full physical address
-                  <br />
-                  for Research Review
-                  <br />
-                  AKL 2022
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: introTextRight }} />
               </div>
             </Col>
           </Row>
@@ -76,7 +59,7 @@ const ModulesTemplate = ({
 
         <section className="modules-page-modules-list pt-0">
           <Row>
-            {pageContext.modules &&
+            {pageContext.modulesContent.Children &&
               <div>
                 <Col xs={12}>
                   <h2>All Modules</h2>
@@ -84,16 +67,16 @@ const ModulesTemplate = ({
                 <SectionLine />
               </div>
             }
-            {pageContext.modules &&
-              pageContext.modules.map((module, index) => {
+            {pageContext.modulesContent.Children &&
+              pageContext.modulesContent.Children.map((module, index) => {
                 return (
                   <Col key={index} xs={12}>
                     <div class="module">
-                      <a href={module.link}>
+                      <a href={module.link} target="_blank">
                         <Row>
                           <Col md={12} xs={12}>
-                            <h3>{module.name}</h3>
-                            <p>{module.introText}</p>
+                            <h3>{module.moduleName}</h3>
+                            <p>{module.text}</p>
                           </Col>
                         </Row>
                       </a>
@@ -108,7 +91,7 @@ const ModulesTemplate = ({
 
       <Container fluid>
         <Row>
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

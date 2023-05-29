@@ -24,9 +24,16 @@ const PodcastTemplate = ({
     console.log("pageContext", pageContext);
   }, [pageContext]);
 
+  const bannerContent = {
+    bannerImage: bannerImage,
+    bannerText: pageContext.review.name,
+    buttonLink: "",
+    buttonText: "",
+  };
+
   return (
     <Layout>
-      <Banner name={pageContext.review.name} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <section className="home-page-connect-section">
           <Row>
@@ -73,7 +80,7 @@ const PodcastTemplate = ({
         <Row>
           <FullScreenAd advertisements={pageContext.advertisements} />
 
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

@@ -28,9 +28,16 @@ const PodcastDetailsTemplate = ({
     setVideoUrl(newUrl);
   }, [pageContext]);
 
+  const bannerContent = {
+    bannerImage: bannerImage,
+    bannerText: pageContext.podcast.title,
+    buttonLink: "",
+    buttonText: "",
+  };
+
   return (
     <Layout>
-      <Banner name={pageContext.podcast.title} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <section className="home-page-connect-section">
           <Row>
@@ -60,7 +67,7 @@ const PodcastDetailsTemplate = ({
         <Row>
           <FullScreenAd advertisements={pageContext.advertisements} />
 
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

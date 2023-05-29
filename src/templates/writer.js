@@ -130,7 +130,7 @@ const WriterTemplate = ({ pageContext, location }) => {
 
       <section>
         <Container fluid>
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Container>
       </section>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { navigate } from "gatsby";
+import he from 'he';
 import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import { Row, Col, Container } from "react-bootstrap"
@@ -10,6 +11,11 @@ import ReCAPTCHA from "react-google-recaptcha"
 import Cookies from "universal-cookie"
 import DoubleAd from "../components/doubleAd";
 import FullScreenAd from "../components/fullScreenAd";
+import BannerImage from "../assets/img/shutterstock_1493149190.jpg";
+import JoinRR4 from "../assets/img/JoinRR/JoinRR4.jpg";
+import JoinRR3 from "../assets/img/JoinRR/JoinRR3.jpg";
+import JoinRR2 from "../assets/img/JoinRR/JoinRR2.jpg";
+import JoinRR1 from "../assets/img/JoinRR/JoinRR1.jpg";
 
 const JoinResearchReviewTemplate = ({ pageContext, location }) => {
   const cookies = new Cookies()
@@ -23,6 +29,8 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
   const [registerError, setRegisterError] = useState()
   const [recaptchaData, setRecaptchaData] = useState()
   const recaptchaRef = React.createRef();
+
+  const introText = he.decode(pageContext.joinRRContent.introText);
 
   const handleSubmit = async event => {
     event.preventDefault()
@@ -100,8 +108,9 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
       <section
         className="join-research-review"
         style={{
-          backgroundImage: "url('https://via.placeholder.com/2000x800')",
+          backgroundImage: `url('${pageContext.joinRRContent.bannerImage}')`,
           height: "800px",
+          backgroundSize: "cover",
         }}
       >
         <Container fluid>
@@ -117,7 +126,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                       <Row>
                         <Col xs={12} className="justify-content-center">
                           <Col xs={6}>
-                            <img 
+                            <img
                               alt="research review logo"
                               src={logoResearchReview}
                               className="img-fluid" />
@@ -237,7 +246,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
               <div className="join-rr-left-side">
                 <img
                   alt="placeholder"
-                  src="https://via.placeholder.com/900x300"
+                  src={pageContext.joinRRContent.introImage}
                   className="img-fluid"
                 />
               </div>
@@ -245,36 +254,54 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
             <Col md={3} xs={12}>
               <SectionLine />
               <div className="join-rr-content-right-side">
-                <h3>Why join?</h3>
-                <p>
-                  Stay informed, quickly and effectively<br/>
-                  Hear from Australia's leading experts<br/>
-                  Free to receive<br/>
-                  Claim CPD/CME points for reading
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: introText }} />
               </div>
             </Col>
           </Row>
         </section>
-        {pageContext.content[0] &&
+        {pageContext.joinRRContent.Children &&
           <section className="join-rr-promoted-content">
             <Row>
               <SectionLine />
               <Col xs={12}>
                 <Row>
-                  <Col md={4} sm={6} xs={12}>
+                  {pageContext.joinRRContent.Children.map((service) => {
+                    return (
+                      <Col md={4} sm={6} xs={12}>
+                        <div className="promoted-content">
+                          <div className="promoted-content-image">
+                            <img
+                              alt="placeholder"
+                              src={service.serviceImage}
+                              className="img-fluid"
+                            />
+                          </div>
+                          <div className="promoted-content-content">
+                            <h3>{service.title}</h3>
+                            <p>
+                              {service.text}
+                            </p>
+                            <a href={service.link} className="btn btn-primary">
+                              See all
+                            </a>
+                          </div>
+                        </div>
+                      </Col>
+                    )
+                  })}
+                  {/* <Col md={4} sm={6} xs={12}>
                     <div className="promoted-content">
                       <div className="promoted-content-image">
                         <img
                           alt="placeholder"
-                          src="https://via.placeholder.com/400x300"
+                          src={JoinRR2}
                           className="img-fluid"
                         />
                       </div>
                       <div className="promoted-content-content">
-                        <h3>{pageContext.content[0].podcastsTitle}</h3>
+                        <h3>{pageContext.Children.podcastsTitle}</h3>
                         <p>
-                          {pageContext.content[0].podcastsText}
+                          {pageContext.Children.podcastsText}
                         </p>
                         <a href="/podcasts" className="btn btn-primary">
                           See all
@@ -288,7 +315,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                       <div className="promoted-content-image">
                         <img
                           alt="placeholder"
-                          src="https://via.placeholder.com/400x300"
+                          src={pageContext.joinRRContent.introImage}
                           className="img-fluid"
                         />
                       </div>
@@ -297,9 +324,6 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                         <p>
                           {pageContext.content[0].speakerEventsText}
                         </p>
-                        {/* <a href="/" className="btn btn-primary">
-                          Sign up
-                        </a> */}
                       </div>
                     </div>
                   </Col>
@@ -309,7 +333,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                       <div className="promoted-content-image">
                         <img
                           alt="placeholder"
-                          src="https://via.placeholder.com/400x300"
+                          src={JoinRR4}
                           className="img-fluid"
                         />
                       </div>
@@ -318,12 +342,9 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                         <p>
                           {pageContext.content[0].productReviewsText}
                         </p>
-                        {/* <a href="/" className="btn btn-primary">
-                          Sign up
-                        </a> */}
                       </div>
                     </div>
-                  </Col>
+                  </Col> */}
                 </Row>
               </Col>
               {/* {pageContext.clinicalAreas.map((clinicalArea, index) => (
@@ -349,7 +370,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
 
       <section>
         <Container fluid>
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Container>
       </section>
     </Layout>

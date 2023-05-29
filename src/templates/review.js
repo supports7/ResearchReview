@@ -41,9 +41,16 @@ const ReviewTemplate = ({
     }
   }
 
+  const bannerContent = {
+    bannerImage: bannerImage,
+    bannerText: pageContext.review.name,
+    buttonLink: "",
+    buttonText: "",
+  };
+
   return (
     <Layout>
-      <Banner name={pageContext.review.name} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
       <Container>
         <section className="home-page-connect-section">
           <Row>
@@ -102,7 +109,7 @@ const ReviewTemplate = ({
         <Row>
           <FullScreenAd advertisements={pageContext.advertisements} />
 
-          {pageContext.podcasts &&
+          {pageContext.podcasts && pageContext.podcasts.length > 0 &&
             <section className="home-page-connect-section">
               <Container>
                 <Row>
@@ -122,7 +129,7 @@ const ReviewTemplate = ({
 
                           <Col md={4} sm={6} xs={12} key={index}>
                             <div className="promoted-content">
-                              <a href={`/podcasts/${reviewUrlTemp}/${podcastUrlTemp}`}>
+                              <a href={`/watch/${reviewUrlTemp}/${podcastUrlTemp}`}>
                                 <div className="promoted-content-image">
                                   <img
                                     alt="research review image showing a medical practice"
@@ -137,7 +144,7 @@ const ReviewTemplate = ({
                                   <p>
                                     {podcast.introText}
                                   </p>
-                                  <span className="btn btn-primary" href={`/podcasts/${reviewUrlTemp}/${podcastUrlTemp}`}>Watch</span>
+                                  <span className="btn btn-primary" href={`/watch/${reviewUrlTemp}/${podcastUrlTemp}`}>Watch</span>
                                 </div>
                               </a>
                             </div>
@@ -152,7 +159,7 @@ const ReviewTemplate = ({
             </section>
           }
 
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

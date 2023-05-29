@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
+import he from 'he';
 // import { Link, graphql } from "gatsby"
 import { Container, Row, Col } from "react-bootstrap"
 // import Bio from "../components/bio"
@@ -14,115 +15,97 @@ import JoinRR from "../components/joinRR"
 // import randomImage from "../components/randomImages";
 
 const PartnersTemplate = ({
-	location,
-	pageContext
+  location,
+  pageContext
 }) => {
 
-	useEffect(() => {
-		console.log("pageContext", pageContext);
-	}, [pageContext]);
+  useEffect(() => {
+    console.log("pageContext", pageContext);
+  }, [pageContext]);
 
-	return (
-		<Layout>
-			<Banner name="Partners" bannerImage={bannerImage} />
-			<Container>
-				<section className="home-page-about-section">
-					<Row>
-						<Col xs={12}>
-							<h2>Partners</h2>
-						</Col>
-						<SectionLine />
+  const bannerContent = {
+    bannerImage: pageContext.partnersContent.bannerImage,
+    bannerText: pageContext.partnersContent.bannerText,
+    buttonLink: pageContext.partnersContent.buttonLink,
+    buttonText: pageContext.partnersContent.buttonText,
+  };
 
-						<Col md={8} sm={6} xs={12}>
-							<div className="about-section-left">
-								<p className="featured-paragraph-text">
-									Research Review publications bring the best of 10,000 global
-									medical journals to your inbox every issue with commentary
-									from New Zealand experts. Over 50 areas including Cardiology,
-									Diabetes, Oncology, General Practice and Psychiatry.
-									Specialist opinions on guidlines, medicines and conferences.
-									All Research Review publications are free to receive.
-								</p>
-								<a href="/modules" className="btn btn-secondary">
-									Modules
-								</a>
-							</div>
-						</Col>
-						<Col md={4} sm={6} xs={12}>
-							<div className="about-section-right">
-								<p className="featured-paragraph-text">
-									Research Review publications bring the best of 10,000 global
-									medical journals to your inbox every issue with commentary
-									from New Zealand experts.
-								</p>
-								<p>
-									Phone number
-									<br />
-									Email address
-									<br />
-									Website link
-								</p>
-								<p>
-									Full physical address
-									<br />
-									for Research Review
-									<br />
-									AKL 2022
-								</p>
-							</div>
-						</Col>
-					</Row>
-				</section>
+  const introTextLeft = he.decode(pageContext.partnersContent.introTextLeft);
+  const introTextRight = he.decode(pageContext.partnersContent.introTextRight);
 
-				<section className="partners-page-partners-list pt-0">
-					<Row>
-						{pageContext.partners &&
-							<div>
-								<Col xs={12}>
-									<h2>All Partners</h2>
-								</Col>
-								<SectionLine />
-							</div>
-						}
-						{pageContext.partners &&
-							pageContext.partners.map((partner, index) => {
-								return (
-									<Col key={index} xs={12}>
-										<div className="partner">
-											<Row>
-												<Col md={2} xs={12}>
-													<div>
-														<img 
-															alt="research review partner image"
-															src={partner.image} 
-															className="img-fluid" />
-													</div>
-												</Col>
-												<Col md={10} xs={12}>
-													<h3>{partner.partnerName}</h3>
-													<p>{partner.partnerText}</p>
-													<p>Please <a href={partner.link}>CLICK HERE</a> to download CPD information</p>
-												</Col>
-											</Row>
-										</div>
-									</Col>
-								)
-							})
-						}
-					</Row>
-				</section>
-			</Container>
+  return (
+    <Layout>
+      <Banner bannerContent={bannerContent} />
+      <Container>
+        <section className="home-page-about-section">
+          <Row>
+            <Col xs={12}>
+              <h2>Partners</h2>
+            </Col>
+            <SectionLine />
 
-			<Container fluid>
-				<Row>
-					<Supporters />
-				</Row>
-			</Container>
-			<Container>
-				<JoinRR />
-			</Container>
-		</Layout>
-	)
+            <Col md={8} sm={6} xs={12}>
+              <div className="about-section-left">
+                <div dangerouslySetInnerHTML={{ __html: introTextLeft }} />
+              </div>
+            </Col>
+            <Col md={4} sm={6} xs={12}>
+              <div className="about-section-right">
+                <div dangerouslySetInnerHTML={{ __html: introTextRight }} />
+              </div>
+            </Col>
+          </Row>
+        </section>
+
+        <section className="partners-page-partners-list pt-0">
+          <Row>
+            {pageContext.partnersContent.Children &&
+              <div>
+                <Col xs={12}>
+                  <h2>All Partners</h2>
+                </Col>
+                <SectionLine />
+              </div>
+            }
+            {pageContext.partnersContent.Children &&
+              pageContext.partnersContent.Children.map((partner, index) => {
+                return (
+                  <Col key={index} xs={12}>
+                    <div className="partner">
+                      <Row>
+                        <Col md={2} xs={12}>
+                          <div>
+                            <img
+                              alt="research review partner image"
+                              src={partner.partnerLogo}
+                              className="img-fluid" />
+                          </div>
+                        </Col>
+                        <Col md={10} xs={12}>
+                          <h3>{partner.partnerName}</h3>
+                          <p>{partner.partnerText}</p>
+                          <p>Please <a href={partner.partnerLink} target="_blank">CLICK HERE</a> to download CPD information</p>
+                        </Col>
+                      </Row>
+                    </div>
+                  </Col>
+                )
+              })
+            }
+          </Row>
+        </section>
+      </Container>
+
+      <Container fluid>
+        <Row>
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
+        </Row>
+      </Container>
+      <Container>
+        <JoinRR />
+      </Container>
+    </Layout>
+  )
 }
 
 export default PartnersTemplate

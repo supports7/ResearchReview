@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 // import { Link, graphql } from "gatsby"
 import { Container, Row, Col } from "react-bootstrap"
+import he from 'he';
 // import Bio from "../components/bio"
 import Layout from "../components/layout"
 // import Seo from "../components/seo"
@@ -11,6 +12,9 @@ import FullScreenAd from "../components/fullScreenAd"
 import Banner from "../components/banner";
 import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
+import Home1 from "../assets/img/Home/Home1.jpg";
+import Home2 from "../assets/img/Home/Home2.jpg";
+import Home3 from "../assets/img/Home/Home3.jpg";
 
 const Index = ({ pageContext }) => {
 
@@ -18,16 +22,22 @@ const Index = ({ pageContext }) => {
     console.log(pageContext);
   }, [])
 
-  const links = [
-    "Free monthly specialist updates",
-    "Australian expert webinars",
-    "Major international conference coverage",
-    "Claim CME points"
-  ];
+  const bannerContent = {
+    bannerImage: pageContext.homeContent.bannerImage,
+    bannerText: pageContext.homeContent.bannerText,
+    buttonLink: pageContext.homeContent.buttonLink,
+    buttonText: pageContext.homeContent.buttonText,
+  };
+
+  const clinicalAreasText = he.decode(pageContext.homeContent.clinicalAreasText);
+  const signUpText = he.decode(pageContext.homeContent.signUpText);
+  const aboutTextLeftSide = he.decode(pageContext.homeContent.aboutTextLeftSide);
+  const aboutTextRightSide = he.decode(pageContext.homeContent.aboutTextRightSide);
 
   return (
     <Layout>
-      <Banner name="An Australian Perspective On Worldwide Research" links={links} bannerImage={bannerImage} />
+      <Banner bannerContent={bannerContent} />
+      {/* <Banner name={pageContext.homeContent.bannerHeading} links={links} bannerImage={bannerImage} /> */}
 
       <Container>
         {pageContext.featuredArticle &&
@@ -72,106 +82,78 @@ const Index = ({ pageContext }) => {
             </Row>
           </section>
         }
-        {pageContext.homeContent[0].clinicalAreas &&
-          <section className="home-page-connect-section">
-            <Row>
-              <Col xs={12}>
-                <h2>CONNECT</h2>
-              </Col>
-              <SectionLine />
-              <Col lg={4} xs={12}>
-                <div className="connect-section-main-div">
-                  <div className="connect-section-image-div">
-                    <img
-                      alt="placeholder"
-                      src="https://via.placeholder.com/400x300"
-                      className="img-fluid connect-image"
-                    />
-                  </div>
-                  <div className="connect-section-content">
-                    <h3>CLINICAL AREAS</h3>
-                    <p className="connect-section-paragraph-text">
-                      Research Review publications bring the best of 10,000 global
-                      medical journals to your inbox every issue with commentary
-                      from New Zealand experts.
-                    </p>
-                    <p className="small-green-text">
-                      Clinical Areas
-                    </p>
-                    <ul className="connect-section-list">
-                      {pageContext.homeContent[0].clinicalAreas.map((clinicalArea, index) => {
-                        return (
-                          <li className="connect-section-list-item" key={clinicalArea.id}>
-                            <a href={`/clinical-areas/#top-level-clinical-area-${index}`}>{clinicalArea.name}</a>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                    <a href="/clinical-areas" className="btn btn-primary">
-                      SEE ALL
-                    </a>
-                  </div>
-                </div>
-              </Col>
-              <Col lg={4} xs={12}>
-                <div className="connect-section-main-div">
-                  <div className="connect-section-image-div">
-                    <img
-                      alt="placeholder"
-                      src="https://via.placeholder.com/400x300"
-                      className="img-fluid connect-image"
-                    />
-                  </div>
-                  <div className="connect-section-content">
-                    <h3>WATCH EXPERT WEBINARS</h3>
-                    <div className="latest-videos">
-                      {pageContext.homeContent[0].latestPodcasts.map((podcast) => {
-                        let podcastUrlTemp = podcast.title.toLowerCase();
-                        podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
-                        return (
-                          <div className="latest-video" key={podcast.id}>
-                            <a href={`/podcasts/${podcastUrlTemp}`}>
-                              <h4>{podcast.title}</h4>
-                              {/* <p className="small-green-text">
-                                16.03.2022 / Medical / Jimmy Choo
-                              </p> */}
-                            </a>
-                          </div>
-                        )
-                      })}
-                    </div>
-                    <a href="/podcasts" className="btn btn-primary">
-                      See All
-                    </a>
-                  </div>
+        <section className="home-page-connect-section">
+          <Row>
+            <Col xs={12}>
+              <h2>CONNECT</h2>
+            </Col>
+            <SectionLine />
+            <Col lg={4} xs={12}>
+              <div className="connect-section-main-div">
+                <div className="connect-section-image-div">
+                  <img
+                    alt="placeholder"
+                    src={Home1}
+                    className="img-fluid connect-image"
+                  />
                 </div>
-              </Col>
-              <Col lg={4} xs={12}>
-                <div className="connect-section-main-div">
-                  <div className="connect-section-image-div">
-                    <img
-                      alt="placeholder"
-                      src="https://via.placeholder.com/400x300"
-                      className="img-fluid connect-image"
-                    />
-                  </div>
-                  <div className="connect-section-content">
-                    <h3>SIGN UP TODAY</h3>
-                    <p className="connect-section-paragraph-text">
-                      Research Review publications bring the best of 10,000 global
-                      medical journals to your inbox every issue with commentary
-                      from New Zealand experts.
-                    </p>
-                    <a href="/join-research-review" className="btn btn-primary">
-                      SIGN UP
-                    </a>
-                  </div>
+                <div className="connect-section-content">
+                  <div dangerouslySetInnerHTML={{ __html: clinicalAreasText }} />
+                  <a href="/clinical-areas" className="btn btn-primary">
+                    SEE ALL
+                  </a>
                 </div>
-              </Col>
-            </Row>
-          </section>
-        }
+              </div>
+            </Col>
+            <Col lg={4} xs={12}>
+              <div className="connect-section-main-div">
+                <div className="connect-section-image-div">
+                  <img
+                    alt="Home2"
+                    src={Home2}
+                    className="img-fluid connect-image"
+                  />
+                </div>
+                <div className="connect-section-content">
+                  <h3>{pageContext.homeContent.expertWebinarsTitle}</h3>
+                  <div className="latest-videos">
+                    {pageContext.homeContent.Children.map((podcast) => {
+                      return (
+                        <div className="latest-video" key={podcast.Node}>
+                          <a href={`${podcast.link}`}>
+                            <h4>{podcast.title}</h4>
+                          </a>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <a href="/watch" className="btn btn-primary">
+                    See All
+                  </a>
+                </div>
+              </div>
+            </Col>
+            <Col lg={4} xs={12}>
+              <div className="connect-section-main-div">
+                <div className="connect-section-image-div">
+                  <img
+                    alt="placeholder"
+                    src={Home3}
+                    className="img-fluid connect-image"
+                  />
+                </div>
+                <div className="connect-section-content">
+                  <div dangerouslySetInnerHTML={{ __html: signUpText }} />
+                  <a href="/join-research-review" className="btn btn-primary">
+                    SIGN UP
+                  </a>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </section>
+
         <DoubleAd advertisements={pageContext.advertisements} />
 
         <section className="home-page-about-section">
@@ -180,33 +162,17 @@ const Index = ({ pageContext }) => {
               <h2>About</h2>
             </Col>
             <SectionLine />
-
             <Col md={8} sm={6} xs={12}>
               <div className="about-section-left">
-                <p className="featured-paragraph-text">
-                  Research Review Australia
-                  <br />
-                  Research Review publications bring the best of 10,000 worldwide medical journals to your inbox every issue with commentary from Australian experts. Over 50 areas including Cardiology, Diabetes, Oncology, General Practice and Psychiatry. Specialist opinions on guidelines, medicines and conferences. All Research Review publications are free to receive.
-                  <br />
-                  Research Review makes keeping up to date easy whether you're a Physician, Surgeon, General Practitioner or Nurse. 50 regular subject specific reviews, over 50 international medical conferences every year and advice from over 200 Australian medical specialists.
-                </p>
-                <a href="/contact" className="btn btn-secondary">
+                <div dangerouslySetInnerHTML={{ __html: aboutTextLeftSide }} />
+              </div>
+              <a href="/contact" className="btn btn-secondary">
                   READ MORE
                 </a>
-              </div>
             </Col>
             <Col md={4} sm={6} xs={12}>
               <div className="about-section-right">
-                <p className="featured-paragraph-text">
-                  Research Review publications bring the best of 10,000 global
-                  medical journals to your inbox every issue with commentary
-                  from New Zealand experts.
-                </p>
-                <p>
-                  Phone number: 1300 132 322 
-                  <br />
-                  Email: admin@researchreview.com.au
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: aboutTextRightSide }} />
               </div>
             </Col>
           </Row>
@@ -216,7 +182,7 @@ const Index = ({ pageContext }) => {
       <Container fluid>
         <Row>
           <FullScreenAd advertisements={pageContext.advertisements} />
-          <Supporters />
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
       <Container>

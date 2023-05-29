@@ -19,19 +19,16 @@ function DesktopNavbar() {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                  <Nav.Link href="/clinical-areas">Clinical Areas</Nav.Link>
-                  <Nav.Link href="/expert-writers">Expert Writers</Nav.Link>
-                  <Nav.Link href="/podcasts">Watch</Nav.Link>
-                  <Nav.Link href="/partners">
-                    Professional Development
-                  </Nav.Link>
-                  {/* <Nav.Link href="/industry-resources">
-                      Industry Resources
-                    </Nav.Link> */}
-                  {/* <Nav.Link href="/links">Links</Nav.Link> */}
-                  {/* <Nav.Link href="/advertise">Advertise</Nav.Link> */}
-                  {/* <Nav.Link href="/about">About</Nav.Link> */}
-                  <Nav.Link href="/contact-us">Contact</Nav.Link>
+                  <Nav.Link as={Link} to="/clinical-areas">Clinical Areas</Nav.Link>
+                  <Nav.Link as={Link} to="/expert-advisors">Expert Advisors</Nav.Link>
+                  <Nav.Link as={Link} to="/watch">Watch</Nav.Link>
+                  <NavDropdown title="CPD/CME" id="cpd-cme-dropdown">
+                    <NavDropdown.Item as={Link} to="/partners">CPD</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/modules">CME</NavDropdown.Item>
+                  </NavDropdown>
+                  <Nav.Link as={Link} to="/links">Links</Nav.Link>
+                  <Nav.Link as={Link} to="/contact-us">Contact</Nav.Link>
+                  {/* <Nav.Link as={Link} to="/advertise">Advertise</Nav.Link> */}
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
@@ -74,10 +71,15 @@ const ResearchReviewNavbar = () => {
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
                   <Nav.Link as={Link} to="/clinical-areas">Clinical Areas</Nav.Link>
-                  <Nav.Link as={Link} to="/expert-writers">Expert Writers</Nav.Link>
-                  <Nav.Link as={Link} to="/podcasts">Watch</Nav.Link>
-                  <Nav.Link as={Link} to="/partners">Professional Development</Nav.Link>
+                  <Nav.Link as={Link} to="/expert-advisors">Expert Advisors</Nav.Link>
+                  <Nav.Link as={Link} to="/watch">Watch</Nav.Link>
+                  <NavDropdown title="CPD/CME" id="cpd-cme-dropdown">
+                    <NavDropdown.Item as={Link} to="/partners">CPD</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/modules">CME</NavDropdown.Item>
+                  </NavDropdown>
+                  <Nav.Link as={Link} to="/links">Links</Nav.Link>
                   <Nav.Link as={Link} to="/contact-us">Contact</Nav.Link>
+                  {/* <Nav.Link as={Link} to="/advertise">Advertise</Nav.Link> */}
                 </Nav>
                 <Nav>
                   <Nav.Link as={Link} to="/join-research-review">Sign up with us</Nav.Link>
