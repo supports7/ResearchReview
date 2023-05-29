@@ -8,9 +8,6 @@ import Supporters from "../components/supporters"
 // import { SettingsSystemDaydreamOutlined } from "@mui/icons-material"
 import ReCAPTCHA from "react-google-recaptcha"
 import Banner from "../components/banner"
-import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
-import NewZealandImage from "../assets/img/Sites/sophie-turner-LZVmvKlchM0-unsplash.jpg"
-import AustraliaImage from "../assets/img/Sites/caleb-russell-JmuyB_LibRo-unsplash.jpg"
 const config = require("../../config")
 
 const ContactUsTemplate = ({ pageContext, location }) => {
