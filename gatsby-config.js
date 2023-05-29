@@ -19,6 +19,14 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    `gatsby-plugin-image`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `imgs`,
+        path: `${__dirname}/src/assets/img`,
+      },
+    },
     {
       resolve: "gatsby-source-apiserver",
       options: {
@@ -81,6 +89,21 @@ module.exports = {
           "Country": config.countryCode,
         },
         name: `FeaturedArticle`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://rrcms.s05.system7.co.nz/au`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        name: `UmbracoContent`,
         verboseOutput: true, // For debugging purposes
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }

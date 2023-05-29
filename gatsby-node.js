@@ -1,7 +1,8 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
-const { filter, first } = require('lodash');
+const { filter, first, head, find } = require('lodash');
 const axios = require('axios');
+const { isGeneratorFunction } = require('util/types');
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
@@ -14,6 +15,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const writerTemp = path.resolve(`./src/templates/writer.js`)
   const issueTemp = path.resolve(`./src/templates/issue.js`)
   const articleTemp = path.resolve(`./src/templates/article.js`)
+  const linksTemp = path.resolve(`./src/templates/links.js`)
   const modulesTemp = path.resolve(`./src/templates/modules.js`)
   const partnersTemp = path.resolve(`./src/templates/partners.js`)
   const subscriptionsTemp = path.resolve(`./src/templates/subscriptions.js`)
@@ -48,6 +50,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   async function getWritersByReview(reviewId) {
     let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/writers`).then(
+      (response) => {
+        return response.data;
+      })
+    return responseData;
+  }
+
+  async function getLinksByReview(reviewId) {
+    let responseData = await axios.get(`https://researchreview.dev.s05.system7.co.nz/api/reviews/${reviewId}/links`).then(
       (response) => {
         return response.data;
       })
@@ -105,6 +115,97 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             section_Id
             image
           }      
+        }
+      }
+    `
+  )
+
+  const UmbracoContentResult = await graphql(
+    `
+      {
+        allZohoUmbracoContent {
+          edges {
+            node {
+              id
+              content {
+                LastModified
+                DocType
+                Node
+                twitterLink
+                aboutTextLeftSide
+                aboutTextRightSide
+                bannerImage
+                bannerText
+                buttonLink
+                buttonText
+                clinicalAreasText
+                expertWebinarsTitle
+                facebookLink
+                featuredArticleImage
+                footerLogo
+                footerText
+                headerLogo
+                introImage
+                introText
+                introTextLeft
+                introTextRight
+                linkedInLink
+                section_Id
+                partnersTitle
+                signUpText
+                subtitle
+                text
+                title
+                Children {
+                  DocType
+                  LastModified
+                  Node
+                  bannerImage
+                  bannerText
+                  buttonLink
+                  introTextLeft
+                  buttonText
+                  introTextRight
+                  link
+                  partnerLink
+                  partnerLogo
+                  partnerName
+                  partnerText
+                  serviceImage
+                  siteImage
+                  siteName
+                  text
+                  title
+                  zohoID
+                  Children {
+                    DocType
+                    LastModified
+                    Node
+                    bannerImage
+                    bannerText
+                    bio
+                    buttonLink
+                    email
+                    buttonText
+                    first_Name
+                    initials
+                    introText
+                    last_Name
+                    link
+                    moduleName
+                    partnerLink
+                    partnerLogo
+                    partnerName
+                    partnerText
+                    text
+                    title
+                    url
+                    writerImage
+                  }
+                }
+              }
+            }
+          }
         }
       }
     `
@@ -244,6 +345,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
     return
   }
+  if (UmbracoContentResult.errors) {
+    reporter.panicOnBuild(
+      `There was an error loading the Umbraco Content`,
+      UmbracoContentResult.errors
+    )
+    return
+  }
   if (partnersResult.errors) {
     reporter.panicOnBuild(
       `There was an error loading your partners`,
@@ -285,18 +393,29 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const clinicalAreas = clinicalAreasResult.data.allZohoClinicalAreas.nodes
   const writers = writerResult.data.allZohoWriters.nodes
   const featuredArticleArray = featuredArticleResult.data.allZohoFeaturedArticle.nodes
+  
   const partners = partnersResult.data.allZohoPartners.nodes
   const modules = modulesResult.data.allZohoModules.nodes
-  const homeContent = homeResult.data.allZohoHome.nodes
+  // const homeContent = homeResult.data.allZohoHome.nodes
   const joinContent = joinResult.data.allZohoJoin.nodes
   const advertisementsContent = advertisementsResult.data.allZohoAdvertisements.nodes
   const featuredArticle = first(featuredArticleArray);
+  
+  const umbracoContentObjectFromGatsby = UmbracoContentResult.data.allZohoUmbracoContent.edges
+  let umbracoContent = head(umbracoContentObjectFromGatsby);
+  umbracoContent = umbracoContent.node.content;
+  const partnersMacroContent = find(umbracoContent, {"Node": "Partners"});
+  const reviewsContentParent = find(umbracoContent, {"Node": "Reviews"});
+  const reviewsContent = reviewsContentParent.Children;
+  
+  // console.log("umbraco content - ", umbracoContent)
+  
   // Create clinical area pages
   async function getSubClinicalAreas(clinicalAreas, alternative_id, url) {
     // function code
     // Gatsby creates own Id. Save Id value from API into new field called alternative_id.
-    const childClinicalAreas = clinicalAreas.filter(clinicalArea => { 
-      if(!clinicalArea.parent_Id){
+    const childClinicalAreas = clinicalAreas.filter(clinicalArea => {
+      if (!clinicalArea.parent_Id) {
         return false;
       }
       return clinicalArea.parent_Id === alternative_id;
@@ -347,15 +466,28 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               let reviewUrlTemp = review.name.toLowerCase();
               reviewUrlTemp = reviewUrlTemp.split(' ').join('-');
               reviewUrlTemp = urlTemp + "/" + reviewUrlTemp;
+              let podcasts = [];
+              let writersByReview = [];
+              let linksByReview = [];
+
+              reviewContentSortedById = find(reviewsContent, {"zohoID": review.alternative_id});
+              if(reviewContentSortedById) {
+                podcasts = filter(reviewContentSortedById.Children, {"DocType": "podcast"});
+                writersByReview = filter(reviewContentSortedById.Children, {"DocType": "writer"});
+                linksByReview = filter(reviewContentSortedById.Children, {"DocType": "link"});
+              }
 
               let issues = [];
               issues = await getIssues(review.alternative_id);
 
-              let podcasts = [];
-              podcasts = await getPodcasts(review.alternative_id);
+              if(review.name.toLowerCase() != "dermatitis") {
 
-              let writersByReview = [];
-              writersByReview = await getWritersByReview(review.alternative_id);
+                podcasts = await getPodcasts(review.alternative_id);
+                
+                writersByReview = await getWritersByReview(review.alternative_id);
+                
+                linksByReview = await getLinksByReview(review.alternative_id);
+              }
 
               //create the review page
               createPage({
@@ -367,17 +499,19 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   podcasts: podcasts,
                   writersByReview: writersByReview,
                   advertisements: advertisementsContent,
+                  partnersMacroContent: partnersMacroContent,
                 },
               })
 
               //Check if any podcasts related to this review
               if (podcasts) {
                 createPage({
-                  path: `/podcasts/${reviewUrlTemp}/`,
+                  path: `/watch/${reviewUrlTemp}/`,
                   component: podcastsTemp,
                   context: {
                     podcasts: podcasts,
                     review: review,
+                    partnersMacroContent: partnersMacroContent,
                     advertisements: advertisementsContent,
                     tempUrlPath: `/podcasts/${reviewUrlTemp}/`
                   },
@@ -388,10 +522,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
                   createPage({
-                    path: `/podcasts/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                    path: `/watch/${reviewUrlTemp}/${podcastUrlTemp}/`,
                     component: podcastDetailTemp,
                     context: {
                       podcast: podcast,
+                      partnersMacroContent: partnersMacroContent,
                       review: review,
                       advertisements: advertisementsContent,
                     },
@@ -412,6 +547,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     context: {
                       issue: issue,
                       articles: articles,
+                      partnersMacroContent: partnersMacroContent,
                       advertisements: advertisementsContent,
                       tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                     },
@@ -419,36 +555,49 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
                       // articles.forEach((article) => {
-                        if(article.id == featuredArticle.section_Id) {
-                          featuredArticle.url = `/clinical-areas/${reviewUrlTemp}/${issue.name}/`;
-                        }
-                        try {
-                          createPage({
-                            path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
-                            component: articleTemp,
-                            context: {
-                              article: article,
-                              otherArticles: articles,
-                              writersByReview: writersByReview,
-                              advertisements: advertisementsContent,
-                              tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                            },
-                          })
-                        } catch (ex) {
-                          console.log(ex);
-                        }
+                      if (article.id == featuredArticle.section_Id) {
+                        featuredArticle.url = `/clinical-areas/${reviewUrlTemp}/${issue.name}/`;
+                      }
+                      try {
+                        createPage({
+                          path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
+                          component: articleTemp,
+                          context: {
+                            article: article,
+                            otherArticles: articles,
+                            writersByReview: writersByReview,
+                            partnersMacroContent: partnersMacroContent,
+                            advertisements: advertisementsContent,
+                            tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
+                          },
+                        })
+                      } catch (ex) {
+                        console.log(ex);
+                      }
                     }))
                   }
                 }))
               }
 
               createPage({
-                path: `/expert-writers/${reviewUrlTemp}/`,
+                path: `/links/${reviewUrlTemp}/`,
+                component: linksTemp,
+                context: {
+                  review: review,
+                  links: linksByReview,
+                  partnersMacroContent: partnersMacroContent,
+                  advertisements: advertisementsContent,
+                },
+              })
+
+              createPage({
+                path: `/expert-advisors/${reviewUrlTemp}/`,
                 component: writerListTemp,
                 context: {
                   review: review,
                   writers: writers,
-                  url: `/expert-writers/${reviewUrlTemp}/`,
+                  partnersMacroContent: partnersMacroContent,
+                  url: `/expert-advisors/${reviewUrlTemp}/`,
                   advertisements: advertisementsContent,
                 },
               })
@@ -458,10 +607,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 let writerUrlTemp = writer.name.toLowerCase();
                 writerUrlTemp = writerUrlTemp.split(' ').join('-');
                 createPage({
-                  path: `/expert-writers/${reviewUrlTemp}/${writerUrlTemp}`,
+                  path: `/expert-advisors/${reviewUrlTemp}/${writerUrlTemp}`,
                   component: writerTemp,
                   context: {
                     writer: writer,
+                    partnersMacroContent: partnersMacroContent,
                     advertisements: advertisementsContent,
                   },
                 })
@@ -485,7 +635,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   if (clinicalAreas.length > 0) {
     let clinicalAreaTree = filter(clinicalAreas, { parent_Id: null, inactive: false }, []);
-    console.log("clinicalAreaTree - ", clinicalAreaTree);
+    // console.log("clinicalAreaTree - ", clinicalAreaTree);
     await Promise.all(clinicalAreaTree.map(async (clinicalArea, index) => {
       // clinicalAreaTree.forEach((clinicalArea) => {
       if (clinicalArea.name && clinicalArea.alternative_id) {
@@ -497,48 +647,73 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       }
     }))
 
+    const clinicalAreasContent = find(umbracoContent, {"Node": "Clinical Areas"});
     createPage({
       path: `/clinical-areas/`,
       component: clinicalAreasTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
+        content: clinicalAreasContent,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
         pageName: "Clinical Areas",
         pageUrl: "/clinical-areas/"
       },
     })
 
+    const expertWritersContent = find(umbracoContent, {"Node": "Expert Writers"});
     createPage({
-      path: `/expert-writers/`,
+      path: `/expert-advisors/`,
       component: clinicalAreasTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
+        content: expertWritersContent,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
-        pageName: "Expert Writers",
-        pageUrl: "/expert-writers/"
+        pageName: "Expert Advisors",
+        pageUrl: "/expert-advisors/"
       },
     })
 
+    const watchContent = find(umbracoContent, {"Node": "Watch"});
     createPage({
-      path: `/podcasts/`,
+      path: `/watch/`,
       component: clinicalAreasTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
+        content: watchContent,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
-        pageName: "Podcasts",
-        pageUrl: "/podcasts/"
+        pageName: "Watch",
+        pageUrl: "/watch/"
       },
     })
+
+    const linkContent = find(umbracoContent, {"Node": "Links"});
+    createPage({
+      path: `/links/`,
+      component: clinicalAreasTemp,
+      context: {
+        clinicalAreas: clinicalAreaTree,
+        content: linkContent,
+        partnersMacroContent: partnersMacroContent,
+        advertisements: advertisementsContent,
+        pageName: "Links",
+        pageUrl: "/links/"
+      },
+    })
+
 
     createPage({
       path: `/subscriptions/`,
       component: subscriptionsTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
       },
     })
-    console.log("BUILT PAGES WITH CLINICAL AREA TREE");
+    // console.log("BUILT PAGES WITH CLINICAL AREA TREE");
 
 
     // clinicalAreas.forEach((clinicalArea) => {
@@ -561,7 +736,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
 
 
-    console.log("before creating home page")
+    // console.log("before creating home page")
+    // let homeContent = {};
+    // if(umbracoContent[0].node.content) {
+    //   homeContent = filter(umbracoContent[0].node.content, { "Node": "Home" }, {})
+    //   console.log("homeContent", homeContent)
+    // }
+
+    const homeContent = find(umbracoContent, {"Node": "Home"});
     createPage({
       path: `/`,
       component: indexTemp,
@@ -569,25 +751,33 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         featuredArticle: featuredArticle,
         homeContent: homeContent,
         advertisements: advertisementsContent,
+        partnersMacroContent: partnersMacroContent,
+        umbracoContent: umbracoContent,
       },
     })
 
-    console.log("before creating partners page")
+    const professionalDevelopmentContent = find(umbracoContent, {"Node": "Professional Development"});
+    const partnersContent = find(professionalDevelopmentContent.Children, {"Node": "CPD"});
     createPage({
       path: `/partners`,
       component: partnersTemp,
       context: {
         partners: partners,
+        partnersContent: partnersContent,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
       },
     })
 
-    console.log("before creating modules page")
+    // console.log("before creating modules page")
+    const modulesContent = find(professionalDevelopmentContent.Children, {"Node": "CME"});
     createPage({
       path: `/modules`,
       component: modulesTemp,
       context: {
         modules: modules,
+        partnersMacroContent: partnersMacroContent,
+        modulesContent: modulesContent,
         advertisements: advertisementsContent,
       },
     })
@@ -664,24 +854,30 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
 
     // Create Contact Us Page
-    console.log("before creating contactUs page")
+    // console.log("before creating contactUs page")
     const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
+    const contactUsContent = find(umbracoContent, {"Node": "Contact Us"});
     createPage({
       path: `/contact-us/`,
       component: contactUsTemp,
       context: {
+        contactUsContent: contactUsContent,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
       },
     })
 
     // Create Join Research Review Page
-    console.log("before creating JoinRR page")
+    // console.log("before creating JoinRR page")
     const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
+    const joinRRContent = find(umbracoContent, {"Node": "Join Research Review"});
     createPage({
       path: `/join-research-review/`,
       component: JoinRRTemp,
       context: {
         content: joinContent,
+        joinRRContent: joinRRContent,
+        partnersMacroContent: partnersMacroContent,
         advertisements: advertisementsContent,
       },
     })
