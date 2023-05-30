@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
+import {orderBy} from 'lodash';
 // import { Link, graphql } from "gatsby"
 import { Container, Row, Col } from "react-bootstrap"
 // import Bio from "../components/bio"
@@ -19,10 +20,16 @@ const PodcastTemplate = ({
   location,
   pageContext
 }) => {
+  const [sortedPodcasts, setSortedPodcasts] = useState();
 
   useEffect(() => {
     console.log("pageContext", pageContext);
+    if(pageContext.podcasts) {
+      const tempSortedPodcast = orderBy(pageContext.podcasts, ['LastModified'], ['desc']);
+      setSortedPodcasts(tempSortedPodcast);
+    }
   }, [pageContext]);
+
 
   const bannerContent = {
     bannerImage: bannerImage,
@@ -43,7 +50,7 @@ const PodcastTemplate = ({
             <SectionLine />
             <Col xs={12}>
               <Row>
-                {pageContext.podcasts.map((podcast, index) => {
+                {sortedPodcasts && sortedPodcasts.map((podcast, index) => {
                   let podcastUrlTemp = podcast.title.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 

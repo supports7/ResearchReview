@@ -10,9 +10,6 @@ import SearchIcon from "@mui/icons-material/Search"
 import CircularProgress from "@mui/material/CircularProgress"
 
 const Search = () => {
-  const cookies = new Cookies()
-  const loginToken = cookies.get("LoginToken");
-
   const [searchEntry, setSearchEntry] = useState("");
   const [searchResults, setSearchResults] = useState();
   const [errorMessage, setErrorMessage] = useState("");
@@ -139,11 +136,11 @@ const Search = () => {
           </section>
         </Row>
       </Container>
-      <section>
+      {/* <section>
         <Container fluid>
           <Supporters />
         </Container>
-      </section>
+      </section> */}
     </Layout >
   )
 }

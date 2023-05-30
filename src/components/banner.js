@@ -17,11 +17,11 @@ const Banner = ({ bannerContent }) => {
       >
         <Container>
           <Row>
-            <Col xs={12}>
+            <Col xs={12} sm={8} md={6}>
               <div className="banner-content">
                 <h1>{bannerContent.bannerText}</h1>
                 {bannerContent.buttonLink && bannerContent.buttonText &&
-                  <Link className="btn btn-primary" to={`/${bannerContent.buttonLink}`}>
+                  <Link className="btn btn-primary" to={`${bannerContent.buttonLink}`}>
                     {bannerContent.buttonText}
                   </Link>
                 }

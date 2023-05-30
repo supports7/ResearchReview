@@ -102,11 +102,11 @@ const ForgottenPassword = () => {
           </Col>
         </Row>
       </Container>
-      <section>
+      {/* <section>
         <Container fluid>
           <Supporters />
         </Container>
-      </section>
+      </section> */}
     </Layout>
   )
 }

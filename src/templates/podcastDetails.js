@@ -24,7 +24,13 @@ const PodcastDetailsTemplate = ({
   useEffect(() => {
     console.log("pageContext", pageContext);
     let tempUrl = pageContext.podcast.link;
-    const newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");
+    let newUrl = tempUrl;
+    if(tempUrl.includes("youtu.be")) {
+      newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");
+    }
+    if(tempUrl.includes("youtube.com/watch")) {
+      newUrl = tempUrl.replace("youtube.com/watch", "youtube.com/embed/watch");
+    }
     setVideoUrl(newUrl);
   }, [pageContext]);
 
@@ -51,7 +57,6 @@ const PodcastDetailsTemplate = ({
                   width="100%"
                   height="100%"
                   src={videoUrl}
-                  // https://www.youtube.com/embed/cZN32QazNH4
                   title={`Research Review | ${pageContext.podcast.title}`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

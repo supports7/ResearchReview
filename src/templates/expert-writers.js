@@ -10,10 +10,10 @@ import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-
 import Supporters from "../components/supporters"
 import JoinRR from "../components/joinRR"
 
-const ClinicalAreasTemplate = ({ pageContext, location }) => {
+const ExpertWritersTemplate = ({ pageContext, location }) => {
   const siteTitle = `Clinical Areas`
   const clinicalAreasData = pageContext.clinicalAreas;
-  const [childrenClinicalAreas, setChildrenClinicalAreas] = useState({});
+  const [reviewsWithWriters, setReviewsWithWriters] = useState({});
 
   const bannerContent = {
     bannerImage: pageContext.content.bannerImage,
@@ -27,13 +27,28 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
 
   useEffect(() => {
     console.log(pageContext);
+    const newData = collectWriters(clinicalAreasData);
+    console.log("newData - ", newData);
+    setReviewsWithWriters(newData);
   }, [])
+
+  const collectWriters = (items) => {
+    return items.map(item => {
+      if (item.children && item.children.length > 0) {
+        const childrenWithWriters = collectWriters(item.children);
+        return { ...item, children: childrenWithWriters };
+      } else if (item.writersByReview) {
+        return { writersByReview: item.writersByReview };
+      } else {
+        return item;
+      }
+    });
+  };
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
     let url = clinicalArea.name;
     const [children, setChildren] = useState();
     const [isActive, setIsActive] = useState();
-
 
     return (
       <Col xs={12} key={index} id={`top-level-clinical-area-${index}`}>
@@ -144,7 +159,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
         <div className="clinical-areas-area-selection">
           <Row>
             <Col xs={12}>
-              <h2>AREA SELECTION</h2>
+              <h2>Medical Advisors' Index</h2>
             </Col>
             <SectionLine />
             {clinicalAreasData && clinicalAreasData.map((clinicalArea, index) => {
@@ -169,4 +184,4 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
   )
 }
 
-export default ClinicalAreasTemplate
+export default ExpertWritersTemplate

@@ -734,8 +734,19 @@ section {
 
 /* BANNER STYLING */
 
+.banner-fullwidth-container .container { 
+  height: 100%;
+}
+.banner-fullwidth-container .container .row { 
+  height: 100%;
+}
+.banner-fullwidth-container .container .row .col-12{ 
+  height: 100%;
+  display: grid;
+}
+
 .banner-content {
-  padding-top: 210px;
+  align-self: center;
 }
 
 .banner-content h1{
@@ -857,11 +868,22 @@ footer .footer-col-ul ul li::marker {
 
 .home-page-connect-section .connect-section-main-div .connect-section-content {
   position: relative;
-  min-height: 320px;
+  min-height: 380px;
 }
+
+@media only screen and (max-width: 1200px) {
+  .home-page-connect-section .connect-section-main-div .connect-section-content {
+    min-height: 420px;
+  }
+}
+
 @media only screen and (max-width: 991px) {
   .home-page-connect-section .connect-section-main-div .connect-section-content {
     min-height: auto;
+  }
+
+  .connect-section-main-div .connect-section-content .latest-videos {
+    padding-bottom: 20px;
   }
 
   .home-page-connect-section .connect-section-main-div .connect-section-content .btn {
@@ -896,7 +918,7 @@ footer .footer-col-ul ul li::marker {
 .home-page-connect-section .connect-section-main-div .connect-section-content .btn {
   position: absolute;
   bottom: 0;
-  padding: 5px 150px;
+  padding: 5px;
 }
 
 .connect-section-main-div .connect-section-content .btn {
@@ -1018,6 +1040,16 @@ footer .footer-col-ul ul li::marker {
   color: white;
   font-size: 30px;
   margin-bottom: 100px;
+}
+
+.supporters-section .partner-macro-outer-div {
+  aspect-ratio: 1/1;
+  display: grid;
+}
+
+.supporters-section .partner-macro-outer-div .partner-macro-inner-div {
+  align-self: center;
+  justify-self: center;
 }
 
 .join-research-review-form-section {

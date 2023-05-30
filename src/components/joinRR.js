@@ -26,7 +26,7 @@ const JoinRR = () => {
                   <Col xs={12}>
                     <input type="text" placeholder="Profession"></input>
                   </Col>
-                  <button type="submit" className="btn btn-primary">SUMBIT</button>
+                  <button type="submit" className="btn btn-primary">JOIN</button>
                 </Row>
               </form>
             </Col>

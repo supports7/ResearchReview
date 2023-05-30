@@ -12,6 +12,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const reviewTemp = path.resolve(`./src/templates/review.js`)
   const writerListTemp = path.resolve(`./src/templates/writer-list.js`)
   const clinicalAreasTemp = path.resolve(`./src/templates/clinical-areas.js`)
+  const expertWritersTemp = path.resolve(`./src/templates/expert-writers.js`)
   const writerTemp = path.resolve(`./src/templates/writer.js`)
   const issueTemp = path.resolve(`./src/templates/issue.js`)
   const articleTemp = path.resolve(`./src/templates/article.js`)
@@ -431,6 +432,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
         //Checks to see if there are children of this child clinical area
         const children = await getSubClinicalAreas(clinicalAreas, childClinicalArea.alternative_id, urlTemp);
+        let writersByReview = [];
 
         if (children) {
           childClinicalArea['children'] = children;
@@ -467,7 +469,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               reviewUrlTemp = reviewUrlTemp.split(' ').join('-');
               reviewUrlTemp = urlTemp + "/" + reviewUrlTemp;
               let podcasts = [];
-              let writersByReview = [];
+              
               let linksByReview = [];
 
               reviewContentSortedById = find(reviewsContent, {"zohoID": review.alternative_id});
@@ -513,7 +515,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     review: review,
                     partnersMacroContent: partnersMacroContent,
                     advertisements: advertisementsContent,
-                    tempUrlPath: `/podcasts/${reviewUrlTemp}/`
+                    tempUrlPath: `/watch/${reviewUrlTemp}/`
                   },
                 })
 
@@ -601,6 +603,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   advertisements: advertisementsContent,
                 },
               })
+
               const topTwoWriters = writers.slice(0, 2);
               await Promise.all(topTwoWriters.map((writer) => {
                 // topTwoWriters.forEach((writer) => {
@@ -619,6 +622,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               review['url'] = reviewUrlTemp;
             }))
             childClinicalArea['children'] = reviews;
+            childClinicalArea['writersByReview'] = writersByReview;
           }
         }
 
@@ -664,7 +668,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const expertWritersContent = find(umbracoContent, {"Node": "Expert Writers"});
     createPage({
       path: `/expert-advisors/`,
-      component: clinicalAreasTemp,
+      component: expertWritersTemp,
       context: {
         clinicalAreas: clinicalAreaTree,
         content: expertWritersContent,

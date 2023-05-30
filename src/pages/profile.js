@@ -208,11 +208,11 @@ const Profile = () => {
           </section>
         </Row>
       </Container>
-      <section>
+      {/* <section>
         <Container fluid>
           <Supporters />
         </Container>
-      </section>
+      </section> */}
     </Layout >
   )
 }
