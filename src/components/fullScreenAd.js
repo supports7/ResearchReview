@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import { Row, Col, Container } from "react-bootstrap"
 import {find} from "lodash";
-import largeAdImage from '../assets/img/Ads/towfiqu-barbhuiya-w8p9cQDLX7I-unsplash.jpg'
+import largeAdImage from '../assets/img/Ads/headway-F2KRf_QfCqw-unsplash.jpg'
 
 const FullScreenAd = ({advertisements}) => {
   const [ largeAd, setLargeAd ] = useState({});

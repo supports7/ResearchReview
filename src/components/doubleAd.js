@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Row, Col } from "react-bootstrap"
 import { find } from "lodash";
 import SmallAdImage from '../assets/img/Ads/austin-distel-7bMdiIqz_J4-unsplash.jpg'
-import MediumAdImage from '../assets/img/Ads/headway-F2KRf_QfCqw-unsplash.jpg'
+import MediumAdImage from '../assets/img/Ads/towfiqu-barbhuiya-w8p9cQDLX7I-unsplash.jpg'
 
 const DoubleAd = ({ advertisements }) => {
   const [smallAd, setSmallAd] = useState({});
