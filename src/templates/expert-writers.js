@@ -11,9 +11,10 @@ import Supporters from "../components/supporters"
 import JoinRR from "../components/joinRR"
 
 const ExpertWritersTemplate = ({ pageContext, location }) => {
-  const siteTitle = `Clinical Areas`
+  const siteTitle = `Expert Writers`
   const clinicalAreasData = pageContext.clinicalAreas;
   const [reviewsWithWriters, setReviewsWithWriters] = useState({});
+
 
   const bannerContent = {
     bannerImage: pageContext.content.bannerImage,
@@ -27,23 +28,7 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
 
   useEffect(() => {
     console.log(pageContext);
-    const newData = collectWriters(clinicalAreasData);
-    console.log("newData - ", newData);
-    setReviewsWithWriters(newData);
   }, [])
-
-  const collectWriters = (items) => {
-    return items.map(item => {
-      if (item.children && item.children.length > 0) {
-        const childrenWithWriters = collectWriters(item.children);
-        return { ...item, children: childrenWithWriters };
-      } else if (item.writersByReview) {
-        return { writersByReview: item.writersByReview };
-      } else {
-        return item;
-      }
-    });
-  };
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
     let url = clinicalArea.name;
@@ -64,6 +49,8 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
 
   const ClinicalAreaSubPills = ({ clinicalAreaParent, level }) => {
     const [selectedChildNode, setSelectedChildNode] = useState(null);
+    const [selectedParentNodeWithWriters, setSelectedParentNodeWithWriters] = useState(null);
+    const [writers, setWriters] = useState([]);
 
     const handleClick = (clinicalArea) => {
       if (clinicalArea == selectedChildNode) {
@@ -72,8 +59,16 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
       }
       console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
+
+      if (clinicalArea.writersByReview) {
+        setWriters(clinicalArea.writersByReview);
+        setSelectedParentNodeWithWriters(clinicalArea);
+        return;
+      }
+
       if (clinicalArea.children) {
         let numberOfChildren = clinicalArea.children.length;
+
         if (numberOfChildren == 1) {
           //Need to check if the only child has a url and if it has a url Redriect to that url
           let firstChild = clinicalArea.children[0];
@@ -104,6 +99,15 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
               </Row>
             </div>
             <div>
+              {writers &&
+                <div className={`clinical-area-section-middle-div pill-level-${level + 1}`}>
+                  <Row>
+                    {writers.map((writer, i) => (
+                      <WritersPill selectedParentNodeWithWriters={selectedParentNodeWithWriters} writer={writer} i={i} level={level + 1}  key={writer.Node} />
+                    ))}
+                  </Row>
+                </div>
+              }
               {selectedChildNode &&
                 <ClinicalAreaSubPills clinicalAreaParent={selectedChildNode} level={level + 1} />
               }
@@ -119,7 +123,7 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
     if (clinicalArea.children) {
       let numberOfChildren = clinicalArea.children.length;
 
-      if (numberOfChildren > 1 || (level == 1 && numberOfChildren > 0)) {
+      if (numberOfChildren > 1 || (level == 1 && numberOfChildren > 0 || (clinicalArea.writersByReview && clinicalArea.writersByReview.length > 0))) {
         hasChildren = true;
       }
     }
@@ -135,6 +139,29 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
           <p onClick={() => handleClick(clinicalArea)}>
             {clinicalArea.name}
             {hasChildren && (selectedChildNode ? (selectedChildNode.id === clinicalArea.id ? <span>-</span> : <span>+</span>) : <span>+</span>)}
+          </p>
+        </div>
+      </Col>
+    )
+  }
+
+
+  const WritersPill = ({ selectedParentNodeWithWriters, writer, i }) => {
+    
+    const writerHandleClick = (writer) => {
+      console.log("selectedParentNodeWithWriters - ", selectedParentNodeWithWriters);
+      console.log("writer - ", writer);
+      let writerUrlTemp = writer.first_Name.toLowerCase() + "-" + writer.last_Name.toLowerCase();
+      writerUrlTemp = writerUrlTemp.split(' ').join('-');
+      let url = selectedParentNodeWithWriters.writerUrl + "/" + writerUrlTemp;
+      navigate(url)
+    }
+
+    return (
+      <Col xs={12} sm={6} md={4} lg={3}>
+        <div key={writer.Node} className="clinical-area-pill">
+          <p onClick={() => writerHandleClick(writer)}>
+            {writer.first_Name + " " + writer.last_Name}
           </p>
         </div>
       </Col>

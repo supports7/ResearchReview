@@ -25,7 +25,7 @@ const LinksTemplate = ({ pageContext, location }) => {
       <Container>
         <section className="section-top-content">
           <Row>
-            <Col lg={8} xs={12}>
+            <Col xs={12}>
               <h2>{pageContext.review.name}</h2>
               <SectionLine />
               <div className="list-links">
@@ -36,14 +36,14 @@ const LinksTemplate = ({ pageContext, location }) => {
                 ))}
               </div>
             </Col>
-            <Col lg={4} xs={12}>
+            {/* <Col lg={4} xs={12}>
               <div className="section-ad-image">
                 <img
                   alt="placeholder"
                   src="https://via.placeholder.com/400x300"
                   className="img-fluid" />
               </div>
-            </Col>
+            </Col> */}
           </Row>
         </section>
 

@@ -97,7 +97,7 @@ const ResearchReviewNavbar = () => {
       <div className="top-navbar">
         <Container>
           <Row>
-            <Col xs={12} lg={5}>
+            <Col xs={12} lg={4}>
               <div className="navbar-logo">
                 <Link className="navbar-brand" to="/">
                   <img
@@ -107,7 +107,7 @@ const ResearchReviewNavbar = () => {
                 </Link>
               </div>
             </Col>
-            <Col lg={5}>
+            <Col lg={6}>
               <div className="navbar-login desktop">
                 <LoginForm />
               </div>

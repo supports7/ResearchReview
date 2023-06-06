@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react"
 import { Row, Col, Container } from "react-bootstrap"
 import {find} from "lodash";
+import largeAdImage from '../assets/img/Ads/towfiqu-barbhuiya-w8p9cQDLX7I-unsplash.jpg'
 
 const FullScreenAd = ({advertisements}) => {
   const [ largeAd, setLargeAd ] = useState({});
@@ -15,7 +16,7 @@ const FullScreenAd = ({advertisements}) => {
     <section
       className="full-screen-ad"
       style={{
-        backgroundImage: `url('${largeAd.image}')`,
+        backgroundImage: `url('${largeAdImage}')`,
         height: "600px",
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',

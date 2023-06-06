@@ -120,7 +120,10 @@ function LoginForm() {
                     {/* {errorMessage} */}
                   </Col>
                 }
-                <Col xs={12} md={6}>
+                <Col xs={12} md={2} style={{display: 'grid'}}>
+                  <h6 style={{alignSelf: 'center', textAlign: 'end'}}>LOGIN</h6>    
+                </Col>
+                <Col xs={12} md={5}>
                   <div className="form-group login-form-username-div">
                     <input
                       type="text"
@@ -134,7 +137,7 @@ function LoginForm() {
                     ></input>
                   </div>
                 </Col>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={5}>
                   <div className="form-group login-form-password-div">
                     <input
                       type="password"

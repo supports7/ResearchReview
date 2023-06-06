@@ -13,7 +13,7 @@ const WritersListTemplate = ({ pageContext, location }) => {
   const siteTitle = `Clinical Areas`
 
   React.useEffect(() => {
-    console.log(pageContext.writers)
+    console.log(pageContext)
   }, [pageContext])
 
   const bannerContent = {
