@@ -97,13 +97,10 @@ const PodcastDetailsTemplate = ({
             </Col>
           </Row>
         </section>
-        <DoubleAd advertisements={pageContext.advertisements} />
       </Container>
 
       <Container fluid>
         <Row>
-          <FullScreenAd advertisements={pageContext.advertisements} />
-
           <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>
