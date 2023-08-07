@@ -21,9 +21,9 @@ const Banner = ({ bannerContent }) => {
               <div className="banner-content">
                 <h1>{bannerContent.bannerText}</h1>
                 {bannerContent.buttonLink && bannerContent.buttonText &&
-                  <Link className="btn btn-primary" to={`${bannerContent.buttonLink}`}>
+                  <a className="btn btn-primary" href={`${bannerContent.buttonLink}`} target="_blank">
                     {bannerContent.buttonText}
-                  </Link>
+                  </a>
                 }
               </div>
             </Col>

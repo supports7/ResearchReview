@@ -25,10 +25,10 @@ const PodcastDetailsTemplate = ({
     console.log("pageContext", pageContext);
     let tempUrl = pageContext.podcast.link;
     let newUrl = tempUrl;
-    if(tempUrl.includes("youtu.be")) {
+    if (tempUrl.includes("youtu.be")) {
       newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");
     }
-    if(tempUrl.includes("youtube.com/watch")) {
+    if (tempUrl.includes("youtube.com/watch")) {
       newUrl = tempUrl.replace("youtube.com/watch", "youtube.com/embed/watch");
     }
     setVideoUrl(newUrl);
@@ -44,14 +44,33 @@ const PodcastDetailsTemplate = ({
   return (
     <Layout>
       <Banner bannerContent={bannerContent} />
-      <Container>
+      <Container >
         <section className="home-page-connect-section">
           <Row>
             <Col xs={12}>
               <p>{pageContext.podcast.introText}</p>
             </Col>
             <SectionLine />
-            <Col xs={12}>
+
+          </Row>
+        </section>
+      </Container>
+      <Container fluid>
+        <section>
+          <Row>
+          <Col xs={2} style={{textAlign:'center'}}>
+              {pageContext.advertisements && pageContext.advertisements.length > 0 &&
+                <a href={pageContext.advertisements[0].link} target="_blank" >
+
+                  <img
+                    alt={pageContext.advertisements[0].Node}
+                    src={pageContext.advertisements[0].image}
+                    className="img-fluid featured-image"
+                  />
+                </a>
+              }
+            </Col>
+            <Col xs={8}>
               <div className="podcast-embedded-video">
                 <iframe
                   width="100%"
@@ -62,6 +81,19 @@ const PodcastDetailsTemplate = ({
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen></iframe>
               </div>
+            </Col>
+            <Col xs={2} style={{textAlign:'center'}}>
+              {pageContext.advertisements && pageContext.advertisements.length > 1 &&
+                <a href={pageContext.advertisements[1].link} target="_blank" >
+
+                  <img
+                    alt={pageContext.advertisements[1].Node}
+                    src={pageContext.advertisements[1].image}
+                    className="img-fluid featured-image"
+
+                  />
+                </a>
+              }
             </Col>
           </Row>
         </section>
