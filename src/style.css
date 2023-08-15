@@ -1603,3 +1603,52 @@ input::placeholder {
 .site-name h3 {
   color: white;
 }
+
+
+
+  /* banner */
+  ul.banner-links{
+
+    width: 330px;
+    float: right;
+    margin-top: 200px;
+    list-style-type: none;
+  }
+  ul.banner-links li {
+    background-color:white;
+    border-radius:50px;
+    font-size:12px;
+   
+  }
+  ul.banner-links li a{
+    background-color:white;
+    font-size:12px;
+    text-transform: none !important;
+text-decoration: none;
+color:black;
+   
+  }
+  ul.banner-links li a div {
+    background-color: white;
+    border-radius: 100px;
+    display: block;
+
+  }
+  ul.banner-links li a span.inner-icon{
+    background-color: black;
+    padding: 5px;
+    border-radius: 16px;
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+    margin-right: 10px;
+    color:white;
+
+   
+  }
+  ul.banner-links li a   span.gt{
+    float: right;
+    padding: 8px;
+    margin-right: 10px;
+}
+  
