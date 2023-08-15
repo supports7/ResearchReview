@@ -27,6 +27,8 @@ const Index = ({ pageContext }) => {
     bannerText: pageContext.homeContent.bannerText,
     buttonLink: pageContext.homeContent.buttonLink,
     buttonText: pageContext.homeContent.buttonText,
+    isHome:true,
+    bannerHeight:"600px",
   };
 
   const clinicalAreasText = he.decode(pageContext.homeContent.clinicalAreasText);
