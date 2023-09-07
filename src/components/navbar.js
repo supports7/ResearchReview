@@ -23,8 +23,8 @@ function DesktopNavbar() {
                   <Nav.Link as={Link} to="/expert-advisors">Expert Advisors</Nav.Link>
                   <Nav.Link as={Link} to="/watch">Watch</Nav.Link>
                   <NavDropdown title="CPD/CME" id="cpd-cme-dropdown">
-                    <NavDropdown.Item as={Link} to="/partners">CPD</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/modules">CME</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/partners">Partners</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/modules">Modules</NavDropdown.Item>
                   </NavDropdown>
                   <Nav.Link as={Link} to="/links">Links</Nav.Link>
                   <Nav.Link as={Link} to="/contact-us">Contact</Nav.Link>
@@ -74,8 +74,8 @@ const ResearchReviewNavbar = () => {
                   <Nav.Link as={Link} to="/expert-advisors">Expert Advisors</Nav.Link>
                   <Nav.Link as={Link} to="/watch">Watch</Nav.Link>
                   <NavDropdown title="CPD/CME" id="cpd-cme-dropdown">
-                    <NavDropdown.Item as={Link} to="/partners">CPD</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/modules">CME</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/partners">Partners</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/modules">Modules</NavDropdown.Item>
                   </NavDropdown>
                   <Nav.Link as={Link} to="/links">Links</Nav.Link>
                   <Nav.Link as={Link} to="/contact-us">Contact</Nav.Link>

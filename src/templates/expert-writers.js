@@ -4,7 +4,7 @@ import he from 'he';
 import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import { Container, Row, Col } from "react-bootstrap"
-// import { filter } from 'lodash';
+import { find } from 'lodash';
 import Banner from "../components/banner";
 import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 import Supporters from "../components/supporters"
@@ -27,7 +27,9 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
   const introTextRight = he.decode(pageContext.content.introTextRight);
 
   useEffect(() => {
-    console.log(pageContext);
+    console.log("pageContext", pageContext);
+    const writersFromId = find(pageContext.testClinicalAreas, {"alternative_id": "4956793000000450112"});
+    console.log("writers", writersFromId);
   }, [])
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
@@ -57,7 +59,6 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
         setSelectedChildNode(null)
         return;
       }
-      console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
 
       if (clinicalArea.writersByReview) {
@@ -92,7 +93,7 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
         {clinicalAreaParent.children && clinicalAreaParent.children.length > 0 &&
           <div>
             <div className={`clinical-area-section-middle-div pill-level-${level}`}>
-              <Row>
+              <Row className="clinical-area-section-row">
                 {clinicalAreaParent.children.map((clinicalAreaChild, i) => (
                   <ClinicalAreaPill handleClick={handleClick} clinicalArea={clinicalAreaChild} level={level} selectedChildNode={selectedChildNode} index={i} url={clinicalAreaChild.url} key={clinicalAreaChild.id} />
                 ))}
@@ -149,8 +150,6 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
   const WritersPill = ({ selectedParentNodeWithWriters, writer, i }) => {
     
     const writerHandleClick = (writer) => {
-      console.log("selectedParentNodeWithWriters - ", selectedParentNodeWithWriters);
-      console.log("writer - ", writer);
       let writerUrlTemp = writer.first_Name.toLowerCase() + "-" + writer.last_Name.toLowerCase();
       writerUrlTemp = writerUrlTemp.split(' ').join('-');
       let url = selectedParentNodeWithWriters.writerUrl + "/" + writerUrlTemp;

@@ -35,18 +35,10 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
   const handleSubmit = async event => {
     event.preventDefault()
     setRegisterError("");
-    const { firstName, lastName, email, profession, registerPassword, registerPasswordConfirm } = document.forms[2]
 
-    if (firstName.value && lastName.value && email.value && profession.value && registerPassword.value && registerPasswordConfirm.value && recaptchaData) {
-      // loadLogin();
-      // Send email and password entered to store/saga
-      // console.log(
-      //   firstName.value,
-      //   lastName.value,
-      //   email.value,
-      //   profession.value
-      // )
-      if (registerPassword.value != registerPasswordConfirm.value) {
+    if (firstName && lastName && email && profession && registerPassword && registerPasswordConfirm && recaptchaData) {
+      
+      if (registerPassword != registerPasswordConfirm) {
         setRegisterError("Passwords do not match. Please try again")
         return;
       }
@@ -55,11 +47,11 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
         return;
       }
       const jsonData = {
-        First_Name: firstName.value,
-        Last_Name: lastName.value,
-        Email: email.value,
-        Profession: profession.value,
-        Password_Hash: registerPassword.value
+        First_Name: firstName,
+        Last_Name: lastName,
+        Email: email,
+        Profession: profession,
+        Password_Hash: registerPassword
       }
 
       fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/register`, {

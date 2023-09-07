@@ -48,7 +48,6 @@ const ArticleTemplate = ({ pageContext, location }) => {
           <Row>
             <Col lg={8} xs={12}>
               <SectionLine />
-              {pageContext.article.longTitle ? <h3>{pageContext.article.longTitle}</h3> : <h3>{pageContext.article.title}</h3>}
               <h3>{pageContext.article.longTitle}</h3>
               {pageContext.article.authors &&
                 <div className="article-summary">
@@ -85,12 +84,12 @@ const ArticleTemplate = ({ pageContext, location }) => {
               }
             </Col>
             <Col lg={4} xs={12}>
-              <div className="section-ad-image">
+              {/* <div className="section-ad-image">
                 <img
                   alt="placeholder"
                   src="https://via.placeholder.com/400x300"
                   className="img-fluid" />
-              </div>
+              </div> */}
               {pageContext.otherArticles && pageContext.otherArticles.length > 0 &&
                 <div className="other-articles">
                   <h3>Also in this issue</h3>

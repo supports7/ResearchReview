@@ -942,11 +942,7 @@ footer .footer-col-ul ul li::marker {
   text-decoration: none !important;
 }
 
-.connect-section-main-div .connect-section-content .latest-videos .latest-video a h4{
-  font-size: 1.2rem;
-}
-
-.connect-section-main-div .connect-section-content .latest-videos .latest-video a:hover h4{
+.connect-section-main-div .connect-section-content .latest-videos .latest-video a:hover p{
   text-decoration: underline !important;
 }
 
@@ -1168,9 +1164,13 @@ input::placeholder {
 
 .clinical-area-pill {
   background-color: white;
-  margin: 25px 15px;
+  margin: 5px 15px;
   border-radius: 50px;
-  padding: 10px 0;
+  padding: 1px 0;
+}
+
+.clinical-area-section-row {
+  padding: 5px 0;
 }
 
 .clinical-area-pill p {

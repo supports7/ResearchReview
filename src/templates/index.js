@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 // import { Link, graphql } from "gatsby"
 import { Container, Row, Col } from "react-bootstrap"
+import { filter } from 'lodash'
 import he from 'he';
 // import Bio from "../components/bio"
 import Layout from "../components/layout"
@@ -17,9 +18,16 @@ import Home2 from "../assets/img/Home/Home2.jpg";
 import Home3 from "../assets/img/Home/Home3.jpg";
 
 const Index = ({ pageContext }) => {
-
+  const [homeBannerLinks, setHomeBannerLinks] = useState([])
+  const [expertWebinars, setExpertWebinars] = useState([])
   useEffect(() => {
     console.log(pageContext);
+    if(pageContext.homeContent.Children){
+      const homeBannerLinksFromHomeContent = filter(pageContext.homeContent.Children, { "DocType": "homeBannerLink" });
+      const expertWebinarsFromHomeContent = filter(pageContext.homeContent.Children, { "DocType": "homeExpertWebinars" });
+      setHomeBannerLinks(homeBannerLinksFromHomeContent)
+      setExpertWebinars(expertWebinarsFromHomeContent)
+    }
   }, [])
 
   const bannerContent = {
@@ -29,6 +37,7 @@ const Index = ({ pageContext }) => {
     buttonText: pageContext.homeContent.buttonText,
     isHome:true,
     bannerHeight:"600px",
+    homeBannerLinks: homeBannerLinks,
   };
 
   const clinicalAreasText = he.decode(pageContext.homeContent.clinicalAreasText);
@@ -54,7 +63,7 @@ const Index = ({ pageContext }) => {
                   </div>
                   <img
                     alt="placeholder"
-                    src={`${pageContext.featuredArticle.image}`}
+                    src={`${pageContext.featuredArticle.featuredArticleImage}`}
                     className="img-fluid featured-image"
                   />
                 </div>
@@ -70,8 +79,8 @@ const Index = ({ pageContext }) => {
                     <p className="featured-paragraph-text">
                       {pageContext.featuredArticle.text}
                     </p>
-                    {pageContext.featuredArticle.url &&
-                      <a href={pageContext.featuredArticle.url} className="btn btn-secondary">
+                    {pageContext.featuredArticle.link &&
+                      <a href={pageContext.featuredArticle.link} className="btn btn-secondary">
                         READ MORE
                       </a>
                     }
@@ -120,11 +129,11 @@ const Index = ({ pageContext }) => {
                 <div className="connect-section-content">
                   <h3>{pageContext.homeContent.expertWebinarsTitle}</h3>
                   <div className="latest-videos">
-                    {pageContext.homeContent.Children.map((podcast) => {
+                    {expertWebinars && expertWebinars.map((podcast) => {
                       return (
                         <div className="latest-video" key={podcast.Node}>
                           <a href={`${podcast.link}`}>
-                            <h4>{podcast.title}</h4>
+                            <p>{podcast.title}</p>
                           </a>
                         </div>
                       )

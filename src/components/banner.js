@@ -2,12 +2,37 @@ import React from "react"
 import { Container, Row, Col } from "react-bootstrap"
 import { Link } from "gatsby"
 import SearchIcon from "@mui/icons-material/Search"
-import StartIcon  from "@mui/icons-material/Star"
+import StarIcon from "@mui/icons-material/Star"
 import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import PersonIcon from '@mui/icons-material/Person';
 const Banner = ({ bannerContent }) => {
-  let bannerHeight=bannerContent.bannerHeight?bannerContent.bannerHeight:"250px";
+  let bannerHeight = bannerContent.bannerHeight ? bannerContent.bannerHeight : "250px";
+
+  function IconSelector({ iconName }) {
+    let selectedIcon = null;
+
+    switch (iconName) {
+      case 'Star':
+        selectedIcon = <StarIcon />;
+        break;
+      case 'Person':
+        selectedIcon = <PersonIcon />;
+        break;
+      case 'Forum':
+        selectedIcon = <ForumRoundedIcon />;
+        break;
+      case 'Thumbs Up':
+        selectedIcon = <ThumbUpAltIcon />;
+        break;
+      default:
+        // If the iconName doesn't match any of the predefined options, you can handle it here
+        selectedIcon = null;
+    }
+
+    return <span className="inner-icon">{selectedIcon}</span>;
+  }
+
   return (
     <div id="banner">
       <Container fluid
@@ -30,48 +55,28 @@ const Banner = ({ bannerContent }) => {
                     {bannerContent.buttonText}
                   </a>
                 }
-                
+
               </div>
             </Col>
             <Col xs={12} sm={8} md={6}>
-            <div className="banner-content">
-                  {bannerContent.isHome && 
-              <ul className="banner-links">
-                          <li >
-                            <a href='test'>
-                              <div className="">
-                                <span className="inner-icon"><StartIcon/></span>
-                                Top Ten Must Read Studies <span className="gt">&gt;</span>
-                                </div>
-                            </a>
-                          </li>
-                          <li >
-                            <a href='test'>
-                              <div className="">
-                                <span className="inner-icon"><ForumRoundedIcon/></span>
-                                Podcasts from Leading Experts <span className="gt">&gt;</span>
-                                </div>
-                            </a>
-                          </li>
-                          <li >
-                          <a href='test'>
+              <div className="banner-content">
+                {bannerContent.isHome && bannerContent.homeBannerLinks &&
+                  <ul className="banner-links">
+                    {bannerContent.homeBannerLinks.map((homeBannerLink) => {
+                      return (
+                        <li>
+                          <a href={homeBannerLink.link}>
                             <div className="">
-                              <span className="inner-icon"><PersonIcon/></span>
-                              Speaker Events <span className="gt">&gt;</span>
-                              </div>
+                              <IconSelector iconName={homeBannerLink.icon} />
+                              {homeBannerLink.text} <span className="gt">&gt;</span>
+                            </div>
                           </a>
-                        </li>                  
-                        <li >
-                          <a href='test'>
-                            <div className="">
-                              <span className="inner-icon"><ThumbUpAltIcon/></span>
-                              Product Reviews <span className="gt">&gt;</span>
-                              </div>
-                          </a>
-                        </li>                  
-                      </ul>
-                         }
-                    </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                }
+              </div>
 
             </Col>
           </Row>

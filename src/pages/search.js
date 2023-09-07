@@ -108,17 +108,18 @@ const Search = () => {
                   <div className="results">
                     <Row>
                       {searchResults.map((result) => {
+                        const cleanedString = result.url.replace(/\(([^)]+)\)/g, '');
                         return (
                           <div className="result-main-div" key={result.id}>
                             <Col xs={12}>
                               <SectionLine />
-                              <a href={result.url} className="result-title">
+                              <a href={cleanedString} className="result-title">
                                 <p>{result.title}</p>
                               </a>
                               <p>{result.summary}</p>
                               <p>Type: {result.type}</p>
-                              <a href={result.url}>
-                                <p>{result.url}</p>
+                              <a href={cleanedString}>
+                                <p>{cleanedString}</p>
                               </a>
                             </Col>
                           </div>

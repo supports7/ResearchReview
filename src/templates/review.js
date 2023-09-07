@@ -159,6 +159,35 @@ const ReviewTemplate = ({
             </section>
           }
 
+          <section className="home-page-connect-section">
+            <Container>
+              <Row>
+                {pageContext.linksByReview && pageContext.linksByReview.length > 0 &&
+                  <Col md={4} sm={6} xs={12}>
+                    <h3>Useful Links</h3>
+                    {pageContext.linksByReview.map((link, index) => {
+                      return (
+                        <div className="promoted-content" key={index}>
+                          <a href={link.url}>
+                            <p>{link.title}</p>
+                          </a>
+                        </div>
+                      )
+                    })}
+                  </Col>
+                }
+
+                
+                <Col md={4} sm={6} xs={12}>
+                  <h3>Download</h3>
+                  <p style={{marginBottom: 0}}>Download a sample publication below</p>
+                  <a href='/sample-reviews/'>Click Here</a>
+                </Col>
+                
+              </Row>
+            </Container>
+          </section>
+
           <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
       </Container>

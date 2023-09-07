@@ -82,7 +82,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
         {clinicalAreaParent.children && clinicalAreaParent.children.length > 0 &&
           <div>
             <div className={`clinical-area-section-middle-div pill-level-${level}`}>
-              <Row>
+              <Row className="clinical-area-section-row">
                 {clinicalAreaParent.children.map((clinicalAreaChild, i) => (
                   <ClinicalAreaPill handleClick={handleClick} clinicalArea={clinicalAreaChild} level={level} selectedChildNode={selectedChildNode} index={i} url={clinicalAreaChild.url} key={clinicalAreaChild.id} />
                 ))}
