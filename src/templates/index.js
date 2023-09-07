@@ -9,6 +9,7 @@ import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import Supporters from "../components/supporters"
 import DoubleAd from "../components/doubleAd"
+import JoinRR from "../components/joinRR"
 import FullScreenAd from "../components/fullScreenAd"
 import Banner from "../components/banner";
 import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
@@ -197,42 +198,7 @@ const Index = ({ pageContext }) => {
         </Row>
       </Container>
       <Container>
-        <section className="join-research-review-form-section">
-          <Row>
-            <Col xs={12}>
-              <h2>JOIN RESEARCH REVIEW</h2>
-            </Col>
-            <SectionLine />
-            <Col md={8} sm={6} xs={12}>
-              <form className="join-rr-form">
-                <Row>
-                  <Col md={6} xs={12}>
-                    <input type="text" placeholder="First Name"></input>
-                  </Col>
-                  <Col md={6} xs={12}>
-                    <input type="text" placeholder="Last Name"></input>
-                  </Col>
-                  <Col xs={12}>
-                    <input type="email" placeholder="Email"></input>
-                  </Col>
-                  <Col xs={12}>
-                    <input type="text" placeholder="Profession"></input>
-                  </Col>
-                  <button type="submit" className="btn btn-primary">Join</button>
-                </Row>
-              </form>
-            </Col>
-            <Col md={4} sm={6} xs={12} className="jrr-cta-main-div">
-              <div className="jrr-cta-logo">
-                <img
-                  alt="research review logo"
-                  src={logoResearchReview}
-                  className="img-fluid"
-                />
-              </div>
-            </Col>
-          </Row>
-        </section>
+        <JoinRR />
       </Container>
     </Layout>
   )

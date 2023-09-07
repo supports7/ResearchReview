@@ -32,35 +32,40 @@ const Profile = () => {
 
       setFirstName(userDataFromCookies.first_Name)
       setLastName(userDataFromCookies.last_Name)
-      setFullName(userDataFromCookies.full_Name)
+      if(userDataFromCookies.full_Name){
+        setFullName(userDataFromCookies.full_Name)
+      }
+      else {
+        setFullName(userDataFromCookies.first_Name + " " + userDataFromCookies.last_Name)
+      }
       setEmail(userDataFromCookies.email)
       setProfession(userDataFromCookies.profession)
       setHealthProfessional(userDataFromCookies.health_Professional)
     }
   }, []);
 
-  const startEditProfile = () => {
-    setIsEditingProfile(true);
+  const toggleEditProfile = () => {
+    setIsEditingProfile(!isEditingProfile);
   };
 
 
   const handleSubmit = async event => {
     event.preventDefault()
-    const { firstName, lastName, email, profession } = document.forms[1]
 
-    if (firstName.value && lastName.value && email.value && profession.value) {
+    if (firstName && lastName && email && profession) {
       // loadLogin();
       // Send email and password entered to store/saga
-      const fullName = firstName.value + " " + lastName.value;
+      const fullName = firstName + " " + lastName;
       setFullName(fullName);
 
       const jsonData = profileData;
       jsonData.full_Name = fullName;
-      jsonData.first_Name = firstName.value;
-      jsonData.last_Name = lastName.value;
-      jsonData.email = email.value;
-      jsonData.profession = profession.value;
-
+      jsonData.first_Name = firstName;
+      jsonData.last_Name = lastName;
+      jsonData.email = email;
+      jsonData.profession = profession;
+      console.log("jsonData", jsonData);
+      
       fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/${profileData.id}`, {
         method: "PUT",
         // mode: 'no-cors',
@@ -164,7 +169,7 @@ const Profile = () => {
                             </Col>
                             <Col xs={8}>
                               <div id="wrapper">
-                                <label for="yes_no_radio">Are you a health professional?</label>
+                                <label htmlFor="yes_no_radio">Are you a health professional?</label>
                                 <p>
                                   <input type="radio" name="yes_no" onChange={e => setHealthProfessional(true)} defaultChecked={healthProfessional} />Yes
                                 </p>
@@ -176,7 +181,7 @@ const Profile = () => {
                               </div>
                             </Col>
                           </Col>
-                          <Col xs={12} className="pt-2">
+                          <Col xs={12} className="pt-2" style={{display: "flex"}}>
                             <p>
                               <button
                                 type="submit"
@@ -185,6 +190,7 @@ const Profile = () => {
                                 Submit
                               </button>
                             </p>
+                            <p><a className="btn btn-secondary mx-2" onClick={toggleEditProfile}>Cancel</a></p>
                           </Col>
                         </Row>
                       </form>
@@ -196,7 +202,7 @@ const Profile = () => {
                       <p><strong>EMAIL:</strong> {email}</p>
                       {profileData.profession && profession && <p><strong>Profession:</strong> {profession}</p>}
                       <p>
-                        <a className="btn btn-primary mr-1" onClick={startEditProfile}>Edit Profile</a>
+                        <a className="btn btn-primary mr-1" onClick={toggleEditProfile}>Edit Profile</a>
                         <Link className="btn btn-primary mx-1" to="/change-password">Change Password</Link>
                         <Link className="btn btn-primary ml-1" to="/subscriptions">Change Subscriptions</Link>
                       </p>

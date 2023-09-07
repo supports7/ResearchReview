@@ -108,7 +108,15 @@ const Search = () => {
                   <div className="results">
                     <Row>
                       {searchResults.map((result) => {
-                        const cleanedString = result.url.replace(/\(([^)]+)\)/g, '');
+                        console.log(result);
+                        let cleanedString = "";
+                        if(result.url){
+                          const cleanedStringTemp =  result.url.replace(/\(([^)]+)\)/g, (match, group) => {
+                            // Use decodeURIComponent to convert the URL-encoded group to its original form
+                            return decodeURIComponent(group);
+                          });
+                          cleanedString = cleanedStringTemp;
+                        }
                         return (
                           <div className="result-main-div" key={result.id}>
                             <Col xs={12}>
