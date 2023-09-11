@@ -178,9 +178,9 @@ const Index = ({ pageContext }) => {
               <div className="about-section-left">
                 <div dangerouslySetInnerHTML={{ __html: aboutTextLeftSide }} />
               </div>
-              <a href="/contact" className="btn btn-secondary">
+              {/* <a href="/contact-us" className="btn btn-secondary">
                   READ MORE
-                </a>
+                </a> */}
             </Col>
             <Col md={4} sm={6} xs={12}>
               <div className="about-section-right">

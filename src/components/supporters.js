@@ -20,12 +20,12 @@ const Supporters = ({ partnersMacroContent }) => {
                 <div dangerouslySetInnerHTML={{ __html: partnersTitle }} />
               }
             </Col>
-            {partnersMacroContent && partnersMacroContent.Children.map((partner) => {
+            {partnersMacroContent && partnersMacroContent.Children.map((partner, index) => {
               return (
-                <Col md={2} sm={3} xs={4}>
+                <Col md={2} sm={3} xs={4} key={index}>
                   <div className="partner-macro-outer-div">
                     <div className="partner-macro-inner-div">
-                      <a href={partner.partnerLink}>
+                      <a href={partner.partnerLink} target="_blank">
                         <img
                           alt={partner.partnerName}
                           className="img-fluid"

@@ -29,7 +29,7 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
   useEffect(() => {
     console.log("pageContext", pageContext);
     const writersFromId = find(pageContext.testClinicalAreas, {"alternative_id": "4956793000000450112"});
-    console.log("writers", writersFromId);
+    console.log("writers", pageContext.allWritersByReview);
   }, [])
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {

@@ -101,13 +101,16 @@ const ReviewTemplate = ({
             </Col>
           </Row>
         </section>
-
-        <DoubleAd advertisements={pageContext.advertisements} />
+        {pageContext.advertisements &&
+          <DoubleAd advertisements={pageContext.advertisements} />
+        }
       </Container>
 
       <Container fluid>
         <Row>
-          <FullScreenAd advertisements={pageContext.advertisements} />
+          {pageContext.advertisements && 
+            <FullScreenAd advertisements={pageContext.advertisements} />
+          }
 
           {pageContext.podcasts && pageContext.podcasts.length > 0 &&
             <section className="home-page-connect-section">
@@ -159,7 +162,7 @@ const ReviewTemplate = ({
             </section>
           }
 
-          <section className="home-page-connect-section">
+          <section className="home-page-connect-section promoted-content">
             <Container>
               <Row>
                 {pageContext.linksByReview && pageContext.linksByReview.length > 0 &&
@@ -167,7 +170,7 @@ const ReviewTemplate = ({
                     <h3>Useful Links</h3>
                     {pageContext.linksByReview.map((link, index) => {
                       return (
-                        <div className="promoted-content" key={index}>
+                        <div key={index}>
                           <a href={link.url}>
                             <p>{link.title}</p>
                           </a>

@@ -8,7 +8,7 @@ import SectionLine from "../components/sectionLine"
 import Cookies from "universal-cookie"
 import SearchIcon from "@mui/icons-material/Search"
 import CircularProgress from "@mui/material/CircularProgress"
-
+import config from "../../config.js"
 const Search = () => {
   const [searchEntry, setSearchEntry] = useState("");
   const [searchResults, setSearchResults] = useState();
@@ -42,6 +42,7 @@ const Search = () => {
         // mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
+          "Country": config.country,
         },
       })
         .then(res => res.json())
@@ -104,13 +105,14 @@ const Search = () => {
                   <CircularProgress />
                 </div>
                 :
-                (searchResults ?
+                (searchResults && searchResults.length ?
                   <div className="results">
                     <Row>
                       {searchResults.map((result) => {
                         console.log(result);
                         let cleanedString = "";
                         if(result.url){
+                          console.log(result.url);
                           const cleanedStringTemp =  result.url.replace(/\(([^)]+)\)/g, (match, group) => {
                             // Use decodeURIComponent to convert the URL-encoded group to its original form
                             return decodeURIComponent(group);

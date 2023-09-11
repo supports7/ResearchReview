@@ -55,7 +55,7 @@ const PodcastDetailsTemplate = ({
           </Row>
         </section>
       </Container>
-      <Container fluid>
+      <Container>
         <section>
           <Row>
           <Col xs={2} style={{textAlign:'center'}}>
