@@ -1,7 +1,10 @@
 const config = {
     // Australian Site
-    countryCode: "Australia",
-    // countryCode: "New Zealand",
+    country: "Australia",
+    countryCode: "AU",
+    // New Zealand Site
+    // country: "New Zealand",
+    // countryCode: "NZ",
 }
 
 module.exports = config;

@@ -53,7 +53,7 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          "Country": config.countryCode,
+          "Country": config.country,
         },
         name: `Writers`,
         verboseOutput: true, // For debugging purposes
@@ -69,7 +69,7 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          "Country": config.countryCode,
+          "Country": config.country,
           // "Country": "Australia",
         },
         name: `Reviews`,
@@ -77,28 +77,12 @@ module.exports = {
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }
     },
-    // {
-    //   resolve: "gatsby-source-apiserver",
-    //   options: {
-    //     // Type prefix of entities from server
-    //     typePrefix: "zoho__",
-    //     url: `https://researchreview.dev.s05.system7.co.nz/api/sections/featured`,
-    //     method: "get",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Country": config.countryCode,
-    //     },
-    //     name: `FeaturedArticle`,
-    //     verboseOutput: true, // For debugging purposes
-    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-    //   }
-    // },
     {
       resolve: "gatsby-source-apiserver",
       options: {
         // Type prefix of entities from server
         typePrefix: "zoho__",
-        url: `https://rrcms.s05.system7.co.nz/au`,
+        url: `https://rrcms.s05.system7.co.nz/${config.countryCode}`,
         method: "get",
         headers: {
           "Content-Type": "application/json",
@@ -108,99 +92,6 @@ module.exports = {
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }
     },
-    // {
-    //   resolve: "gatsby-source-apiserver",
-    //   options: {
-    //     // Type prefix of entities from server
-    //     typePrefix: "zoho__",
-    //     url: `https://researchreview.dev.s05.system7.co.nz/api/professionaldevelopment/modules`,
-    //     method: "get",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Country": config.countryCode,
-    //     },
-    //     name: `Modules`,
-    //     verboseOutput: true, // For debugging purposes
-    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-    //   }
-    // },
-    // {
-    //   resolve: "gatsby-source-apiserver",
-    //   options: {
-    //     // Type prefix of entities from server
-    //     typePrefix: "zoho__",
-    //     url: `https://researchreview.dev.s05.system7.co.nz/api/professionaldevelopment/partners`,
-    //     method: "get",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Country": config.countryCode,
-    //     },
-    //     name: `Partners`,
-    //     verboseOutput: true, // For debugging purposes
-    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-    //   }
-    // },
-    // {
-    //   resolve: "gatsby-source-apiserver",
-    //   options: {
-    //     // Type prefix of entities from server
-    //     typePrefix: "zoho__",
-    //     url: `https://researchreview.dev.s05.system7.co.nz/api/home`,
-    //     method: "get",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Country": config.countryCode,
-    //     },
-    //     name: `Home`,
-    //     verboseOutput: true, // For debugging purposes
-    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-    //   }
-    // }, 
-    // {
-    //   resolve: "gatsby-source-apiserver",
-    //   options: {
-    //     // Type prefix of entities from server
-    //     typePrefix: "zoho__",
-    //     url: `https://researchreview.dev.s05.system7.co.nz/api/join`,
-    //     method: "get",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Country": config.countryCode,
-    //     },
-    //     name: `Join`,
-    //     verboseOutput: true, // For debugging purposes
-    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-    //   }
-    // },
-    // {
-    //   resolve: "gatsby-source-apiserver",
-    //   options: {
-    //     // Type prefix of entities from server
-    //     typePrefix: "zoho__",
-    //     url: `https://researchreview.dev.s05.system7.co.nz/api/advertisements`,
-    //     method: "get",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Country": config.countryCode,
-    //     },
-    //     name: `Advertisements`,
-    //     verboseOutput: true, // For debugging purposes
-    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-    //   }
-    // },
-    // {
-    //   resolve: 'gatsby-source-rest-api',
-    //   options: {
-    //     endpoints: [
-    //       `https://researchreview.dev.s05.system7.co.nz/api/clinicalAreas`,
-    //       // `https://researchreview.dev.s05.system7.co.nz/api/writers`,
-    //       // `https://researchreview.dev.s05.system7.co.nz/api/reviews`,
-    //     ]
-    //   },
-    //   headers: {
-    //     "Country": `${config.countryCode}`
-    //   },
-    // },
     {
       resolve: `gatsby-transformer-remark`,
       options: {

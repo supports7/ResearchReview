@@ -253,10 +253,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   let siteWideAdvertisements = filter(allAdvertisements, { "zohoId": "" }, []);
   //console.log("siteWideAdvertisements:" , siteWideAdvertisements)
 
+
+  //DEBUGGING WRITERS
+  const allWritersByReview = [];
+
   // - - - - - - - - - - - - - - - - - - - - - - - - MAIN SUB CLINICAL AREA LOOP - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-
-
   async function getSubClinicalAreas(clinicalAreas, parentClinicalArea, url) {
     // function code
     // Gatsby creates own Id. Save Id value from API into new field called alternative_id.
@@ -355,7 +356,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               issues = await getIssues(review.alternative_id);
               writersByReview = [];
               writersByReview = await getWritersByReview(review.alternative_id);
-
+              allWritersByReview.push(writersByReview);
               if (review.name != "Dermatitis") {
 
                 podcasts = await getPodcasts(review.alternative_id);
@@ -552,6 +553,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       context: {
         clinicalAreas: clinicalAreaTree,
         content: expertWritersContent,
+        allWritersByReview: allWritersByReview,
         partnersMacroContent: partnersLogoListContent,
         advertisements: siteWideAdvertisements,
         testClinicalAreas: testClinicalAreas,
