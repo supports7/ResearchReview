@@ -28,14 +28,150 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
 
   useEffect(() => {
     console.log("pageContext", pageContext);
-    const writersFromId = find(pageContext.testClinicalAreas, {"alternative_id": "4956793000000450112"});
+    const writersFromId = find(pageContext.testClinicalAreas, { "alternative_id": "4956793000000450112" });
     console.log("writers", pageContext.allWritersByReview);
   }, [])
+
+  // const TopLevelClinicalArea = ({ clinicalArea, index }) => {
+  //   let url = clinicalArea.name;
+  //   const [children, setChildren] = useState();
+  //   const [isActive, setIsActive] = useState();
+
+  //   return (
+  //     <Col xs={12} key={index} id={`top-level-clinical-area-${index}`}>
+  //       <div className="clinical-area-section-main-div">
+  //         <div className="clinical-area-section-top-div">
+  //           <h3>{clinicalArea.name}</h3>
+  //         </div>
+  //         <ClinicalAreaSubPills clinicalAreaParent={clinicalArea} level={1} />
+  //       </div>
+  //     </Col>
+  //   )
+  // }
+
+  // const ClinicalAreaSubPills = ({ clinicalAreaParent, level }) => {
+  //   const [selectedChildNode, setSelectedChildNode] = useState(null);
+  //   const [selectedParentNodeWithWriters, setSelectedParentNodeWithWriters] = useState(null);
+  //   const [writers, setWriters] = useState([]);
+
+  //   const handleClick = (clinicalArea) => {
+  //     if (clinicalArea == selectedChildNode) {
+  //       setSelectedChildNode(null)
+  //       return;
+  //     }
+  //     let redirecting = false;
+
+  //     if (clinicalArea.writersByReview) {
+  //       setWriters(clinicalArea.writersByReview);
+  //       setSelectedParentNodeWithWriters(clinicalArea);
+  //       return;
+  //     }
+
+  //     if (clinicalArea.children) {
+  //       let numberOfChildren = clinicalArea.children.length;
+
+  //       if (numberOfChildren == 1) {
+  //         //Need to check if the only child has a url and if it has a url Redriect to that url
+  //         let firstChild = clinicalArea.children[0];
+  //         if (firstChild.url && firstChild.url.length > 0) {
+  //           redirecting = true;
+  //           navigate(`${pageContext.pageUrl}${firstChild.url}`);
+  //         }
+  //       }
+  //     }
+  //     else {
+  //       redirecting = true;
+  //       navigate(clinicalArea.url)
+  //     }
+  //     if (!redirecting) {
+  //       setSelectedChildNode(clinicalArea);
+  //     }
+  //   };
+
+  //   return (
+  //     <div>
+  //       {clinicalAreaParent.children && clinicalAreaParent.children.length > 0 &&
+  //         <div>
+  //           <div className={`clinical-area-section-middle-div pill-level-${level}`}>
+  //             <Row className="clinical-area-section-row">
+  //               {clinicalAreaParent.children.map((clinicalAreaChild, i) => (
+  //                 <ClinicalAreaPill handleClick={handleClick} clinicalArea={clinicalAreaChild} level={level} selectedChildNode={selectedChildNode} index={i} url={clinicalAreaChild.url} key={clinicalAreaChild.id} />
+  //               ))}
+  //             </Row>
+  //           </div>
+  //           <div>
+  //             {writers &&
+  //               <div className={`clinical-area-section-middle-div pill-level-${level + 1}`}>
+  //                 <Row>
+  //                   {writers.map((writer, i) => (
+  //                     <WritersPill selectedParentNodeWithWriters={selectedParentNodeWithWriters} writer={writer} i={i} level={level + 1}  key={writer.Node} />
+  //                   ))}
+  //                 </Row>
+  //               </div>
+  //             }
+  //             {selectedChildNode &&
+  //               <ClinicalAreaSubPills clinicalAreaParent={selectedChildNode} level={level + 1} />
+  //             }
+  //           </div>
+  //         </div>
+  //       }
+  //     </div>
+  //   )
+  // }
+
+  // const ClinicalAreaPill = ({ clinicalArea, level, selectedChildNode, index, url, handleClick }) => {
+  //   let hasChildren = false;
+  //   if (clinicalArea.children) {
+  //     let numberOfChildren = clinicalArea.children.length;
+
+  //     if (numberOfChildren > 1 || (level == 1 && numberOfChildren > 0 || (clinicalArea.writersByReview && clinicalArea.writersByReview.length > 0))) {
+  //       hasChildren = true;
+  //     }
+  //   }
+  //   // let urlCopy = url.slice();
+  //   // urlCopy = urlCopy + "/" + clinicalArea.name;
+  //   // if (clinicalArea.children.length > 0) {
+  //   //   hasChildren = true;
+  //   // }
+
+  //   return (
+  //     <Col xs={12} sm={6} md={4} lg={3}>
+  //       <div key={clinicalArea.id} className="clinical-area-pill">
+  //         <p onClick={() => handleClick(clinicalArea)}>
+  //           {clinicalArea.name}
+  //           {hasChildren && (selectedChildNode ? (selectedChildNode.id === clinicalArea.id ? <span>-</span> : <span>+</span>) : <span>+</span>)}
+  //         </p>
+  //       </div>
+  //     </Col>
+  //   )
+  // }
+
+
+  const WritersPill = ({ selectedParentNodeWithWriters, writer, i }) => {
+
+    const writerHandleClick = (writer) => {
+      let writerUrlTemp = writer.first_Name.toLowerCase() + "-" + writer.last_Name.toLowerCase();
+      writerUrlTemp = writerUrlTemp.split(' ').join('-');
+      let url = selectedParentNodeWithWriters.writerUrl + "/" + writerUrlTemp;
+      navigate(url)
+    }
+
+    return (
+      <Col xs={12} sm={6} md={4} lg={3}>
+        <div key={writer.Node} className="clinical-area-pill">
+          <p onClick={() => writerHandleClick(writer)}>
+            {writer.first_Name + " " + writer.last_Name}
+          </p>
+        </div>
+      </Col>
+    )
+  }
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
     let url = clinicalArea.name;
     const [children, setChildren] = useState();
     const [isActive, setIsActive] = useState();
+
 
     return (
       <Col xs={12} key={index} id={`top-level-clinical-area-${index}`}>
@@ -51,37 +187,23 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
 
   const ClinicalAreaSubPills = ({ clinicalAreaParent, level }) => {
     const [selectedChildNode, setSelectedChildNode] = useState(null);
-    const [selectedParentNodeWithWriters, setSelectedParentNodeWithWriters] = useState(null);
-    const [writers, setWriters] = useState([]);
 
-    const handleClick = (clinicalArea) => {
+    const handleClick = (clinicalArea, url) => {
       if (clinicalArea == selectedChildNode) {
         setSelectedChildNode(null)
         return;
       }
+      console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
+      if (clinicalArea.children || clinicalArea.writersByReview) {
 
-      if (clinicalArea.writersByReview) {
-        setWriters(clinicalArea.writersByReview);
-        setSelectedParentNodeWithWriters(clinicalArea);
-        return;
-      }
-
-      if (clinicalArea.children) {
-        let numberOfChildren = clinicalArea.children.length;
-
-        if (numberOfChildren == 1) {
-          //Need to check if the only child has a url and if it has a url Redriect to that url
-          let firstChild = clinicalArea.children[0];
-          if (firstChild.url && firstChild.url.length > 0) {
-            redirecting = true;
-            navigate(`${pageContext.pageUrl}${firstChild.url}`);
-          }
-        }
       }
       else {
         redirecting = true;
-        navigate(clinicalArea.url)
+        let writerName = clinicalArea.name.toLowerCase();
+        writerName = writerName.split(' ').join('-');
+        let writerDetailsPageUrl = url + "/" + writerName;
+        navigate(writerDetailsPageUrl);
       }
       if (!redirecting) {
         setSelectedChildNode(clinicalArea);
@@ -100,15 +222,22 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
               </Row>
             </div>
             <div>
-              {writers &&
-                <div className={`clinical-area-section-middle-div pill-level-${level + 1}`}>
-                  <Row>
-                    {writers.map((writer, i) => (
-                      <WritersPill selectedParentNodeWithWriters={selectedParentNodeWithWriters} writer={writer} i={i} level={level + 1}  key={writer.Node} />
-                    ))}
-                  </Row>
-                </div>
+              {selectedChildNode &&
+                <ClinicalAreaSubPills clinicalAreaParent={selectedChildNode} level={level + 1} />
               }
+            </div>
+          </div>
+        }
+        {clinicalAreaParent.writersByReview && clinicalAreaParent.writersByReview.length > 0 &&
+          <div>
+            <div className={`clinical-area-section-middle-div pill-level-${level}`}>
+              <Row className="clinical-area-section-row">
+                {clinicalAreaParent.writersByReview.map((writer, i) => (
+                  <ClinicalAreaPill handleClick={handleClick} isWriter={true} clinicalArea={writer} level={level} selectedChildNode={selectedChildNode} index={i} url={clinicalAreaParent.url} key={writer.id} />
+                ))}
+              </Row>
+            </div>
+            <div>
               {selectedChildNode &&
                 <ClinicalAreaSubPills clinicalAreaParent={selectedChildNode} level={level + 1} />
               }
@@ -119,52 +248,40 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
     )
   }
 
-  const ClinicalAreaPill = ({ clinicalArea, level, selectedChildNode, index, url, handleClick }) => {
+  const ClinicalAreaPill = ({ clinicalArea, level, selectedChildNode, index, url, handleClick, isWriter }) => {
     let hasChildren = false;
+    let hasWriters = false;
     if (clinicalArea.children) {
       let numberOfChildren = clinicalArea.children.length;
 
-      if (numberOfChildren > 1 || (level == 1 && numberOfChildren > 0 || (clinicalArea.writersByReview && clinicalArea.writersByReview.length > 0))) {
+      if (numberOfChildren > 1 || (level == 1 && numberOfChildren > 0)) {
         hasChildren = true;
       }
+    }
+    else if (clinicalArea.writersByReview) {
+      let numberOfWriters = clinicalArea.writersByReview.length;
+      if (numberOfWriters > 1 || (level == 1 && numberOfWriters > 0)) {
+        hasWriters = true;
+      }
+
     }
     // let urlCopy = url.slice();
     // urlCopy = urlCopy + "/" + clinicalArea.name;
     // if (clinicalArea.children.length > 0) {
     //   hasChildren = true;
     // }
-
-    return (
-      <Col xs={12} sm={6} md={4} lg={3}>
-        <div key={clinicalArea.id} className="clinical-area-pill">
-          <p onClick={() => handleClick(clinicalArea)}>
-            {clinicalArea.name}
-            {hasChildren && (selectedChildNode ? (selectedChildNode.id === clinicalArea.id ? <span>-</span> : <span>+</span>) : <span>+</span>)}
-          </p>
-        </div>
-      </Col>
-    )
-  }
-
-
-  const WritersPill = ({ selectedParentNodeWithWriters, writer, i }) => {
-    
-    const writerHandleClick = (writer) => {
-      let writerUrlTemp = writer.first_Name.toLowerCase() + "-" + writer.last_Name.toLowerCase();
-      writerUrlTemp = writerUrlTemp.split(' ').join('-');
-      let url = selectedParentNodeWithWriters.writerUrl + "/" + writerUrlTemp;
-      navigate(url)
+    if ((hasWriters || hasChildren || isWriter)) {
+      return (
+        <Col xs={12} sm={6} md={4} lg={3}>
+          <div key={clinicalArea.id} className="clinical-area-pill">
+            <p onClick={() => handleClick(clinicalArea, url)}>
+              {clinicalArea.name}
+              {(hasChildren || hasWriters) && (selectedChildNode ? (selectedChildNode.alternative_id === clinicalArea.alternative_id ? <span>-</span> : <span>+</span>) : <span>+</span>)}
+            </p>
+          </div>
+        </Col>
+      )
     }
-
-    return (
-      <Col xs={12} sm={6} md={4} lg={3}>
-        <div key={writer.Node} className="clinical-area-pill">
-          <p onClick={() => writerHandleClick(writer)}>
-            {writer.first_Name + " " + writer.last_Name}
-          </p>
-        </div>
-      </Col>
-    )
   }
 
   return (

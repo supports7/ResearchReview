@@ -320,7 +320,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           // start build review section - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
           if (reviewResult.data.allZohoReviews.nodes) {
             let reviews = [...reviewResult.data.allZohoReviews.nodes];
-            let writersByReview = [];
             await Promise.all(reviews.map(async (review) => {
               // reviews.forEach(async (review) => {
               // Create URL
@@ -354,13 +353,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
               let issues = [];
               issues = await getIssues(review.alternative_id);
-              writersByReview = [];
+              review['writersByReview'] = await getWritersByReview(review.alternative_id);
+              let writersByReview = [];
               writersByReview = await getWritersByReview(review.alternative_id);
-              allWritersByReview.push(writersByReview);
               if (review.name != "Dermatitis") {
-
                 podcasts = await getPodcasts(review.alternative_id);
-
                 linksByReview = await getLinksByReview(review.alternative_id);
               }
 
@@ -468,20 +465,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 },
               })
 
-              createPage({
-                path: `/expert-advisors/${reviewUrlTemp}/`,
-                component: writerListTemplate,
-                context: {
-                  review: review,
-                  writers: writers,
-                  partnersMacroContent: partnersLogoListContent,
-                  url: `/expert-advisors/${reviewUrlTemp}/`,
-                  advertisements: ads,
-                },
-              })
-
-              const topTwoWriters = writers.slice(0, 2);
-              await Promise.all(topTwoWriters.map((writer) => {
+              await Promise.all(review.writersByReview.map((writer) => {
                 // topTwoWriters.forEach((writer) => {
                 let writerUrlTemp = writer.name.toLowerCase();
                 writerUrlTemp = writerUrlTemp.split(' ').join('-');
@@ -498,7 +482,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               review['url'] = reviewUrlTemp;
             }))
             childClinicalArea['children'] = reviews;
-            childClinicalArea['writersByReview'] = writersByReview;
             childClinicalArea['writerUrl'] = reviewUrlTemp;
           }
           // end build review section - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

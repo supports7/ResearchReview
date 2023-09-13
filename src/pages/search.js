@@ -48,6 +48,7 @@ const Search = () => {
         .then(res => res.json())
         .then(
           result => {
+            console.log("search results", result)
             setSearchResults(result)
           },
           // Note: it's important to handle errors here
@@ -109,7 +110,6 @@ const Search = () => {
                   <div className="results">
                     <Row>
                       {searchResults.map((result) => {
-                        console.log(result);
                         let cleanedString = "";
                         if(result.url){
                           console.log(result.url);
