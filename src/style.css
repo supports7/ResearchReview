@@ -537,6 +537,10 @@ section {
   padding-top: 100px;
 }
 
+.issue-page-top-section, .article-page-top-section {
+  padding-top: 50px;
+}
+
 .container-fluid {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -563,7 +567,7 @@ section {
 }
 
 .navbar-login {
-  margin-top: 80px;
+  margin-top: 55px;
 }
 
 .navbar-expand .navbar-nav {
@@ -603,6 +607,9 @@ section {
 .navbar-row .navbar-nav a:hover {
   background-color: black;
   color: white; 
+}
+.navbar-login .login-form-title-div {
+  margin-top: 25px;
 }
 .navbar-login .login-form-title-div p {
   font-weight: bold;
@@ -1076,7 +1083,7 @@ input::placeholder {
   font-weight: 500;
 }
 
-.join-research-review-form-section .join-rr-form input {
+.join-rr-form input[type='text'], .join-rr-form input[type='email'], .join-rr-form input[type='password'] {
   border: none;
   border-bottom: 1px solid black;
   width: 100%;
@@ -1097,6 +1104,14 @@ input::placeholder {
   /* color: black; */
   font-family: "Gotham Book";
   font-size: 20px;
+}
+
+.join-rr-form .form-group-radio-div {
+  margin-bottom: 1rem;
+}
+
+.join-rr-form .form-group-radio-div p {
+  margin-bottom: 0;
 }
 
 .join-research-review-form-section .join-rr-form button {
@@ -1303,6 +1318,9 @@ input::placeholder {
 }
 
 /* Join research review page */
+section#join-research-review-page {
+  padding-top: 15px;
+}
 
 .join-research-review .join-research-review-popup-box {
   background: black;
@@ -1325,7 +1343,7 @@ input::placeholder {
   padding: 40px 100px;
 }
 
-.join-research-review .join-research-review-form input {
+.join-research-review .join-research-review-form input[type='text'], .join-research-review .join-research-review-form input[type='email'], .join-research-review .join-research-review-form input[type='password'] {
   border: none;
   border-bottom: 1px solid black;
   width: 100%;

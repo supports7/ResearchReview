@@ -26,18 +26,26 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
   const [profession, setProfession] = useState()
   const [registerPassword, setRegisterPassword] = useState()
   const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState()
+  const [organisation, setOrganisation] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [healthProfessional, setHealthProfessional] = useState('');
+  const [confirmTAndCs, setConfirmTAndCs] = useState('');
   const [registerError, setRegisterError] = useState()
   const [recaptchaData, setRecaptchaData] = useState()
   const recaptchaRef = React.createRef();
 
   const introText = he.decode(pageContext.joinRRContent.introText);
 
+  const handleConfirmTAndCsChange = (e) => {
+    setConfirmTAndCs(e.target.value);
+  };
+
   const handleSubmit = async event => {
     event.preventDefault()
     setRegisterError("");
 
     if (firstName && lastName && email && profession && registerPassword && registerPasswordConfirm && recaptchaData) {
-      
+
       if (registerPassword != registerPasswordConfirm) {
         setRegisterError("Passwords do not match. Please try again")
         return;
@@ -51,6 +59,9 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
         Last_Name: lastName,
         Email: email,
         Profession: profession,
+        Organisation: organisation,
+        Phone_Number: phoneNumber,
+        Health_Professional: healthProfessional,
         Password_Hash: registerPassword
       }
 
@@ -98,6 +109,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
     <Layout>
       {/* <JoinResearchReviewForm /> */}
       <section
+        id="join-research-review-page"
         className="join-research-review"
         style={{
           backgroundImage: `url('${pageContext.joinRRContent.bannerImage}')`,
@@ -114,7 +126,7 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                     <div className="join-research-review-popup-box">
                       <h2 className="join-research-review-heading">Join Research Review</h2>
                     </div>
-                    <form onSubmit={handleSubmit} className="join-research-review-form">
+                    <form onSubmit={handleSubmit} className="join-rr-form join-research-review-form">
                       <Row>
                         <Col xs={12} className="justify-content-center">
                           <Col xs={6}>
@@ -171,8 +183,34 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={12}>
-                          <div className="form-group form-profession-div">
+                        <Col xs={6}>
+                          <div className="form-group form-phone-number-div">
+                            <input
+                              type="text"
+                              name="phoneNumber"
+                              className="form-control mt-1"
+                              placeholder="Home/Work Phone Number"
+                              required
+                              value={phoneNumber}
+                              onChange={e => setPhoneNumber(e.target.value)}
+                            ></input>
+                          </div>
+                        </Col>
+                        <Col xs={6}>
+                          <div className="form-group form-organisation-div">
+                            <input
+                              type="text"
+                              name="organisation"
+                              className="form-control mt-1"
+                              placeholder="Organisation"
+                              required
+                              value={organisation}
+                              onChange={e => setOrganisation(e.target.value)}
+                            ></input>
+                          </div>
+                        </Col>
+                        <Col xs={6}>
+                          <div className="form-group form-password-div">
                             <input
                               type="password"
                               name="registerPassword"
@@ -184,8 +222,8 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={12}>
-                          <div className="form-group form-profession-div">
+                        <Col xs={6}>
+                          <div className="form-group form-confirm-password-div">
                             <input
                               type="password"
                               name="registerPasswordConfirm"
@@ -209,6 +247,29 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                               onChange={e => setProfession(e.target.value)}
                             ></input>
                           </div>
+                        </Col>
+                        <Col xs={12}>
+                          <div className="form-group-radio-div">
+                            <label htmlFor="yes_no_radio">Are you a health professional?</label>
+                            <p>
+                              <input type="radio" name="yes_no" onChange={e => setHealthProfessional(true)} defaultChecked={healthProfessional} />Yes
+                            </p>
+
+                            <p>
+                              <input type="radio" name="yes_no" onChange={e => setHealthProfessional(false)} defaultChecked={!healthProfessional} />No
+                            </p>
+                          </div>
+                        </Col>
+                        <Col xs={12} className="form-group-radio-div">
+                          <label>
+                            <input
+                              type="checkbox"
+                              name="confirmTAndCs"
+                              checked={confirmTAndCs}
+                              onChange={handleConfirmTAndCsChange} // Use the custom handler
+                            />
+                            I have read and agree with the <a href="/terms-and-conditions">Terms and Conditions</a>
+                          </label>
                         </Col>
                         <Col xs={12} lg={6}>
                           <ReCAPTCHA

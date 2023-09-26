@@ -35,14 +35,11 @@ const ModulesTemplate = ({
   }, []);
 
   const bannerContent = {
-    bannerImage: pageContext.modulesContent.bannerImage,
-    bannerText: pageContext.modulesContent.bannerText,
-    buttonLink: pageContext.modulesContent.buttonLink,
-    buttonText: pageContext.modulesContent.buttonText,
+    bannerImage: bannerImage,
+    bannerText: pageContext.review.name + " Modules",
+    buttonLink: "",
+    buttonText: "",
   };
-
-  const introTextLeft = he.decode(pageContext.modulesContent.introTextLeft);
-  const introTextRight = he.decode(pageContext.modulesContent.introTextRight);
 
   return (
     <Layout>
@@ -54,17 +51,6 @@ const ModulesTemplate = ({
               <h2>Modules</h2>
             </Col>
             <SectionLine />
-
-            <Col md={8} sm={6} xs={12}>
-              <div className="about-section-left">
-                <div dangerouslySetInnerHTML={{ __html: introTextLeft }} />
-              </div>
-            </Col>
-            <Col md={4} sm={6} xs={12}>
-              <div className="about-section-right">
-                <div dangerouslySetInnerHTML={{ __html: introTextRight }} />
-              </div>
-            </Col>
           </Row>
         </section>
 
@@ -72,7 +58,7 @@ const ModulesTemplate = ({
           <Row>
             {loggedIn ?
               <div>
-                {pageContext.modulesContent.Children &&
+                {pageContext.modules.Children &&
                   <div>
                     <Col xs={12}>
                       <h2>All Modules</h2>
@@ -80,8 +66,8 @@ const ModulesTemplate = ({
                     <SectionLine />
                   </div>
                 }
-                {pageContext.modulesContent.Children &&
-                  pageContext.modulesContent.Children.map((module, index) => {
+                {pageContext.modules &&
+                  pageContext.modules.map((module, index) => {
                     return (
                       <Col key={index} xs={12}>
                         <div class="module">

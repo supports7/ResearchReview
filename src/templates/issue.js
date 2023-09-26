@@ -19,9 +19,19 @@ const IssueTemplate = ({
   location,
   pageContext
 }) => {
+  const [ reviewPageURL, setReviewPageURL ] = useState();
 
   useEffect(() => {
     console.log("pageContext", pageContext);
+
+    // Need to adjust the tempURLPath to get the original review URL for the back button.
+    let originalURL = pageContext.tempUrlPath;
+    // Split the URL by "/"
+    let urlParts = originalURL.split("/");
+    // Remove the last two elements and join them back with "/"
+    urlParts.splice(-2, 2);
+    let adjustedReviewPageURL = urlParts.join("/");
+    setReviewPageURL(adjustedReviewPageURL);
   }, [pageContext]);
 
   const bannerContent = {
@@ -35,8 +45,11 @@ const IssueTemplate = ({
     <Layout>
       <Banner bannerContent={bannerContent} />
       <Container>
-        <section className="home-page-connect-section">
+        <section className="issue-page-top-section">
           <Row>
+            <Col xs={12} className="pb-md-5">
+              <a className="btn btn-primary" href={reviewPageURL}>Back to Review</a>
+            </Col>
             <Col xs={12}>
               <h2>Sections</h2>
             </Col>

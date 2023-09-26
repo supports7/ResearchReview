@@ -14,9 +14,17 @@ const JoinRR = () => {
   const [profession, setProfession] = useState()
   const [registerPassword, setRegisterPassword] = useState()
   const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState()
+  const [organisation, setOrganisation] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [healthProfessional, setHealthProfessional] = useState('');
+  const [confirmTAndCs, setConfirmTAndCs] = useState('');
   const [registerError, setRegisterError] = useState()
   const [recaptchaData, setRecaptchaData] = useState()
   const recaptchaRef = React.createRef();
+
+  const handleConfirmTAndCsChange = (e) => {
+    setConfirmTAndCs(e.target.value);
+  };
 
   const handleSubmit = async event => {
     event.preventDefault()
@@ -37,6 +45,9 @@ const JoinRR = () => {
         Last_Name: lastName,
         Email: email,
         Profession: profession,
+        Organisation: organisation,
+        Phone_Number: phoneNumber,
+        Health_Professional: healthProfessional,
         Password_Hash: registerPassword
       }
 
@@ -130,6 +141,30 @@ const JoinRR = () => {
                 </div>
               </Col>
               <Col xs={12}>
+                <div className="form-group form-phone-number-div">
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    placeholder="Home/Work Phone Number"
+                    required
+                    value={phoneNumber}
+                    onChange={e => setPhoneNumber(e.target.value)}
+                  ></input>
+                </div>
+              </Col>
+              <Col xs={12}>
+                <div className="form-group form-organisation-div">
+                  <input
+                    type="text"
+                    name="organisation"
+                    placeholder="Organisation"
+                    required
+                    value={organisation}
+                    onChange={e => setOrganisation(e.target.value)}
+                  ></input>
+                </div>
+              </Col>
+              <Col xs={12}>
                 <div className="form-group form-profession-div">
                   <input
                     type="password"
@@ -164,6 +199,29 @@ const JoinRR = () => {
                     onChange={e => setProfession(e.target.value)}
                   ></input>
                 </div>
+              </Col>
+              <Col xs={12}>
+                <div className="form-group-radio-div">
+                  <label htmlFor="yes_no_radio">Are you a health professional?</label>
+                  <p>
+                    <input type="radio" name="yes_no" onChange={e => setHealthProfessional(true)} defaultChecked={healthProfessional} />Yes
+                  </p>
+
+                  <p>
+                    <input type="radio" name="yes_no" onChange={e => setHealthProfessional(false)} defaultChecked={!healthProfessional} />No
+                  </p>
+                </div>
+              </Col>
+              <Col xs={12} className="form-group-radio-div">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="confirmTAndCs"
+                    checked={confirmTAndCs}
+                    onChange={handleConfirmTAndCsChange}
+                  />
+                  I have read and agree with the <a href="/terms-and-conditions">Terms and Conditions</a>
+                </label>
               </Col>
               <Col xs={12} lg={6}>
                 <ReCAPTCHA

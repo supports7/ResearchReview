@@ -44,7 +44,10 @@ const ArticleTemplate = ({ pageContext, location }) => {
       <Banner bannerContent={bannerContent} />
       </div>
       <Container>
-        <section className="section-top-content">
+        <section className="article-page-top-section">
+          <Col xs={12} className="pb-md-5">
+            <a className="btn btn-primary" href={pageContext.tempUrlPath}>Back to Issue</a>
+          </Col>
           <Row>
             <Col lg={8} xs={12}>
               <SectionLine />

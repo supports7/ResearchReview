@@ -14,6 +14,7 @@ function LoginForm() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [userData, setUserData] = useState()
   const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessageTemp, setErrorMessageTemp] = useState("")
   const [loadingLogin, setLoadingLogin] = useState(true)
   const inputRef = useRef(null);
   
@@ -24,12 +25,33 @@ function LoginForm() {
     setPassword(event.target.value);
   };
 
-  
-  useEffect(() => {
-    if (errorMessage) {
-      console.log(errorMessage)
+  function isJSONString(str) {
+    try {
+      JSON.parse(str);
+      return true;
+    } catch (e) {
+      return false;
     }
-  }, [errorMessage])
+  }
+
+  useEffect(() => {
+    if (errorMessageTemp) {
+      // Parse the error messages and display them
+      if(isJSONString(errorMessageTemp)) {
+        let JSONObjectError = JSON.parse(errorMessageTemp);
+        // if error message has email field get message else set message
+        if(JSONObjectError.errors) {
+          console.log(JSONObjectError.errors.Email)
+          if(JSONObjectError.errors.Email) {
+            setErrorMessage(JSONObjectError.errors.Email[0])
+          }
+        }
+      }
+        else {
+          setErrorMessage(errorMessageTemp);
+      }
+    }
+  }, [errorMessageTemp])
 
   useEffect(() => {
     setLoadingLogin(true)
@@ -70,40 +92,54 @@ function LoginForm() {
         },
         body: JSON.stringify(jsonData),
       })
-        .then(res => res.json())
-        .then(
-          result => {
-            console.log("result", result)
-            if (!result.errors) {
-              console.log("TESTING")
-            }
-            setLoadingLogin(false)
-            setLoggedIn(true)
-            setUserData(result)
-            cookies.set("userData", result, {
-              path: "/",
-              expires: new Date(Date.now() + 8640000),
-            })
-            cookies.set("EncryptionKey", result.encryptionKey, {
-              path: "/",
-              expires: new Date(Date.now() + 8640000),
-            })
-            cookies.set("LoginToken", result.token, {
-              path: "/",
-              expires: new Date(Date.now() + 8640000),
-            })
-            window.location.reload();
-          },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
-          error => {
-            setLoadingLogin(false)
-            setLoggedIn(false)
-            console.log(error.message)
-            setErrorMessage(error)
+      .then(async res => {
+        if (!res.ok) {
+          const responseText = await res.text(); // Get the response as text
+          if (res.status === 400) {
+            // Handle a 400 Bad Request error, assuming it contains a text message
+            throw new Error(`${responseText}`);
           }
-        )
+          // Handle other non-OK responses here if needed
+          throw new Error(`${res.status}`);
+        }
+        return res.json();
+      })
+      .then(result => {
+        // Handle JSON response as before
+        console.log("STRAIGHT RESULTS");
+        if (result.errors) {
+          // Handle errors
+          setLoadingLogin(false);
+          setErrorMessageTemp(result.errors);
+          setLoggedIn(false);
+          return;
+        }
+        // Handle successful response
+        setLoadingLogin(false);
+        setLoggedIn(true);
+        setUserData(result);
+        cookies.set("userData", result, {
+          path: "/",
+          expires: new Date(Date.now() + 8640000),
+        });
+        cookies.set("EncryptionKey", result.encryptionKey, {
+          path: "/",
+          expires: new Date(Date.now() + 8640000),
+        });
+        cookies.set("LoginToken", result.token, {
+          path: "/",
+          expires: new Date(Date.now() + 8640000),
+        });
+        window.location.reload();
+      })
+      .catch(error => {
+        // Handle all other errors, including the ones we explicitly threw
+        console.log("STRAIGHT ERROR");
+        setLoadingLogin(false);
+        setLoggedIn(false);
+        console.error("error message", error.message);
+        setErrorMessageTemp(error.message);
+      });
       console.log(username.value, password.value)
     }
   }
@@ -115,11 +151,9 @@ function LoginForm() {
           {!loggedIn && (
             <form onSubmit={handleSubmit} id="navbar-login">
               <Row>
-                {errorMessage &&
-                  <Col xs={12}>
-                    {/* {errorMessage} */}
-                  </Col>
-                }
+                <Col className="offset-md-2 col-md-10" style={{height: '24px'}}>
+                  {errorMessage}
+                </Col>
                 <Col xs={12} md={2} style={{display: 'grid'}}>
                   <h6 style={{alignSelf: 'center', textAlign: 'end'}}>LOGIN</h6>    
                 </Col>

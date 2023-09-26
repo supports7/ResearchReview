@@ -14,6 +14,15 @@ const JoinResearchReviewForm = () => {
   const [lastName, setLastName] = useState()
   const [email, setEmail] = useState()
   const [profession, setProfession] = useState()
+  const [organisation, setOrganisation] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [healthProfessional, setHealthProfessional] = useState('');
+  const [confirmTAndCs, setConfirmTAndCs] = useState('');
+  
+  // Function to handle changes in the input field and update the state
+  const handleConfirmTAndCsChange = (e) => {
+    setConfirmTAndCs(e.target.value);
+  };
 
   const handleSubmit = async event => {
     event.preventDefault()
@@ -118,6 +127,32 @@ const JoinResearchReviewForm = () => {
                         </div>
                       </Col>
                       <Col xs={12}>
+                        <div className="form-group form-phone-number-div">
+                          <input
+                            type="text"
+                            name="phoneNumber"
+                            className="form-control mt-1"
+                            placeholder="Home/Work Phone Number"
+                            required
+                            value={phoneNumber}
+                            onChange={e => setPhoneNumber(e.target.value)}
+                          ></input>
+                        </div>
+                      </Col>
+                      <Col xs={12}>
+                        <div className="form-group form-organisation-div">
+                          <input
+                            type="text"
+                            name="organisation"
+                            className="form-control mt-1"
+                            placeholder="Organisation"
+                            required
+                            value={organisation}
+                            onChange={e => setOrganisation(e.target.value)}
+                          ></input>
+                        </div>
+                      </Col>
+                      <Col xs={12}>
                         <div className="form-group form-profession-div">
                           <input
                             type="text"
@@ -129,6 +164,29 @@ const JoinResearchReviewForm = () => {
                             onChange={e => setProfession(e.target.value)}
                           ></input>
                         </div>
+                      </Col>
+                      <Col xs={12}>
+                        <div id="wrapper">
+                          <label htmlFor="yes_no_radio">Are you a health professional?</label>
+                          <p>
+                            <input type="radio" name="yes_no" onChange={e => setHealthProfessional(true)} defaultChecked={healthProfessional} />Yes
+                          </p>
+
+                          <p>
+                            <input type="radio" name="yes_no" onChange={e => setHealthProfessional(false)} defaultChecked={!healthProfessional} />No
+                          </p>
+                        </div>
+                      </Col>
+                      <Col xs={12}>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="confirmTAndCs"
+                            checked={confirmTAndCs}
+                            onChange={handleConfirmTAndCsChange} // Use the custom handler
+                          />
+                          Check this box
+                        </label>
                       </Col>
                       <Col xs={6}>
                         <button
