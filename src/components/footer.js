@@ -5,6 +5,7 @@ import { Link } from "gatsby"
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const ResearchReviewFooter = () => {
   return (
@@ -25,7 +26,7 @@ const ResearchReviewFooter = () => {
             <p>Research Review highlights critical studies from 10,000 worldwide medical journals with commentary from Australian experts.</p>
             <p className="footer-social-media-links">
               <span><a href="https://www.facebook.com/researchreviewnz/" target="_blank"><FacebookIcon /></a></span>
-              <span><a href="https://twitter.com/researchrev_nz?lang=en" target="_blank"><TwitterIcon /></a></span>
+              <span><a href="https://twitter.com/researchrev_nz?lang=en" target="_blank"><FaXTwitter /></a></span>
               <span><a href="https://nz.linkedin.com/company/research-review-url" target="_blank"><LinkedInIcon /></a></span>
             </p>
           </Col>

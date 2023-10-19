@@ -198,7 +198,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
       </section>
 
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

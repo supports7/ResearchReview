@@ -1,40 +1,36 @@
-import React, { useState, useEffect } from "react"
-import { navigate } from "gatsby";
-import he from 'he';
-import Layout from "../components/layout"
-import SectionLine from "../components/sectionLine"
-import { Row, Col, Container } from "react-bootstrap"
-import Supporters from "../components/supporters"
-// import { Password, SettingsSystemDaydreamOutlined } from "@mui/icons-material"
-import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
-import ReCAPTCHA from "react-google-recaptcha"
-import Cookies from "universal-cookie"
+import React, { useState, useEffect } from "react";
+import Layout from "../components/layout";
+import SectionLine from "../components/sectionLine";
+import { Row, Col, Container } from "react-bootstrap";
+import Supporters from "../components/supporters";
+import ReCAPTCHA from "react-google-recaptcha";
+import Cookies from "universal-cookie";
 import DoubleAd from "../components/doubleAd";
 import FullScreenAd from "../components/fullScreenAd";
-import BannerImage from "../assets/img/shutterstock_1493149190.jpg";
-import JoinRR4 from "../assets/img/JoinRR/JoinRR4.jpg";
-import JoinRR3 from "../assets/img/JoinRR/JoinRR3.jpg";
-import JoinRR2 from "../assets/img/JoinRR/JoinRR2.jpg";
-import JoinRR1 from "../assets/img/JoinRR/JoinRR1.jpg";
+import config from "../../config";
+import { navigate } from "gatsby";
+import he from 'he';
 
-const JoinResearchReviewTemplate = ({ pageContext, location }) => {
+const JoinResearchReviewTemplate = ({ pageContext }) => {
   const cookies = new Cookies()
   const siteTitle = `Join Research Review`
-  const [firstName, setFirstName] = useState()
-  const [lastName, setLastName] = useState()
-  const [email, setEmail] = useState()
-  const [profession, setProfession] = useState()
-  const [registerPassword, setRegisterPassword] = useState()
-  const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState()
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [email, setEmail] = useState();
+  const [profession, setProfession] = useState();
+  const [location, setLocation] = useState();
+  const [registerPassword, setRegisterPassword] = useState();
+  const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState();
   const [organisation, setOrganisation] = useState('');
+  const [ahpraNumber, setAHPRANumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [healthProfessional, setHealthProfessional] = useState('');
   const [confirmTAndCs, setConfirmTAndCs] = useState('');
-  const [registerError, setRegisterError] = useState()
-  const [recaptchaData, setRecaptchaData] = useState()
+  const [registerError, setRegisterError] = useState();
+  const [recaptchaData, setRecaptchaData] = useState();
   const recaptchaRef = React.createRef();
-
   const introText = he.decode(pageContext.joinRRContent.introText);
+
 
   const handleConfirmTAndCsChange = (e) => {
     setConfirmTAndCs(e.target.value);
@@ -47,22 +43,34 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
     if (firstName && lastName && email && profession && registerPassword && registerPasswordConfirm && recaptchaData) {
 
       if (registerPassword != registerPasswordConfirm) {
-        setRegisterError("Passwords do not match. Please try again")
+        setRegisterError("Passwords do not match. Please try again.")
+        return;
+      }
+      if (!healthProfessional) {
+        setRegisterError("Sign-up is only for Health Professionals.")
+        return;
+      }
+      if (!confirmTAndCs) {
+        setRegisterError("Please accept the Terms and Conditions to proceed.")
         return;
       }
       if (!recaptchaData) {
-        setRegisterError("reCAPTCHA not complete")
+        setRegisterError("reCAPTCHA not complete.")
         return;
       }
       const jsonData = {
         First_Name: firstName,
         Last_Name: lastName,
         Email: email,
-        Profession: profession,
-        Organisation: organisation,
-        Phone_Number: phoneNumber,
+        Password_Hash: registerPassword,
         Health_Professional: healthProfessional,
-        Password_Hash: registerPassword
+        Custom_Data: {
+          Location: location,
+          AHPRANumber: ahpraNumber
+        },
+        Profession: profession,
+        Phone: phoneNumber,
+        Organisation: organisation,
       }
 
       fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/register`, {
@@ -100,7 +108,6 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
   function onChangeRecaptcha(value) {
     setRecaptchaData(value);
   }
-
   useEffect(() => {
     console.log(pageContext)
   }, [pageContext])
@@ -128,14 +135,6 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                     </div>
                     <form onSubmit={handleSubmit} className="join-rr-form join-research-review-form">
                       <Row>
-                        <Col xs={12} className="justify-content-center">
-                          <Col xs={6}>
-                            <img
-                              alt="research review logo"
-                              src={logoResearchReview}
-                              className="img-fluid" />
-                          </Col>
-                        </Col>
                         {registerError &&
                           <Col xs={12}>
                             <div className="alert alert-danger">
@@ -143,27 +142,24 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             </div>
                           </Col>
                         }
-                        <Col xs={6}>
+                        <Col xs={12} md={6}>
                           <div className="form-group form-first-name-div">
                             <input
                               type="text"
                               name="firstName"
-                              className="form-control mt-1"
-                              placeholder="First Name"
+                              placeholder="First Name *"
                               required
                               value={firstName}
                               onChange={e => setFirstName(e.target.value)}
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={12} md={6}>
                           <div className="form-group form-last-name-div">
                             <input
                               type="text"
-
                               name="lastName"
-                              className="form-control mt-1"
-                              placeholder="Last Name"
+                              placeholder="Last Name *"
                               required
                               value={lastName}
                               onChange={e => setLastName(e.target.value)}
@@ -175,46 +171,56 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             <input
                               type="email"
                               name="email"
-                              className="form-control mt-1"
-                              placeholder="Email"
+                              placeholder="Email *"
                               required
                               value={email}
                               onChange={e => setEmail(e.target.value)}
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={12} md={6}>
                           <div className="form-group form-phone-number-div">
                             <input
                               type="text"
                               name="phoneNumber"
-                              className="form-control mt-1"
-                              placeholder="Home/Work Phone Number"
+                              placeholder="Home/Work Phone Number *"
                               required
                               value={phoneNumber}
                               onChange={e => setPhoneNumber(e.target.value)}
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={12} md={6}>
                           <div className="form-group form-organisation-div">
                             <input
                               type="text"
                               name="organisation"
-                              className="form-control mt-1"
-                              placeholder="Organisation"
+                              placeholder="Organisation *"
                               required
                               value={organisation}
                               onChange={e => setOrganisation(e.target.value)}
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={6}>
-                          <div className="form-group form-password-div">
+                        {config.countryCode === "AU" &&
+                          <Col xs={12}>
+                            <div className="form-group form-phone-number-div">
+                              <input
+                                type="text"
+                                name="ahpraNumber"
+                                placeholder="AHPRA Number"
+                                required
+                                value={ahpraNumber}
+                                onChange={e => setAHPRANumber(e.target.value)}
+                              ></input>
+                            </div>
+                          </Col>
+                        }
+                        <Col xs={12} md={6}>
+                          <div className="form-group form-profession-div">
                             <input
                               type="password"
                               name="registerPassword"
-                              className="form-control mt-1"
                               placeholder="Password"
                               required
                               value={registerPassword}
@@ -222,12 +228,11 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={6}>
-                          <div className="form-group form-confirm-password-div">
+                        <Col xs={12} md={6}>
+                          <div className="form-group form-profession-div">
                             <input
                               type="password"
                               name="registerPasswordConfirm"
-                              className="form-control mt-1"
                               placeholder="Confirm Password"
                               required
                               value={registerPasswordConfirm}
@@ -235,17 +240,50 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                             ></input>
                           </div>
                         </Col>
-                        <Col xs={12}>
+                        {/* <Col xs={12}>
+                <div className="form-group form-profession-div">
+                  <input
+                    type="text"
+                    name="profession"
+                    placeholder="Profession"
+                    required
+                    value={profession}
+                    onChange={e => setProfession(e.target.value)}
+                  ></input>
+                </div>
+              </Col> */}
+                        <Col xs={12} md={6}>
                           <div className="form-group form-profession-div">
-                            <input
-                              type="text"
+                            <select
+                              name="location"
+                              required
+                              value={location}
+                              onChange={e => setLocation(e.target.value)}
+                            >
+                              <option value="Select Location" className="placeholder-option">Select Location</option>
+                              {pageContext.signUpFormContent && pageContext.signUpFormContent.locations.Children.map((locationOption, index) => (
+                                <option key={index} value={locationOption.Node}>
+                                  {locationOption.Node}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </Col>
+                        <Col xs={12} md={6}>
+                          <div className="form-group form-profession-div">
+                            <select
                               name="profession"
-                              className="form-control mt-1"
-                              placeholder="Profession"
                               required
                               value={profession}
                               onChange={e => setProfession(e.target.value)}
-                            ></input>
+                            >
+                              <option value="Select Profession" className="placeholder-option">Select Profession</option>
+                              {pageContext.signUpFormContent && pageContext.signUpFormContent.professions.Children.map((professionOption, index) => (
+                                <option key={index} value={professionOption.Node}>
+                                  {professionOption.Node}
+                                </option>
+                              ))}
+                            </select>
                           </div>
                         </Col>
                         <Col xs={12}>
@@ -266,7 +304,8 @@ const JoinResearchReviewTemplate = ({ pageContext, location }) => {
                               type="checkbox"
                               name="confirmTAndCs"
                               checked={confirmTAndCs}
-                              onChange={handleConfirmTAndCsChange} // Use the custom handler
+                              onChange={handleConfirmTAndCsChange}
+                              style={{ marginRight: '10px' }}
                             />
                             I have read and agree with the <a href="/terms-and-conditions">Terms and Conditions</a>
                           </label>

@@ -90,7 +90,7 @@ const WritersListTemplate = ({ pageContext, location }) => {
       </Container>
 
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

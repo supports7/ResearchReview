@@ -158,7 +158,7 @@ const LinksTreeTemplate = ({ pageContext, location }) => {
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

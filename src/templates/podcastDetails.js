@@ -79,7 +79,7 @@ const PodcastDetailsTemplate = ({
                   title={`Research Review | ${pageContext.podcast.title}`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen></iframe>
+                  allowFullscreen></iframe>
               </div>
             </Col>
             <Col xs={2} style={{textAlign:'center'}}>
@@ -105,7 +105,7 @@ const PodcastDetailsTemplate = ({
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

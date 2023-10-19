@@ -138,7 +138,7 @@ const PodcastsTreeTemplate = ({ pageContext, location }) => {
         <div className="clinical-areas-area-selection">
           <Row>
             <Col xs={12}>
-              <h2>Medical Advisors' Index</h2>
+              <h2>Choose your interest area to watch a video</h2>
             </Col>
             <SectionLine />
             {clinicalAreasData && clinicalAreasData.map((clinicalArea, index) => {
@@ -157,7 +157,7 @@ const PodcastsTreeTemplate = ({ pageContext, location }) => {
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

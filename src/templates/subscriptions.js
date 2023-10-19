@@ -17,7 +17,6 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
   const [fullAreaForCheckboxes, setFullAreaForCheckboxes] = useState([]);
   const [subscriptionListOfIds, setSubscriptionListOfIds] = useState([]);
   
-
   const bundleReviews = (clinicalArea, reviews) => {
     if (clinicalArea.children) {
       clinicalArea.children.forEach((clinicalAreaChild) => {
@@ -40,7 +39,10 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
     if(!userDataFromCookies) {
       navigate("/");
     }
-
+    if(userDataFromCookies.customData) {
+      //Scan custom data for IDs then add to list
+      //setSubscriptionListOfIds(listOfSelectedSubscriptions);
+    }
     console.log(subscriptionList);
     subscriptionList.forEach((clinicalArea) => {
       let reviews = [];
@@ -103,21 +105,38 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
 
   const handleSubmit = () => {
     const userDataFromCookies = cookies.get("userData")
-
+    const loginToken = cookies.get("LoginToken");
     const jsonData = {
       UserId: userDataFromCookies.id,
       Subscriptions: subscriptionListOfIds,
     }
 
-    fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/${userDataFromCookies.id}/subscriptions`, {
+    fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
       method: "PUT",
       // mode: 'no-cors',
       headers: {
         "Content-Type": "application/json",
+        "Authorization": "Bearer " + loginToken,
       },
       body: JSON.stringify(jsonData),
     })
     .then(res => console.log(res.json()))
+    .then(
+      result => {
+        console.log("result", result);
+
+        // cookies.set("userData", result, {
+        //   path: "/",
+        //   expires: new Date(Date.now() + 8640000),
+        // })
+        // setIsEditingProfile(false);
+        // setProfileData(result)
+      },
+
+      error => {
+        console.log("error", error);
+      }
+    )
   }
 
   return (

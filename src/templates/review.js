@@ -14,6 +14,7 @@ import JoinRR from "../components/joinRR"
 import randomImage from "../components/randomImages";
 import FullScreenAd from "../components/fullScreenAd";
 import DoubleAd from "../components/doubleAd";
+import { find } from 'lodash';
 
 const ReviewTemplate = ({
   location,
@@ -22,11 +23,13 @@ const ReviewTemplate = ({
   const [issuesShownOnScreen, setIssuesShownOnScreen] = useState([]);
   const [currentNumberOfIssuesShowing, setCurrentNumberOfIssuesShowing] = useState(0);
   const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
+  const [latestPDf, setLatestPDF] = useState(false);
 
   useEffect(() => {
     console.log("pageContext", pageContext);
     if (pageContext.issues) {
       showMoreIssues();
+      setLatestIssueForPDFDownload();
     }
   }, [pageContext]);
 
@@ -41,11 +44,16 @@ const ReviewTemplate = ({
     }
   }
 
+  const setLatestIssueForPDFDownload = () => {
+    const latestPDFForDownload = find(pageContext.issues, 'pdfDownloadUrl');
+    setLatestPDF(latestPDFForDownload);
+  }
+
   const bannerContent = {
     bannerImage: bannerImage,
     bannerText: pageContext.review.name,
-    buttonLink: "",
-    buttonText: "",
+    buttonLink: latestPDf?.pdfDownloadUrl,
+    buttonText: "Download Latest Issue",
   };
 
   return (
@@ -195,7 +203,7 @@ const ReviewTemplate = ({
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

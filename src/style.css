@@ -1034,13 +1034,13 @@ footer .footer-col-ul ul li::marker {
 }
 
 .supporters-section {
-  background-color: #1cb2a9;
+  background-color: #f5f5f5;
   padding-bottom: 100px;
 }
 
 .supporters-section .supporters-heading {
   text-align: center;
-  color: white;
+  color: #1cb2a9;
   font-size: 30px;
   margin-bottom: 100px;
 }
@@ -1092,7 +1092,22 @@ input::placeholder {
 
 }
 
-.join-research-review-form-section .join-rr-form input:focus {
+.form-profession-div select {
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  margin-bottom: 25px;
+  color: black;
+}
+
+.form-profession-div select .placeholder-option {
+  font-family: 'Gotham Book' !important;
+  font-style: normal !important;
+  font-weight: 500;
+}
+
+
+.join-research-review-form-section .join-rr-form input[type='email']:focus, .join-research-review-form-section .join-rr-form input[type='text']:focus, .join-research-review-form-section .join-rr-form input[type='password']:focus {
   border: none;
   border-bottom: 1px solid black;
   width: 100%;
@@ -1118,6 +1133,23 @@ input::placeholder {
   margin-top: 25px;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.form-group-radio-div {
+  display: flex;
+  align-items: center;
+}
+
+.form-group-radio-div label {
+  margin-right: 10px;
+}
+
+.form-group-radio-div p {
+  margin: 0;
+}
+
+.form-group-radio-div p + p {
+  margin-left: 10px;
 }
 
 /* Clinical Areas List */

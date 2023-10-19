@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react"
-// import { Link, graphql } from "gatsby"
 import { Container, Row, Col } from "react-bootstrap"
 import { filter } from 'lodash'
 import he from 'he';
-// import Bio from "../components/bio"
 import Layout from "../components/layout"
-// import Seo from "../components/seo"
 import SectionLine from "../components/sectionLine"
 import Supporters from "../components/supporters"
 import DoubleAd from "../components/doubleAd"
 import JoinRR from "../components/joinRR"
 import FullScreenAd from "../components/fullScreenAd"
 import Banner from "../components/banner";
-import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
-import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
 import Home1 from "../assets/img/Home/Home1.jpg";
 import Home2 from "../assets/img/Home/Home2.jpg";
 import Home3 from "../assets/img/Home/Home3.jpg";
@@ -198,7 +193,7 @@ const Index = ({ pageContext }) => {
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

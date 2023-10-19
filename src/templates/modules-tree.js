@@ -139,7 +139,7 @@ const ModulesTreeTemplate = ({ pageContext, location }) => {
         <div className="clinical-areas-area-selection">
           <Row>
             <Col xs={12}>
-              <h2>Medical Advisors' Index</h2>
+              <h2>Select a CPD Module</h2>
             </Col>
             <SectionLine />
             {clinicalAreasData && clinicalAreasData.map((clinicalArea, index) => {
@@ -158,7 +158,7 @@ const ModulesTreeTemplate = ({ pageContext, location }) => {
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

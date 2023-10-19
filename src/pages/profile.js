@@ -13,12 +13,13 @@ const Profile = () => {
 
   const [profileData, setProfileData] = useState("");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-
   const [fullName, setFullName] = useState();
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
   const [profession, setProfession] = useState();
+  const [phone, setPhone] = useState();
+  const [organisation, setOrganisation] = useState();
   const [healthProfessional, setHealthProfessional] = useState();
 
   useEffect(() => {
@@ -40,6 +41,8 @@ const Profile = () => {
       }
       setEmail(userDataFromCookies.email)
       setProfession(userDataFromCookies.profession)
+      setPhone(userDataFromCookies.phone)
+      setOrganisation(userDataFromCookies.organisation)
       setHealthProfessional(userDataFromCookies.health_Professional)
     }
   }, []);
@@ -85,6 +88,7 @@ const Profile = () => {
               expires: new Date(Date.now() + 8640000),
             })
             setIsEditingProfile(false);
+            setProfileData(result)
           },
 
           error => {
@@ -155,6 +159,19 @@ const Profile = () => {
                               </div>
                             </Col>
                             <Col xs={8}>
+                              <div className="form-group form-phone-div">
+                                <input
+                                  type="text"
+                                  name="phone"
+                                  className="form-control mt-1"
+                                  placeholder="Phone Number"
+                                  required
+                                  value={phone}
+                                  onChange={e => setPhone(e.target.value)}
+                                ></input>
+                              </div>
+                            </Col>
+                            <Col xs={8}>
                               <div className="form-group form-profession-div">
                                 <input
                                   type="text"
@@ -164,6 +181,19 @@ const Profile = () => {
                                   required
                                   value={profession}
                                   onChange={e => setProfession(e.target.value)}
+                                ></input>
+                              </div>
+                            </Col>
+                            <Col xs={8}>
+                              <div className="form-group form-organisation-div">
+                                <input
+                                  type="text"
+                                  name="organisation"
+                                  className="form-control mt-1"
+                                  placeholder="Organisation"
+                                  required
+                                  value={organisation}
+                                  onChange={e => setOrganisation(e.target.value)}
                                 ></input>
                               </div>
                             </Col>
@@ -200,7 +230,10 @@ const Profile = () => {
                     <div>
                       <p><strong>NAME:</strong> {fullName}</p>
                       <p><strong>EMAIL:</strong> {email}</p>
+                      {profileData.phone && phone && <p><strong>Phone:</strong> {phone}</p>}
                       {profileData.profession && profession && <p><strong>Profession:</strong> {profession}</p>}
+                      {profileData.organisation && organisation && <p><strong>Organisation:</strong> {organisation}</p>}
+                      {profileData.health_Professional && healthProfessional && <p><strong>Health Professional:</strong> {healthProfessional ? "Yes" : "No"}</p>}
                       <p>
                         <a className="btn btn-primary mr-1" onClick={toggleEditProfile}>Edit Profile</a>
                         <Link className="btn btn-primary mx-1" to="/change-password">Change Password</Link>

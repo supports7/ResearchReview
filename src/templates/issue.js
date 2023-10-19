@@ -57,6 +57,16 @@ const IssueTemplate = ({
             <Col xs={12}>
               <Row>
                 {pageContext.articles.map((article, index) => {
+                  const maxTitleLength = 75; // Set your desired maximum title length
+
+                  // Function to shorten the title if it's too long
+                  const shortenTitle = (title, maxLength) => {
+                    if (title.length > maxLength) {
+                      return title.substring(0, maxLength) + ' more...';
+                    }
+                    return title;
+                  }
+
                   return (
                     <Col md={4} sm={6} xs={12} key={index}>
                       <div className="promoted-content">
@@ -71,7 +81,7 @@ const IssueTemplate = ({
                             />
                           </div>
                           <div className="promoted-content-content">
-                            <h3>{article.title}</h3>
+                            <h3>{shortenTitle(article.title, maxTitleLength)}</h3>
                             {article.authors &&
                               <p>
                                 Authors: {article.authors}
@@ -99,7 +109,7 @@ const IssueTemplate = ({
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

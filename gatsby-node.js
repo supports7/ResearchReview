@@ -260,6 +260,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const allAdvertisements = advertisementsContentParent.Children;
   let siteWideAdvertisements = filter(allAdvertisements, { "zohoId": "" }, []);
 
+  // Sign up form content
+  const locationsContent = find(umbracoContent, { "Node": "Locations" });
+  const professionsContent = find(umbracoContent, { "Node": "Professions" });
+  const signUpFormContent = {
+    locations: locationsContent,
+    professions: professionsContent
+  }
+
   // 7.  - - - - - - - - - - - - - - - - - - - - - - - - MAIN SUB CLINICAL NESTED FUNCTION  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   async function buildSubClinicalAreas(clinicalAreas, parentClinicalArea, url) {
     // function code
@@ -409,6 +417,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   partnersMacroContent: partnersLogoListContent,
                   samplePublication: samplePublication,
                   linksByReview: linksByReview,
+                  signUpFormContent: signUpFormContent,
                 },
               })
 
@@ -429,6 +438,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     podcasts: podcasts,
                     review: review,
                     partnersMacroContent: partnersLogoListContent,
+                    signUpFormContent: signUpFormContent,
                     advertisements: ads,
                     tempUrlPath: `/watch/${reviewUrlTemp}/`
                   },
@@ -447,6 +457,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     context: {
                       podcast: podcast,
                       partnersMacroContent: partnersLogoListContent,
+                      signUpFormContent: signUpFormContent,
                       review: review,
                       advertisements: podcastAds,
                     },
@@ -487,6 +498,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                             otherArticles: articles,
                             writersByReview: writersByReview,
                             partnersMacroContent: partnersLogoListContent,
+                            signUpFormContent: signUpFormContent,
                             advertisements: ads,
                             tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                           },
@@ -516,6 +528,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     review: review,
                     links: linksByReview,
                     partnersMacroContent: partnersLogoListContent,
+                    signUpFormContent: signUpFormContent,
                     advertisements: ads,
                   },
                 })
@@ -537,6 +550,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     review: review,
                     modules: modulesByReview,
                     partnersMacroContent: partnersLogoListContent,
+                    signUpFormContent: signUpFormContent,
                     advertisements: ads,
                   },
                 })
@@ -562,6 +576,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                       context: {
                     writer: writer,
                     partnersMacroContent: partnersLogoListContent,
+                    signUpFormContent: signUpFormContent,
                     advertisements: ads,
                   },
                 })
@@ -613,6 +628,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         content: clinicalAreasContent,
         partnersMacroContent: partnersLogoListContent,
         advertisements: siteWideAdvertisements,
+        signUpFormContent: signUpFormContent,
         pageName: "Clinical Areas",
         pageUrl: "/clinical-areas/"
       },
@@ -629,6 +645,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         partnersMacroContent: partnersLogoListContent,
         advertisements: siteWideAdvertisements,
         testClinicalAreas: testClinicalAreas,
+        signUpFormContent: signUpFormContent,
         pageName: "Expert Advisors",
         pageUrl: "/expert-advisors/"
       },
@@ -644,6 +661,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         content: watchContent,
         partnersMacroContent: partnersLogoListContent,
         advertisements: siteWideAdvertisements,
+        signUpFormContent: signUpFormContent,
         pageName: "Watch",
         pageUrl: "/watch/"
       },
@@ -658,6 +676,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         content: linkContent,
         partnersMacroContent: partnersLogoListContent,
         advertisements: siteWideAdvertisements,
+        signUpFormContent: signUpFormContent,
         pageName: "Links",
         pageUrl: "/links/"
       },
@@ -673,6 +692,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         clinicalAreas: clinicalAreaTree,
         partnersMacroContent: partnersLogoListContent,
         modulesContent: modulesContent,
+        signUpFormContent: signUpFormContent,
         advertisements: siteWideAdvertisements,
       },
     })
@@ -712,6 +732,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         advertisements: siteWideAdvertisements,
         partnersMacroContent: partnersLogoListContent,
         umbracoContent: umbracoContent,
+        signUpFormContent: signUpFormContent,
       },
     })
 
@@ -723,6 +744,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       context: {
         partnersContent: partnersContent,
         partnersMacroContent: partnersLogoListContent,
+        signUpFormContent: signUpFormContent,
         advertisements: siteWideAdvertisements,
       },
     })
@@ -736,6 +758,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         partnersMacroContent: partnersLogoListContent,
         sampleReviews: sampleReviewsContent,
         advertisements: siteWideAdvertisements,
+        signUpFormContent: signUpFormContent,
       },
     })
 
@@ -767,6 +790,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     // Create Join Research Review Page
     const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
     const joinRRContent = find(umbracoContent, { "Node": "Join Research Review" });
+    
     createPage({
       path: `/join-research-review/`,
       component: JoinRRTemp,
@@ -774,6 +798,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         joinRRContent: joinRRContent,
         partnersMacroContent: partnersLogoListContent,
         advertisements: siteWideAdvertisements,
+        locationsContent: locationsContent,
+        professionsContent: professionsContent,
+        signUpFormContent: signUpFormContent,
       },
     })
   }

@@ -57,6 +57,34 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
       }
       console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
+
+      if (clinicalArea.children && clinicalArea.children.length === 1) {
+        const firstChild = clinicalArea.children[0];
+        console.log("firstChild", firstChild);
+      
+        if (
+          firstChild.url && firstChild.url.length > 0 &&
+          clinicalArea.name === firstChild.name
+        ) {
+          // Redirect to the child's page if it's the only child with the same name and a URL.
+          // console.log("what the url should be =", `${pageContext.pageUrl}${firstChild.url}`);
+          navigate(`${pageContext.pageUrl}${firstChild.url}`);
+          return;
+        } else if (
+          firstChild.children &&
+          firstChild.children.length === 1 &&
+          firstChild.children[0].url &&
+          firstChild.children[0].url.length > 0
+        ) {
+          // Redirect to the child's page if the first child's only child has a URL.
+          const firstGrandChild = firstChild.children[0];
+          // console.log("what the url should be =", `${pageContext.pageUrl}${firstGrandChild.url}`);
+          navigate(`${pageContext.pageUrl}${firstGrandChild.url}`);
+          return;
+        }
+      }
+      
+
       if (clinicalArea.children) {
         let numberOfChildren = clinicalArea.children.length;
         if (numberOfChildren == 1) {
@@ -101,11 +129,15 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
 
   const ClinicalAreaPill = ({ clinicalArea, level, selectedChildNode, index, url, handleClick }) => {
     let hasChildren = false;
+    let onlyOneChildWithSameName = false;
     if (clinicalArea.children) {
       let numberOfChildren = clinicalArea.children.length;
 
       if (numberOfChildren > 1 || (level == 1 && numberOfChildren > 0)) {
         hasChildren = true;
+      }
+      if (numberOfChildren === 1 && clinicalArea.name === clinicalArea.children[0].name && clinicalArea.children[0].children && clinicalArea.children[0].children[0] && clinicalArea.children[0].children[0].url) {
+        onlyOneChildWithSameName = true;
       }
     }
     // let urlCopy = url.slice();
@@ -119,7 +151,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
         <div key={clinicalArea.id} className="clinical-area-pill">
           <p onClick={() => handleClick(clinicalArea)}>
             {clinicalArea.name}
-            {hasChildren && (selectedChildNode ? (selectedChildNode.id === clinicalArea.id ? <span>-</span> : <span>+</span>) : <span>+</span>)}
+            {hasChildren && !onlyOneChildWithSameName && (selectedChildNode ? (selectedChildNode.id === clinicalArea.id ? <span>-</span> : <span>+</span>) : <span>+</span>)}
           </p>
         </div>
       </Col>
@@ -163,7 +195,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
         </Row>
       </Container>
       <Container>
-        <JoinRR />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )
