@@ -60,7 +60,13 @@ const IssueTemplate = ({
                   const maxTitleLength = 75; // Set your desired maximum title length
 
                   // Function to shorten the title if it's too long
+                  // THIS IS FAILING if title is NULL
+                  //  Update to check for a null value
                   const shortenTitle = (title, maxLength) => {
+                    if(!title)
+                    {
+                      return "";
+                    }
                     if (title.length > maxLength) {
                       return title.substring(0, maxLength) + ' more...';
                     }
