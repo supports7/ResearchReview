@@ -6,8 +6,8 @@ import { Buffer } from 'buffer';
 function hexToBase64(str) {
     let stringBeforeCharCode = str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")
     let tempString = String.fromCharCode.apply(null,stringBeforeCharCode)
-    var x = Buffer.from(tempString)
-    var y = x.toString('base64');
+    //var x = Buffer.from(tempString)
+    //var y = x.toString('base64');
     return Buffer.from(tempString, "binary").toString('base64')
     // // return btoa();
     // return btoa(String.fromCharCode.apply(null,
