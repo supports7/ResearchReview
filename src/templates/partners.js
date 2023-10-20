@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import Layout from "../components/layout";
 import he from 'he';
 // import { Link, graphql } from "gatsby"
@@ -7,7 +7,7 @@ import { Container, Row, Col } from "react-bootstrap"
 // import Layout from "../components/layout"
 // import Seo from "../components/seo"
 import Banner from "../components/banner";
-import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
+//import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 import SectionLine from "../components/sectionLine"
 import Supporters from "../components/supporters"
 import JoinRR from "../components/joinRR"
@@ -20,7 +20,7 @@ const PartnersTemplate = ({
 }) => {
 
   useEffect(() => {
-    console.log("pageContext", pageContext);
+   // console.log("pageContext", pageContext);
   }, [pageContext]);
 
   const bannerContent = {
@@ -76,7 +76,7 @@ const PartnersTemplate = ({
                         <Col md={2} xs={12}>
                           <div>
                             <img
-                              alt="research review partner image"
+                              alt="research review partner"
                               src={partner.partnerLogo}
                               className="img-fluid" />
                           </div>

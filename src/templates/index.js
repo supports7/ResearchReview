@@ -17,7 +17,7 @@ const Index = ({ pageContext }) => {
   const [homeBannerLinks, setHomeBannerLinks] = useState([])
   const [expertWebinars, setExpertWebinars] = useState([])
   useEffect(() => {
-    console.log(pageContext);
+    //console.log(pageContext);
     if(pageContext.homeContent.Children){
       const homeBannerLinksFromHomeContent = filter(pageContext.homeContent.Children, { "DocType": "homeBannerLink" });
       const expertWebinarsFromHomeContent = filter(pageContext.homeContent.Children, { "DocType": "homeExpertWebinars" });

@@ -22,7 +22,7 @@ const IssueTemplate = ({
   const [ reviewPageURL, setReviewPageURL ] = useState();
 
   useEffect(() => {
-    console.log("pageContext", pageContext);
+    //console.log("pageContext", pageContext);
 
     // Need to adjust the tempURLPath to get the original review URL for the back button.
     let originalURL = pageContext.tempUrlPath;

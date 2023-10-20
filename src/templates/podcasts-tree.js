@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { navigate, Link } from "gatsby";
+import { navigate} from "gatsby";//, Link 
 import he from 'he';
 import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import { Container, Row, Col } from "react-bootstrap"
-import { find } from 'lodash';
+//import { find } from 'lodash';
 import Banner from "../components/banner";
-import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
+//import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 import Supporters from "../components/supporters"
 import JoinRR from "../components/joinRR"
 
@@ -29,9 +29,9 @@ const PodcastsTreeTemplate = ({ pageContext, location }) => {
   }, [])
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
-    let url = clinicalArea.name;
-    const [children, setChildren] = useState();
-    const [isActive, setIsActive] = useState();
+     //let url = clinicalArea.name;
+    // const [children, setChildren] = useState();
+    // const [isActive, setIsActive] = useState();
 
 
     return (
@@ -54,7 +54,7 @@ const PodcastsTreeTemplate = ({ pageContext, location }) => {
         setSelectedChildNode(null)
         return;
       }
-      console.log("clincalArea - ", clinicalArea)
+     // console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
       if (clinicalArea.children) {
       }

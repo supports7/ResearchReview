@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react"; //, { useEffect, useState }
 import Layout from "../components/layout"
 import { Row, Col, Container } from "react-bootstrap"
 import SectionLine from "../components/sectionLine"
@@ -31,7 +31,7 @@ const LinksTemplate = ({ pageContext, location }) => {
               <div className="list-links">
                 {pageContext.links.map((link,index) => (
                   <Col xs={12} key={link.id}>
-                    <a target="_blank" href={link.url}><h4>{link.title} {">"}</h4></a>
+                    <a target="_blank" rel="noreferrer" href={link.url}><h4>{link.title} {">"}</h4></a>
                   </Col>
                 ))}
               </div>

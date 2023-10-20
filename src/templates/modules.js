@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
-import he from 'he';
+//import he from 'he';
 // import { Link, graphql } from "gatsby";
 import { Container, Row, Col } from "react-bootstrap";
 // import Bio from "../components/bio";
@@ -21,17 +21,17 @@ const ModulesTemplate = ({
 }) => {
   const cookies = new Cookies()
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loadingLogin, setLoadingLogin] = useState(true);
+  //const [loadingLogin, setLoadingLogin] = useState(true);
 
   useEffect(() => {
-    console.log("pageContext", pageContext);
+   // console.log("pageContext", pageContext);
 
-    setLoadingLogin(true);
+    //setLoadingLogin(true);
     const encryptionKey = cookies.get("EncryptionKey")
     if (encryptionKey) {
       setLoggedIn(true);
     }
-    setLoadingLogin(false);
+   // setLoadingLogin(false);
   }, []);
 
   const bannerContent = {
@@ -71,7 +71,7 @@ const ModulesTemplate = ({
                     return (
                       <Col key={index} xs={12}>
                         <div class="module">
-                          <a href={module.link} target="_blank">
+                          <a href={module.link} target="_blank" rel="noreferrer">
                             <Row>
                               <Col md={12} xs={12}>
                                 <h3>{module.moduleName}</h3>

@@ -13,7 +13,7 @@ import he from 'he';
 
 const JoinResearchReviewTemplate = ({ pageContext }) => {
   const cookies = new Cookies()
-  const siteTitle = `Join Research Review`
+  //const siteTitle = `Join Research Review`
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -84,7 +84,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
         .then(res => res.json())
         .then(
           result => {
-            console.log("result", result)
+          //  console.log("result", result)
             cookies.set("userData", result, {
               path: "/",
               expires: new Date(Date.now() + 8640000),
@@ -109,7 +109,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
     setRecaptchaData(value);
   }
   useEffect(() => {
-    console.log(pageContext)
+    //console.log(pageContext)
   }, [pageContext])
 
   return (

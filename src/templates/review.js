@@ -77,7 +77,7 @@ const ReviewTemplate = ({
                         <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
                           <div className="promoted-content-image">
                             <img
-                              alt="research review image showing a medical practice"
+                              alt="medical practice"
                               src={randomImage(index)}
                               className="img-fluid"
                               width="400"

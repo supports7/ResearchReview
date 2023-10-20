@@ -8,10 +8,10 @@ import Supporters from "../components/supporters"
 // import { SettingsSystemDaydreamOutlined } from "@mui/icons-material"
 import ReCAPTCHA from "react-google-recaptcha"
 import Banner from "../components/banner"
-const config = require("../../config")
+//const config = require("../../config")
 
 const ContactUsTemplate = ({ pageContext, location }) => {
-  const siteTitle = `Clinical Areas`
+  //const siteTitle = `Clinical Areas`
 
   const bannerContent = {
     bannerImage: pageContext.contactUsContent.bannerImage,
@@ -36,7 +36,7 @@ const ContactUsTemplate = ({ pageContext, location }) => {
   }
 
   useEffect(() => {
-    console.log(pageContext)
+    //console.log(pageContext)
   }, [pageContext])
 
   const handleSubmit = e => {
@@ -54,7 +54,7 @@ const ContactUsTemplate = ({ pageContext, location }) => {
       EmailAddress: email,
       Message: message,
     }
-    console.log(JSON.stringify(jsonData))
+    //console.log(JSON.stringify(jsonData))
 
     fetch(`https://researchreview.dev.s05.system7.co.nz/api/contact/`, {
       method: "POST",
@@ -65,7 +65,7 @@ const ContactUsTemplate = ({ pageContext, location }) => {
       body: JSON.stringify(jsonData),
     }).then(
       result => {
-        console.log("result", result)
+        //console.log("result", result)
         setFormMessage("Message sent successfully. We will be in touch soon.")
         setName("")
         setEmail("")
@@ -149,7 +149,7 @@ const ContactUsTemplate = ({ pageContext, location }) => {
                         <div className="site">
                           <div className="site-image">
                             <img
-                              alt="Image of Australia"
+                              alt="Australia"
                               src={site.siteImage}
                               className="img-fluid"
                             />
@@ -158,7 +158,7 @@ const ContactUsTemplate = ({ pageContext, location }) => {
                             </div>
                           </div>
                           <div className="site-content">
-                            <a href={site.link} target="_blank" className="btn btn-primary">
+                            <a href={site.link} target="_blank" rel="noreferrer" className="btn btn-primary">
                               {site.link}
                             </a>
                           </div>

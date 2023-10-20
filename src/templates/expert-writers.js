@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react"
-import { navigate, Link } from "gatsby";
+import { navigate} from "gatsby"; //, Link 
 import he from 'he';
 import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import { Container, Row, Col } from "react-bootstrap"
 import { find } from 'lodash';
 import Banner from "../components/banner";
-import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
+//import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 import Supporters from "../components/supporters"
 import JoinRR from "../components/joinRR"
 
 const ExpertWritersTemplate = ({ pageContext, location }) => {
   const siteTitle = `Expert Writers`
   const clinicalAreasData = pageContext.clinicalAreas;
-  const [reviewsWithWriters, setReviewsWithWriters] = useState({});
+  //const [reviewsWithWriters, setReviewsWithWriters] = useState({});
 
 
   const bannerContent = {
@@ -27,15 +27,15 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
   const introTextRight = he.decode(pageContext.content.introTextRight);
 
   useEffect(() => {
-    console.log("pageContext", pageContext);
-    const writersFromId = find(pageContext.testClinicalAreas, { "alternative_id": "4956793000000450112" });
-    console.log("writers", pageContext.allWritersByReview);
+   // console.log("pageContext", pageContext);
+    //const writersFromId = find(pageContext.testClinicalAreas, { "alternative_id": "4956793000000450112" });
+    //console.log("writers", pageContext.allWritersByReview);
   }, [])
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
-    let url = clinicalArea.name;
-    const [children, setChildren] = useState();
-    const [isActive, setIsActive] = useState();
+    //let url = clinicalArea.name;
+    // const [children, setChildren] = useState();
+    // const [isActive, setIsActive] = useState();
 
 
     return (
@@ -58,7 +58,7 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
         setSelectedChildNode(null)
         return;
       }
-      console.log("clincalArea - ", clinicalArea)
+     // console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
       if (clinicalArea.children || clinicalArea.writersByReview) {
 

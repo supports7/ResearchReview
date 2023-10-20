@@ -18,7 +18,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
   const siteTitle = `${pageContext.article.title}`
 
   useEffect(() => {
-    console.log(pageContext)
+    //console.log(pageContext)
     const encryptionKey = cookies.get('EncryptionKey');
 
     if (encryptionKey) {

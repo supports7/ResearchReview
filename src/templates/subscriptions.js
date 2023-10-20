@@ -3,7 +3,7 @@ import { navigate } from "gatsby";
 import Layout from "../components/layout";
 import SectionLine from "../components/sectionLine";
 import Supporters from "../components/supporters";
-import JoinRR from "../components/joinRR";
+//import JoinRR from "../components/joinRR";
 import Cookies from "universal-cookie";
 
 import { Container, Row, Col } from "react-bootstrap"

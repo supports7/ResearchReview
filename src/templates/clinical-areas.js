@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react"
-import { navigate, Link } from "gatsby";
+import { navigate} from "gatsby"; //, Link 
 import he from 'he';
 import Layout from "../components/layout"
 import SectionLine from "../components/sectionLine"
 import { Container, Row, Col } from "react-bootstrap"
 // import { filter } from 'lodash';
 import Banner from "../components/banner";
-import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
+//import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 import Supporters from "../components/supporters"
 import JoinRR from "../components/joinRR"
 
 const ClinicalAreasTemplate = ({ pageContext, location }) => {
   const siteTitle = `Clinical Areas`
   const clinicalAreasData = pageContext.clinicalAreas;
-  const [childrenClinicalAreas, setChildrenClinicalAreas] = useState({});
+  //const [childrenClinicalAreas, setChildrenClinicalAreas] = useState({});
 
   const bannerContent = {
     bannerImage: pageContext.content.bannerImage,
@@ -30,9 +30,9 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
   }, [])
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {
-    let url = clinicalArea.name;
-    const [children, setChildren] = useState();
-    const [isActive, setIsActive] = useState();
+    // let url = clinicalArea.name;
+    // const [children, setChildren] = useState();
+    // const [isActive, setIsActive] = useState();
 
 
     return (
@@ -55,7 +55,7 @@ const ClinicalAreasTemplate = ({ pageContext, location }) => {
         setSelectedChildNode(null)
         return;
       }
-      console.log("clincalArea - ", clinicalArea)
+      //console.log("clincalArea - ", clinicalArea)
       let redirecting = false;
 
       if (clinicalArea.children && clinicalArea.children.length === 1) {

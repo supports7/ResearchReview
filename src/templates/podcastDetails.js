@@ -22,7 +22,7 @@ const PodcastDetailsTemplate = ({
   const [videoUrl, setVideoUrl] = useState();
 
   useEffect(() => {
-    console.log("pageContext", pageContext);
+   // console.log("pageContext", pageContext);
     let tempUrl = pageContext.podcast.link;
     let newUrl = tempUrl;
     if (tempUrl.includes("youtu.be")) {

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react"; //, { useEffect, useState }
 import Layout from "../components/layout"
 import { Row, Col, Container } from "react-bootstrap"
-import JoinRR from "../components/joinRR"
+//import JoinRR from "../components/joinRR"
 import Supporters from "../components/supporters"
 import DoubleAd from "../components/doubleAd"
 import Banner from "../components/banner"

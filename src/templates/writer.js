@@ -11,7 +11,7 @@ const WriterTemplate = ({ pageContext, location }) => {
   const siteTitle = `Clinical Areas`
 
   React.useEffect(() => {
-    console.log(pageContext)
+   // console.log(pageContext)
   }, [pageContext])
 
   return (
