@@ -14,8 +14,11 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
   const cookies = new Cookies()
   const subscriptionList = pageContext.clinicalAreas;
   const [subscriptionListWithReviews, setSubscriptionListWithReviews] = useState([]);
+  //TODO: Rename variables
   const [fullAreaForCheckboxes, setFullAreaForCheckboxes] = useState([]);
-  const [subscriptionListOfIds, setSubscriptionListOfIds] = useState([]);
+  //const [subscriptionListOfIds, setSubscriptionListOfIds] = useState([]);
+
+  const [selectedIds, setSelectedIds] = useState([]);
   
   const bundleReviews = (clinicalArea, reviews) => {
     if (clinicalArea.children) {
@@ -35,15 +38,21 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
 
   useEffect(() => {
     const userDataFromCookies = cookies.get("userData")
-    console.log(userDataFromCookies);
+    console.log("userDataFromCookies:",userDataFromCookies);
     if(!userDataFromCookies) {
       navigate("/");
     }
-    if(userDataFromCookies.customData) {
+    if(userDataFromCookies.custom_Data) {
       //Scan custom data for IDs then add to list
       //setSubscriptionListOfIds(listOfSelectedSubscriptions);
+      if(userDataFromCookies.custom_Data.length>0)
+      {
+        setSelectedIds(userDataFromCookies.custom_Data);
+
+      }
     }
-    console.log(subscriptionList);
+    console.log("subscriptionList:",subscriptionList);
+    
     subscriptionList.forEach((clinicalArea) => {
       let reviews = [];
       if (clinicalArea.children) {
@@ -88,30 +97,53 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
     }
   }, [subscriptionListWithReviews])
 
-  const onAddingItem = (event, option, index, i) => {
-    const values = [...subscriptionListWithReviews];
-    let tempListOfIdsUserIsSubscribedTo = [...subscriptionListOfIds];
-    values[index].reviews[i].isAdded = event.target.checked;
-    console.log("event.target.checked, option.name, index, i", event.target.checked, option.name, index, i)
-    if(event.target.checked) {
-      tempListOfIdsUserIsSubscribedTo.push(option.id)
+  const toggleSelect = (event,id)=>
+  {
+    //event.preventDefault();
+    let currentSelected = [...selectedIds];
+    var index = currentSelected.indexOf(id);
+
+    if (index === -1) {
+      currentSelected.push(id);
+    } else {
+      currentSelected.splice(index, 1);
     }
-    else {
-      tempListOfIdsUserIsSubscribedTo = remove(tempListOfIdsUserIsSubscribedTo, (id) => id == option.id);
-    }
-    setSubscriptionListOfIds(tempListOfIdsUserIsSubscribedTo);
-    setFullAreaForCheckboxes(values);
+    setSelectedIds(currentSelected);
+
   }
+  const isSelected = (id) => {
+    var idSelected = selectedIds.includes(id);
+    return idSelected;
+
+  }
+  // const onAddingItem = (event, option, index, i) => {
+  //   // note: option is review
+  //   const values = [...subscriptionListWithReviews];
+  //   let tempListOfIdsUserIsSubscribedTo = [...subscriptionListOfIds];
+  //   values[index].reviews[i].isAdded = event.target.checked;
+  //   console.log("event.target.checked, option.name, index, i", event.target.checked, option.name, index, i)
+  //   if(event.target.checked) {
+  //     tempListOfIdsUserIsSubscribedTo.push(option.id)
+  //     console.log("option added: optionId:",option.id)
+  //   }
+  //   else {
+  //     tempListOfIdsUserIsSubscribedTo = remove(tempListOfIdsUserIsSubscribedTo, (id) => id == option.id);
+  //   }
+  //   setSubscriptionListOfIds(tempListOfIdsUserIsSubscribedTo);
+  //   setFullAreaForCheckboxes(values);
+  // }
 
   const handleSubmit = () => {
     const userDataFromCookies = cookies.get("userData")
     const loginToken = cookies.get("LoginToken");
+    
     const jsonData = {
       UserId: userDataFromCookies.id,
-      Subscriptions: subscriptionListOfIds,
+      //Subscriptions: subscriptionListOfIds,
+      ReviewIds: selectedIds,
     }
+fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
 
-    fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
       method: "PUT",
       // mode: 'no-cors',
       headers: {
@@ -124,13 +156,17 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
     .then(
       result => {
         console.log("result", result);
+          userDataFromCookies.custom_Data=selectedIds;
 
-        // cookies.set("userData", result, {
-        //   path: "/",
-        //   expires: new Date(Date.now() + 8640000),
-        // })
-        // setIsEditingProfile(false);
-        // setProfileData(result)
+        cookies.set("userData", userDataFromCookies, {
+          path: "/",
+          expires: new Date(Date.now() + 8640000),
+        })
+        //setIsEditingProfile(false);
+        //setProfileData(result)
+        //setProfileData(userDataFromCookies)
+        navigate('/profile')
+
       },
 
       error => {
@@ -166,8 +202,11 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
                                 type="checkbox"
                                 id={review.name}
                                 value={review.name}
-                                checked={review.isAdded}
-                                onChange={(e) => onAddingItem(e, review, index, i)}
+                                // checked={review.isAdded}
+                                // onChange={(e) => onAddingItem(e, review, index, i)}
+                                checked={isSelected(review.id)}
+                                onChange={(e) => toggleSelect(e,review.id)}
+
                               />
                               <label className="review-label" htmlFor={review.name}>{review.name}</label>
                             </Col>
