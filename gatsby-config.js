@@ -78,23 +78,23 @@ module.exports = {
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }
     },
-    {
-      resolve: "gatsby-source-apiserver",
-      options: {
-        // Type prefix of entities from server
-        typePrefix: "zoho__",
-        url: `https://researchreview.dev.s05.system7.co.nz/api/sections/featured`,
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
-        },
-        name: `FeaturedArticle`,
-        verboseOutput: true, // For debugging purposes
-        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
-      }
-    },
+    // {
+    //   resolve: "gatsby-source-apiserver",
+    //   options: {
+    //     // Type prefix of entities from server
+    //     typePrefix: "zoho__",
+    //     url: `https://researchreview.dev.s05.system7.co.nz/api/sections/featured`,
+    //     method: "get",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       //"Country": config.countryCode,
+    //       "Country": "Australia",
+    //     },
+    //     name: `FeaturedArticle`,
+    //     verboseOutput: true, // For debugging purposes
+    //     skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+    //   }
+    // },
     {
       resolve: "gatsby-source-apiserver",
       options: {

@@ -15,15 +15,15 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
   // 1. DEFINE TEMPLATE FILES: Define a template for each page using content from Gatsby
-    
+
   const indexTemplate = path.resolve(`./src/templates/index.js`)
   const reviewTemplate = path.resolve(`./src/templates/review.js`)
   const writerListTemplate = path.resolve(`./src/templates/writer-list.js`)
   const clinicalAreasTemp = path.resolve(`./src/templates/clinical-areas.js`)
   const expertWritersTemp = path.resolve(`./src/templates/expert-writers.js`)
   const linksTreeTemp = path.resolve(`./src/templates/links-tree.js`)
-  const modulesTreeTemp = path.resolve(`./src/templates/modules-tree.js`) 
-  const podcastsTreeTemp = path.resolve(`./src/templates/podcasts-tree.js`) 
+  const modulesTreeTemp = path.resolve(`./src/templates/modules-tree.js`)
+  const podcastsTreeTemp = path.resolve(`./src/templates/podcasts-tree.js`)
   const writerTemp = path.resolve(`./src/templates/writer.js`)
   const issueTemp = path.resolve(`./src/templates/issue.js`)
   const articleTemp = path.resolve(`./src/templates/article.js`)
@@ -76,7 +76,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   }
 
   //3 . DEFINE FUNCTIONS TO GET INFORMATION FROM GATSBY
-      // This data is loaded by the gatsby-config.js file
+  // This data is loaded by the gatsby-config.js file
   // Get all the content from Clinical Areas endpoint
   const clinicalAreasResult = await graphql(
     `
@@ -218,7 +218,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     
     `
   )
-//4 . CHECK FOR ERRORS FROM STEP 3
+  //4 . CHECK FOR ERRORS FROM STEP 3
   if (clinicalAreasResult.errors) {
     reporter.panicOnBuild(
       `There was an error loading your clinical areas`,
@@ -233,7 +233,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
     return
   }
-  
+
   if (UmbracoContentResult.errors) {
     reporter.panicOnBuild(
       `There was an error loading the Umbraco Content`,
@@ -248,7 +248,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
 
   // 6. PUT UMBRACO CONTENT INTO VARIABLES
-        // UMBRACO CONTENT GETS LOADED FROM gatsby-config.js
+  // UMBRACO CONTENT GETS LOADED FROM gatsby-config.js
   const umbracoContentObjectFromGatsby = UmbracoContentResult.data.allZohoUmbracoContent.edges
   let umbracoContent = head(umbracoContentObjectFromGatsby);
   umbracoContent = umbracoContent.node.content;
@@ -280,12 +280,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       return clinicalArea.parent_Id === parentClinicalArea.alternative_id;
     });
 
-    if (childClinicalAreas.length == 0) 
-    {
+    if (childClinicalAreas.length == 0) {
       return;
     }
-    else
-    {
+    else {
       await Promise.all(childClinicalAreas.map(async (childClinicalArea) => {
         childClinicalArea.name = childClinicalArea.name.split(" (")[0];
         let clinicalAreaHandle = childClinicalArea.name.toLowerCase();
@@ -310,10 +308,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         let reviewUrlTemp = "";
         // If this has children clinicial areas, then return
         if (children) {
-          let totalPodcastCount =0;
-          let totalLinksCount =0;
-          let totalWritersCount=0;
-          let totalModuleCount=0;
+          let totalPodcastCount = 0;
+          let totalLinksCount = 0;
+          let totalWritersCount = 0;
+          let totalModuleCount = 0;
 
           children.forEach(element => {
             totalPodcastCount += element.PodCastCount;
@@ -371,7 +369,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               const currentReviewUmbracoContent = find(reviewsContent, { "zohoId": review.alternative_id });
               if (currentReviewUmbracoContent) {
                 podcasts = filter(currentReviewUmbracoContent.Children, { "DocType": "podcast" });
-                modulesByReview = filter(currentReviewUmbracoContent.Children, {"DocType": "modules"});
+                modulesByReview = filter(currentReviewUmbracoContent.Children, { "DocType": "modules" });
                 linksByReview = filter(currentReviewUmbracoContent.Children, { "DocType": "link" });
               }
 
@@ -390,12 +388,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
               let issues = [];
               issues = await getIssues(review.alternative_id);
-              
+
               review['writersByReview'] = await getWritersByReview(review.alternative_id);
               // double call is because this re-using the same data was causing gatsby issues
               let writersByReview = [];
               writersByReview = await getWritersByReview(review.alternative_id);
-              
+
               // OLD Code below for Zoho
               // if (review.name != "Dermatitis") {
               //   podcasts = await getPodcasts(review.alternative_id);
@@ -404,26 +402,29 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
               //BUILD THE REVIEW PAGE
               //  NEED TO PULL THROUGH THE LINKS HERE - SHOULD I DO A QUERY?
-                  // check that reviewUrlTemp is added to each loop
-              createPage({
-                path: `/clinical-areas/${reviewUrlTemp}/`,
-                component: reviewTemplate,
-                context: {
-                  review: review,
-                  issues: issues,
-                  podcasts: podcasts,
-                  writersByReview: writersByReview,
-                  advertisements: ads,
-                  partnersMacroContent: partnersLogoListContent,
-                  samplePublication: samplePublication,
-                  linksByReview: linksByReview,
-                  signUpFormContent: signUpFormContent,
-                },
-              })
-
+              // check that reviewUrlTemp is added to each loop
+              try {
+                createPage({
+                  path: `/clinical-areas/${reviewUrlTemp}/`,
+                  component: reviewTemplate,
+                  context: {
+                    review: review,
+                    issues: issues,
+                    podcasts: podcasts,
+                    writersByReview: writersByReview,
+                    advertisements: ads,
+                    partnersMacroContent: partnersLogoListContent,
+                    samplePublication: samplePublication,
+                    linksByReview: linksByReview,
+                    signUpFormContent: signUpFormContent,
+                  },
+                })
+              } catch (ex) {
+                console.log(ex);
+              }
               //Check if any podcasts related to this review
               if (podcasts) {
-                if(childClinicalArea.PodCasts && childClinicalArea.PodCastCount) {
+                if (childClinicalArea.PodCasts && childClinicalArea.PodCastCount) {
                   childClinicalArea.PodCasts.push(...podcasts);
                   childClinicalArea.PodCastCount += podcasts.length;
                 }
@@ -431,18 +432,22 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   childClinicalArea.PodCasts = [...podcasts];
                   childClinicalArea.PodCastCount = podcasts.length;
                 }
-                createPage({
-                  path: `/watch/${reviewUrlTemp}/`,
-                  component: podcastsTemp,
-                  context: {
-                    podcasts: podcasts,
-                    review: review,
-                    partnersMacroContent: partnersLogoListContent,
-                    signUpFormContent: signUpFormContent,
-                    advertisements: ads,
-                    tempUrlPath: `/watch/${reviewUrlTemp}/`
-                  },
-                })
+                try {
+                  createPage({
+                    path: `/watch/${reviewUrlTemp}/`,
+                    component: podcastsTemp,
+                    context: {
+                      podcasts: podcasts,
+                      review: review,
+                      partnersMacroContent: partnersLogoListContent,
+                      signUpFormContent: signUpFormContent,
+                      advertisements: ads,
+                      tempUrlPath: `/watch/${reviewUrlTemp}/`
+                    },
+                  })
+                } catch (ex) {
+                  console.log(ex);
+                }
                 // BUILD podcast pages
                 await Promise.all(podcasts.map(async (podcast) => {
                   let podcastUrlTemp = podcast.title.toLowerCase();
@@ -450,19 +455,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   //Filter podcast ads from podcast children
                   //Swap advertisements: advertisementsContent ---> advertisements: podcastAds,
                   let podcastAds = filter(podcast.Children, { "DocType": "podcastAdvertisement" }, []);
-
-                  createPage({
-                    path: `/watch/${reviewUrlTemp}/${podcastUrlTemp}/`,
-                    component: podcastDetailTemp,
-                    context: {
-                      podcast: podcast,
-                      partnersMacroContent: partnersLogoListContent,
-                      signUpFormContent: signUpFormContent,
-                      review: review,
-                      advertisements: podcastAds,
-                    },
-                  })
+                  try {
+                    createPage({
+                      path: `/watch/${reviewUrlTemp}/${podcastUrlTemp}/`,
+                      component: podcastDetailTemp,
+                      context: {
+                        podcast: podcast,
+                        partnersMacroContent: partnersLogoListContent,
+                        signUpFormContent: signUpFormContent,
+                        review: review,
+                        advertisements: podcastAds,
+                      },
+                    })
+                  } catch (ex) {
+                    console.log(ex);
+                  }
                 }))
+
               }
 
               // BUILD ISSUE PAGES (IF THEY EXIST)
@@ -471,24 +480,27 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   // issues.forEach(async (issue) => {
                   let articles = [];
                   articles = await getArticles(issue.id);
-
-                  createPage({
-                    path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
-                    component: issueTemp,
-                    context: {
-                      issue: issue,
-                      articles: articles,
-                      partnersMacroContent: partnersLogoListContent,
-                      advertisements: ads,
-                      tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                    },
-                  })
-
+                  console.log("createPage:Issue:", reviewUrlTemp, issue.name)
+                  try {
+                    createPage({
+                      path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
+                      component: issueTemp,
+                      context: {
+                        issue: issue,
+                        articles: articles,
+                        partnersMacroContent: partnersLogoListContent,
+                        advertisements: ads,
+                        tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
+                      },
+                    })
+                  } catch (ex) {
+                    console.log(ex);
+                  }
                   // BUILD ARTICLE PAGES (IF THEY EXIST)
                   if (articles.length > 0) {
                     await Promise.all(articles.map((article) => {
                       // articles.forEach((article) => {
-                      
+
                       try {
                         createPage({
                           path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
@@ -512,8 +524,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               }
 
               // BUILD REVIEW LINKS PAGE
-              if(linksByReview){
-                if(childClinicalArea.Links && childClinicalArea.LinksCount) {
+              if (linksByReview) {
+                if (childClinicalArea.Links && childClinicalArea.LinksCount) {
                   childClinicalArea.Links.push(...linksByReview);
                   childClinicalArea.LinksCount += linksByReview.length;
                 }
@@ -521,21 +533,25 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   childClinicalArea.Links = [...linksByReview];
                   childClinicalArea.LinksCount = linksByReview.length;
                 }
-                createPage({
-                  path: `/links/${reviewUrlTemp}/`,
-                  component: linksTemp,
-                  context: {
-                    review: review,
-                    links: linksByReview,
-                    partnersMacroContent: partnersLogoListContent,
-                    signUpFormContent: signUpFormContent,
-                    advertisements: ads,
-                  },
-                })
+                try {
+                  createPage({
+                    path: `/links/${reviewUrlTemp}/`,
+                    component: linksTemp,
+                    context: {
+                      review: review,
+                      links: linksByReview,
+                      partnersMacroContent: partnersLogoListContent,
+                      signUpFormContent: signUpFormContent,
+                      advertisements: ads,
+                    },
+                  })
+                } catch (ex) {
+                  console.log(ex);
+                }
               }
 
-              if(modulesByReview){
-                if(childClinicalArea.Modules && childClinicalArea.ModulesCount) {
+              if (modulesByReview) {
+                if (childClinicalArea.Modules && childClinicalArea.ModulesCount) {
                   childClinicalArea.Modules.push(...modulesByReview);
                   childClinicalArea.ModulesCount += modulesByReview.length;
                 }
@@ -543,22 +559,26 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   childClinicalArea.Modules = [...modulesByReview];
                   childClinicalArea.ModulesCount = modulesByReview.length;
                 }
-                createPage({
-                  path: `/modules/${reviewUrlTemp}/`,
-                  component: modulesTemp,
-                  context: {
-                    review: review,
-                    modules: modulesByReview,
-                    partnersMacroContent: partnersLogoListContent,
-                    signUpFormContent: signUpFormContent,
-                    advertisements: ads,
-                  },
-                })
+                try {
+                  createPage({
+                    path: `/modules/${reviewUrlTemp}/`,
+                    component: modulesTemp,
+                    context: {
+                      review: review,
+                      modules: modulesByReview,
+                      partnersMacroContent: partnersLogoListContent,
+                      signUpFormContent: signUpFormContent,
+                      advertisements: ads,
+                    },
+                  })
+                } catch (ex) {
+                  console.log(ex);
+                }
               }
 
               // BUILD REVIEW EXPERT ADVISORS LIST PAGE
-              if(review.writersByReview) {
-                if(childClinicalArea.Writers && childClinicalArea.WritersCount) {
+              if (review.writersByReview) {
+                if (childClinicalArea.Writers && childClinicalArea.WritersCount) {
                   childClinicalArea.Writers.push(...review.writersByReview);
                   childClinicalArea.WritersCount += review.writersByReview.length;
                 }
@@ -568,20 +588,24 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 }
                 await Promise.all(review.writersByReview.map((writer) => {
                   // topTwoWriters.forEach((writer) => {
-                    let writerUrlTemp = writer.name.toLowerCase();
-                    writerUrlTemp = writerUrlTemp.split(' ').join('-');
+                  let writerUrlTemp = writer.name.toLowerCase();
+                  writerUrlTemp = writerUrlTemp.split(' ').join('-');
+                  try {
                     createPage({
                       path: `/expert-advisors/${reviewUrlTemp}/${writerUrlTemp}`,
                       component: writerTemp,
                       context: {
-                    writer: writer,
-                    partnersMacroContent: partnersLogoListContent,
-                    signUpFormContent: signUpFormContent,
-                    advertisements: ads,
-                  },
-                })
-              }));
-            }
+                        writer: writer,
+                        partnersMacroContent: partnersLogoListContent,
+                        signUpFormContent: signUpFormContent,
+                        advertisements: ads,
+                      },
+                    })
+                  } catch (ex) {
+                    console.log(ex);
+                  }
+                }));
+              }
               review['url'] = reviewUrlTemp;
             }))
             // ADD DISCOVERED DATA TO THIS VARIABLE: STEPHEN - WHY? WHERE IS THIS USED?
@@ -600,7 +624,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   }
 
   // ------------------------------- END  buildSubClinicalAreas function--------------------------------- 
-    // clincialAreas includes MEDICAL SPECIALTY etc and all their children, excluding the review areas.
+  // clincialAreas includes MEDICAL SPECIALTY etc and all their children, excluding the review areas.
 
   if (clinicalAreas.length > 0) {
     const testClinicalAreas = clinicalAreas;
@@ -620,83 +644,100 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     // BUILDS THE VERY TOP LEVEL CLINICIAL AREAS PAGES (WITH THE CLINICAL AREA MENU)
     const clinicalAreasContent = find(umbracoContent, { "Node": "Clinical Areas" });
-    createPage({
-      path: `/clinical-areas/`,
-      component: clinicalAreasTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        content: clinicalAreasContent,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-        signUpFormContent: signUpFormContent,
-        pageName: "Clinical Areas",
-        pageUrl: "/clinical-areas/"
-      },
-    })
+    try {
+      createPage({
+        path: `/clinical-areas/`,
+        component: clinicalAreasTemp,
+        context: {
+          clinicalAreas: clinicalAreaTree,
+          content: clinicalAreasContent,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+          signUpFormContent: signUpFormContent,
+          pageName: "Clinical Areas",
+          pageUrl: "/clinical-areas/"
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
 
     // BUILDS THE VERY TOP LEVEL EXPERT WRITERS PAGE (WITH THE CLINICAL AREA MENU)
     const expertWritersContent = find(umbracoContent, { "Node": "Expert Writers" });
-    createPage({
-      path: `/expert-advisors/`,
-      component: expertWritersTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        content: expertWritersContent,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-        testClinicalAreas: testClinicalAreas,
-        signUpFormContent: signUpFormContent,
-        pageName: "Expert Advisors",
-        pageUrl: "/expert-advisors/"
-      },
-    })
-    
+    try {
+      createPage({
+        path: `/expert-advisors/`,
+        component: expertWritersTemp,
+        context: {
+          clinicalAreas: clinicalAreaTree,
+          content: expertWritersContent,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+          testClinicalAreas: testClinicalAreas,
+          signUpFormContent: signUpFormContent,
+          pageName: "Expert Advisors",
+          pageUrl: "/expert-advisors/"
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
+
     // BUILD MAIN PODCASTS PAGE
     const watchContent = find(umbracoContent, { "Node": "Watch" });
-    createPage({
-      path: `/watch/`,
-      component: podcastsTreeTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        content: watchContent,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-        signUpFormContent: signUpFormContent,
-        pageName: "Watch",
-        pageUrl: "/watch/"
-      },
-    })
-
+    try {
+      createPage({
+        path: `/watch/`,
+        component: podcastsTreeTemp,
+        context: {
+          clinicalAreas: clinicalAreaTree,
+          content: watchContent,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+          signUpFormContent: signUpFormContent,
+          pageName: "Watch",
+          pageUrl: "/watch/"
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     const linkContent = find(umbracoContent, { "Node": "Links" });
-    createPage({
-      path: `/links/`,
-      component: linksTreeTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        content: linkContent,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-        signUpFormContent: signUpFormContent,
-        pageName: "Links",
-        pageUrl: "/links/"
-      },
-    })
-
+    try {
+      createPage({
+        path: `/links/`,
+        component: linksTreeTemp,
+        context: {
+          clinicalAreas: clinicalAreaTree,
+          content: linkContent,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+          signUpFormContent: signUpFormContent,
+          pageName: "Links",
+          pageUrl: "/links/"
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     // NEEDS TO CHANGE TO MATCH CLINICAL AREA TREE
     const professionalDevelopmentContent = find(umbracoContent, { "Node": "Professional Development" });
     const modulesContent = find(professionalDevelopmentContent.Children, { "Node": "CME" });
-    createPage({
-      path: `/modules`,
-      component: modulesTreeTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        partnersMacroContent: partnersLogoListContent,
-        modulesContent: modulesContent,
-        signUpFormContent: signUpFormContent,
-        advertisements: siteWideAdvertisements,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/modules`,
+        component: modulesTreeTemp,
+        context: {
+          clinicalAreas: clinicalAreaTree,
+          partnersMacroContent: partnersLogoListContent,
+          modulesContent: modulesContent,
+          signUpFormContent: signUpFormContent,
+          advertisements: siteWideAdvertisements,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     // const modulesContent = find(professionalDevelopmentContent.Children, { "Node": "CME" });
     // createPage({
     //   path: `/modules`,
@@ -709,100 +750,120 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     //   },
     // })
 
-
-    createPage({
-      path: `/subscriptions/`,
-      component: subscriptionsTemp,
-      context: {
-        clinicalAreas: clinicalAreaTree,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/subscriptions/`,
+        component: subscriptionsTemp,
+        context: {
+          clinicalAreas: clinicalAreaTree,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     // BUILDS HOME PAGE
     const homeContent = find(umbracoContent, { "Node": "Home" });
     const featuredArticleContent = find(umbracoContent, { "Node": "Featured Article" });
-    createPage({
-      path: `/`,
-      component: indexTemplate,
-      context: {
-        featuredArticle: featuredArticleContent,
-        homeContent: homeContent,
-        advertisements: siteWideAdvertisements,
-        partnersMacroContent: partnersLogoListContent,
-        umbracoContent: umbracoContent,
-        signUpFormContent: signUpFormContent,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/`,
+        component: indexTemplate,
+        context: {
+          featuredArticle: featuredArticleContent,
+          homeContent: homeContent,
+          advertisements: siteWideAdvertisements,
+          partnersMacroContent: partnersLogoListContent,
+          umbracoContent: umbracoContent,
+          signUpFormContent: signUpFormContent,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     // BUILDS TOP LEVEL PROFESSIONAL DEVLOPMENT PAGE
     const partnersContent = find(professionalDevelopmentContent.Children, { "Node": "CPD" });
-    createPage({
-      path: `/partners`,
-      component: partnersTemplate,
-      context: {
-        partnersContent: partnersContent,
-        partnersMacroContent: partnersLogoListContent,
-        signUpFormContent: signUpFormContent,
-        advertisements: siteWideAdvertisements,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/partners`,
+        component: partnersTemplate,
+        context: {
+          partnersContent: partnersContent,
+          partnersMacroContent: partnersLogoListContent,
+          signUpFormContent: signUpFormContent,
+          advertisements: siteWideAdvertisements,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     const sampleReviewsContent = find(umbracoContent, { "Node": "Sample Reviews" });
     const sampleReviewsTemp = path.resolve(`./src/templates/sample-reviews.js`)
-    createPage({
-      path: `/sample-reviews`,
-      component: sampleReviewsTemp,
-      context: {
-        partnersMacroContent: partnersLogoListContent,
-        sampleReviews: sampleReviewsContent,
-        advertisements: siteWideAdvertisements,
-        signUpFormContent: signUpFormContent,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/sample-reviews`,
+        component: sampleReviewsTemp,
+        context: {
+          partnersMacroContent: partnersLogoListContent,
+          sampleReviews: sampleReviewsContent,
+          advertisements: siteWideAdvertisements,
+          signUpFormContent: signUpFormContent,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     const termsAndConditionsContent = find(umbracoContent, { "Node": "Terms And Conditions" });
     const termsAndConditionsTemp = path.resolve(`./src/templates/terms-and-conditions.js`)
-    createPage({
-      path: `/terms-and-conditions`,
-      component: termsAndConditionsTemp,
-      context: {
-        partnersMacroContent: partnersLogoListContent,
-        content: termsAndConditionsContent,
-        advertisements: siteWideAdvertisements,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/terms-and-conditions`,
+        component: termsAndConditionsTemp,
+        context: {
+          partnersMacroContent: partnersLogoListContent,
+          content: termsAndConditionsContent,
+          advertisements: siteWideAdvertisements,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     // BUILDS CONTACT US PAGE
     const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
     const contactUsContent = find(umbracoContent, { "Node": "Contact Us" });
-    createPage({
-      path: `/contact-us/`,
-      component: contactUsTemp,
-      context: {
-        contactUsContent: contactUsContent,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-      },
-    })
-
+    try {
+      createPage({
+        path: `/contact-us/`,
+        component: contactUsTemp,
+        context: {
+          contactUsContent: contactUsContent,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
     // Create Join Research Review Page
     const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
     const joinRRContent = find(umbracoContent, { "Node": "Join Research Review" });
-    
-    createPage({
-      path: `/join-research-review/`,
-      component: JoinRRTemp,
-      context: {
-        joinRRContent: joinRRContent,
-        partnersMacroContent: partnersLogoListContent,
-        advertisements: siteWideAdvertisements,
-        locationsContent: locationsContent,
-        professionsContent: professionsContent,
-        signUpFormContent: signUpFormContent,
-      },
-    })
+    try {
+      createPage({
+        path: `/join-research-review/`,
+        component: JoinRRTemp,
+        context: {
+          joinRRContent: joinRRContent,
+          partnersMacroContent: partnersLogoListContent,
+          advertisements: siteWideAdvertisements,
+          locationsContent: locationsContent,
+          professionsContent: professionsContent,
+          signUpFormContent: signUpFormContent,
+        },
+      })
+    } catch (ex) {
+      console.log(ex);
+    }
   }
 
 
