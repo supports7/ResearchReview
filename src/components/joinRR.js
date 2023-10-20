@@ -242,7 +242,7 @@ const JoinRR = (signUpFormContent) => {
                     onChange={e => setLocation(e.target.value)}
                   >
                     <option value="Select Location" className="placeholder-option">Select Location</option>
-                    {signUpFormContent && signUpFormContent.signUpFormContent.locations.Children.map((locationOption, index) => (
+                    {signUpFormContent && signUpFormContent.locations && signUpFormContent.locations.Children.map((locationOption, index) => (
                       <option key={index} value={locationOption.Node}>
                         {locationOption.Node}
                       </option>
@@ -259,7 +259,7 @@ const JoinRR = (signUpFormContent) => {
                     onChange={e => setProfession(e.target.value)}
                   >
                     <option value="Select Profession" className="placeholder-option">Select Profession</option>
-                    {signUpFormContent && signUpFormContent.signUpFormContent.professions.Children.map((professionOption, index) => (
+                    {signUpFormContent && signUpFormContent.professions && signUpFormContent.professions.Children.map((professionOption, index) => (
                       <option key={index} value={professionOption.Node}>
                         {professionOption.Node}
                       </option>
