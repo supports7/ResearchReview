@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react" //, useCallback
 import { navigate, Link } from 'gatsby'
 import { Container, Row, Col } from "react-bootstrap"
 import Layout from "../components/layout"
-import Supporters from "../components/supporters"
+//import Supporters from "../components/supporters"
 import SectionLine from "../components/sectionLine"
 // import JoinRR from "../components/JoinRR"
 import Cookies from "universal-cookie"

@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useCallback } from "react"
-import { navigate, Link } from 'gatsby'
+import React, { useEffect, useState } from "react" ; //, useCallback
+//import { navigate, Link } from 'gatsby'
 import { Container, Row, Col } from "react-bootstrap"
 import Layout from "../components/layout"
-import Supporters from "../components/supporters"
+//import Supporters from "../components/supporters"
 import SectionLine from "../components/sectionLine"
 // import JoinRR from "../components/JoinRR"
-import Cookies from "universal-cookie"
+//import Cookies from "universal-cookie"
 import SearchIcon from "@mui/icons-material/Search"
 import CircularProgress from "@mui/material/CircularProgress"
 import config from "../../config.js"
 const Search = () => {
   const [searchEntry, setSearchEntry] = useState("");
   const [searchResults, setSearchResults] = useState();
-  const [errorMessage, setErrorMessage] = useState("");
+  //const [errorMessage, setErrorMessage] = useState("");
 
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,7 @@ const Search = () => {
         // exceptions from actual bugs in components.
         error => {
           setSearchResults();
-          setErrorMessage(error);
+          //setErrorMessage(error);
           setLoading(false);
         }
       )
