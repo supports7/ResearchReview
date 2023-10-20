@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Row, Col } from "react-bootstrap"
 import SearchIcon from "@mui/icons-material/Search"
-import { navigate } from 'gatsby'
-import { useHistory } from "react-router-dom";
+// import { navigate } from 'gatsby'
+// import { useHistory } from "react-router-dom";
 
 function SearchForm() {
   const [searchEntry, setSearchEntry] = useState("")

@@ -1,7 +1,7 @@
 import React from "react"
 import { Container, Row, Col } from "react-bootstrap"
-import { Link } from "gatsby"
-import SearchIcon from "@mui/icons-material/Search"
+// import { Link } from "gatsby"
+// import SearchIcon from "@mui/icons-material/Search"
 import StarIcon from "@mui/icons-material/Star"
 import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
@@ -51,7 +51,7 @@ const Banner = ({ bannerContent }) => {
               <div className="banner-content">
                 <h1>{bannerContent.bannerText}</h1>
                 {bannerContent.buttonLink && bannerContent.buttonText &&
-                  <a className="btn btn-primary" href={`${bannerContent.buttonLink}`} target="_blank">
+                  <a className="btn btn-primary" href={`${bannerContent.buttonLink}`} target="_blank" rel="noreferrer">
                     {bannerContent.buttonText}
                   </a>
                 }

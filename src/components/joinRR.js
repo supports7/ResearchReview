@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Row, Col } from "react-bootstrap"
 import SectionLine from "./sectionLine"
 import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
-import { navigate } from "gatsby";
+//import { navigate } from "gatsby";
 import ReCAPTCHA from "react-google-recaptcha"
 import Cookies from "universal-cookie"
 import config from "../../config";
@@ -26,7 +26,7 @@ const JoinRR = (signUpFormContent) => {
   const recaptchaRef = React.createRef();
 
   useEffect(() => {
-    console.log();
+   // console.log();
   }, [])
 
   const handleConfirmTAndCsChange = (e) => {
@@ -39,7 +39,7 @@ const JoinRR = (signUpFormContent) => {
 
     if (firstName && lastName && email && profession && registerPassword && registerPasswordConfirm && recaptchaData) {
 
-      if (registerPassword != registerPasswordConfirm) {
+      if (registerPassword !== registerPasswordConfirm) {
         setRegisterError("Passwords do not match. Please try again.")
         return;
       }

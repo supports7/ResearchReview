@@ -26,7 +26,7 @@ const FullScreenAd = ({ advertisements }) => {
               height: "600px",
               backgroundPosition: 'center center',
               backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
+              backgroundSize: 'contain',
             }}
           >
             <Container>

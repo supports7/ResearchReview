@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap"
 import he from 'he';
 
 const Supporters = ({ partnersMacroContent }) => {
-  console.log(partnersMacroContent)
+ // console.log(partnersMacroContent)
   let partnersTitle = "";
 
   if(partnersMacroContent.partnersTitle) {
@@ -25,7 +25,7 @@ const Supporters = ({ partnersMacroContent }) => {
                 <Col md={2} sm={3} xs={4} key={index}>
                   <div className="partner-macro-outer-div">
                     <div className="partner-macro-inner-div">
-                      <a href={partner.partnerLink} target="_blank">
+                      <a href={partner.partnerLink} target="_blank" rel="noreferrer">
                         <img
                           alt={partner.partnerName}
                           className="img-fluid"
