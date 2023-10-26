@@ -4,7 +4,7 @@ import { Breadcrumb } from 'react-bootstrap';
 const BreadcrumbComponent = ({ breadcrumbs }) => {
   return (
     <Breadcrumb>
-      {breadcrumbs.map((breadcrumb, index) => (
+      {breadcrumbs && breadcrumbs.map((breadcrumb, index) => (
         <Breadcrumb.Item
           key={index}
           href={breadcrumb.url} // Assuming each breadcrumb item has a 'url' property
