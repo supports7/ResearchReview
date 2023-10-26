@@ -175,6 +175,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 zohoId
                 small
                 medium
+                image
                 file
                 Children {
                   Node
