@@ -25,7 +25,7 @@ const FullScreenAd = ({ advertisements }) => {
                 <section
                   className="full-screen-ad"
                 >
-                  <img src={`${largeAd.fullWidth}?width=1600`} className="img-fluid" />
+                  <img src={`${largeAd.image}?width=1600`} className="img-fluid" />
                 </section>
               </a>
             }
