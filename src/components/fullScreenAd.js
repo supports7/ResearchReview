@@ -17,40 +17,21 @@ const FullScreenAd = ({ advertisements }) => {
 
   return (
     <div>
-      {largeAd &&
-        <a className="full-screen-ad-link" href={largeAd.link} target="_blank" >
-          <section
-            className="full-screen-ad"
-            style={{
-              backgroundImage: `url('${largeAd.fullWidth}')`,
-              height: "600px",
-              backgroundPosition: 'center center',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'contain',
-            }}
-          >
-            <Container>
-              <Row>
-                <Col xs={12}>
-                  <div className="full-screen-ad-image">
-                    <div className="full-screen-ad-content">
-                      {/* <p className="small-green-text">
-                  16.03.2022 / Medical / Jimmy Choo
-                  </p>
-                  <h2>{largeAd.advertisementName}</h2>
-                  <p>
-                  Research Review publications bring the best of 10,000
-                  global medical journals to your inbox every issue with
-                  commentary from New Zealand experts.
-                </p> */}
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-          </section>
-        </a>
-      }
+      <Container>
+        <Row>
+          <Col xs={12}>
+            {largeAd &&
+              <a className="full-screen-ad-link" href={largeAd.link} target="_blank" >
+                <section
+                  className="full-screen-ad"
+                >
+                  <img src={`${largeAd.fullWidth}?width=1600`} className="img-fluid" />
+                </section>
+              </a>
+            }
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }

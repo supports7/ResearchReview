@@ -70,7 +70,7 @@ const ModulesTemplate = ({
                   pageContext.modules.map((module, index) => {
                     return (
                       <Col key={index} xs={12}>
-                        <div class="module">
+                        <div className="module">
                           <a href={module.link} target="_blank" rel="noreferrer">
                             <Row>
                               <Col md={12} xs={12}>
@@ -88,7 +88,7 @@ const ModulesTemplate = ({
               :
               <div className="full-width-button not-logged-in">
                 <div className="">
-                  <a className="btn btn-secondary load-more-button" href="/join-research-review/">Register to see our summary content</a>
+                  <p className="btn btn-secondary load-more-button"><a href="#navbar">Login</a> or <a href="/join-research-review/">Register</a> to see modules</p>
                 </div>
               </div>
             }

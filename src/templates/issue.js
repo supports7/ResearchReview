@@ -14,6 +14,7 @@ import JoinRR from "../components/joinRR"
 import randomImage from "../components/randomImages";
 import FullScreenAd from "../components/fullScreenAd";
 import DoubleAd from "../components/doubleAd";
+import BreadcrumbComponent from "../components/breadcrumbComponent";
 
 const IssueTemplate = ({
   location,
@@ -22,7 +23,7 @@ const IssueTemplate = ({
   const [ reviewPageURL, setReviewPageURL ] = useState();
 
   useEffect(() => {
-    //console.log("pageContext", pageContext);
+    console.log("pageContext", pageContext);
 
     // Need to adjust the tempURLPath to get the original review URL for the back button.
     let originalURL = pageContext.tempUrlPath;
@@ -48,7 +49,9 @@ const IssueTemplate = ({
         <section className="issue-page-top-section">
           <Row>
             <Col xs={12} className="pb-md-5">
-              <a className="btn btn-primary" href={reviewPageURL}>Back to Review</a>
+              {pageContext.breadcrumbs &&
+                <BreadcrumbComponent breadcrumbs={pageContext.breadcrumbs} />
+              }
             </Col>
             <Col xs={12}>
               <h2>Sections</h2>

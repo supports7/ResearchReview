@@ -175,7 +175,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 zohoId
                 small
                 medium
-                fullWidth
                 file
                 Children {
                   Node
@@ -404,6 +403,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               //  NEED TO PULL THROUGH THE LINKS HERE - SHOULD I DO A QUERY?
               // check that reviewUrlTemp is added to each loop
               try {
+                console.log("createPage:review:", reviewUrlTemp)
                 createPage({
                   path: `/clinical-areas/${reviewUrlTemp}/`,
                   component: reviewTemplate,
@@ -420,7 +420,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   },
                 })
               } catch (ex) {
-                console.log(ex);
+                console.log("Error bulding review page: ", reviewUrlTemp, ex);
               }
               //Check if any podcasts related to this review
               if (podcasts) {
@@ -432,6 +432,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   childClinicalArea.PodCasts = [...podcasts];
                   childClinicalArea.PodCastCount = podcasts.length;
                 }
+                console.log("createPage:watch:", reviewUrlTemp)
                 try {
                   createPage({
                     path: `/watch/${reviewUrlTemp}/`,
@@ -446,7 +447,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     },
                   })
                 } catch (ex) {
-                  console.log(ex);
+                  console.log("Error bulding watch page: ", reviewUrlTemp, ex);
+
                 }
                 // BUILD podcast pages
                 await Promise.all(podcasts.map(async (podcast) => {
@@ -456,6 +458,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   //Swap advertisements: advertisementsContent ---> advertisements: podcastAds,
                   let podcastAds = filter(podcast.Children, { "DocType": "podcastAdvertisement" }, []);
                   try {
+                    console.log("createPage:watch:", reviewUrlTemp, podcastUrlTemp)
                     createPage({
                       path: `/watch/${reviewUrlTemp}/${podcastUrlTemp}/`,
                       component: podcastDetailTemp,
@@ -468,7 +471,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                       },
                     })
                   } catch (ex) {
-                    console.log(ex);
+                    console.log("Error bulding watch page: ", podcastUrlTemp, ex);
+
                   }
                 }))
 
@@ -478,48 +482,65 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               if (issues.length > 0) {
                 await Promise.all(issues.map(async (issue) => {
                   // issues.forEach(async (issue) => {
-                  let articles = [];
-                  articles = await getArticles(issue.id);
-                  console.log("createPage:Issue:", reviewUrlTemp, issue.name)
                   try {
-                    createPage({
-                      path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
-                      component: issueTemp,
-                      context: {
-                        issue: issue,
-                        articles: articles,
-                        partnersMacroContent: partnersLogoListContent,
-                        advertisements: ads,
-                        tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                      },
-                    })
-                  } catch (ex) {
-                    console.log(ex);
-                  }
-                  // BUILD ARTICLE PAGES (IF THEY EXIST)
-                  if (articles.length > 0) {
-                    await Promise.all(articles.map((article) => {
-                      // articles.forEach((article) => {
+                    let articles = [];
+                    articles = await getArticles(issue.id);
+                    
+                    try {
+                      console.log("createPage:Issue:", reviewUrlTemp, issue.name)
+                      createPage({
+                        path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`,
+                        component: issueTemp,
+                        context: {
+                          issue: issue,
+                          articles: articles,
+                          partnersMacroContent: partnersLogoListContent,
+                          advertisements: ads,
+                          breadcrumbs: [
+                            { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
+                            { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },
+                          ],
+                          tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
+                        },
+                      })
+                    } catch (ex) {
+                      console.log("Error bulding Issue page: ", issue.id, ex);
+                    }
+                    // BUILD ARTICLE PAGES (IF THEY EXIST)
+                    if (articles.length > 0) {
+                      await Promise.all(articles.map((article) => {
+                        // articles.forEach((article) => {
 
-                      try {
-                        createPage({
-                          path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
-                          component: articleTemp,
-                          context: {
-                            article: article,
-                            otherArticles: articles,
-                            writersByReview: writersByReview,
-                            partnersMacroContent: partnersLogoListContent,
-                            signUpFormContent: signUpFormContent,
-                            advertisements: ads,
-                            tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
-                          },
-                        })
-                      } catch (ex) {
-                        console.log(ex);
-                      }
-                    }))
+                        try {
+                          createPage({
+                            path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
+                            component: articleTemp,
+                            context: {
+                              article: article,
+                              otherArticles: articles,
+                              writersByReview: writersByReview,
+                              partnersMacroContent: partnersLogoListContent,
+                              signUpFormContent: signUpFormContent,
+                              advertisements: ads,
+                              breadcrumbs: [
+                                { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
+                                { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },
+                                { name: article.title, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}` },
+                              ],
+                              tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
+                            },
+                          })
+                        } catch (ex) {
+                          console.log("Error bulding article page: ",issue.name, article.name, ex);
+                        }
+                      }))
+                    }
+                     
                   }
+                  catch(ex)
+                      {
+                        console.log("Error bulding issue page: ", issue.id, ex);
+                      }
                 }))
               }
 
@@ -534,6 +555,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   childClinicalArea.LinksCount = linksByReview.length;
                 }
                 try {
+                  console.log("createPage:links:", reviewUrlTemp)
                   createPage({
                     path: `/links/${reviewUrlTemp}/`,
                     component: linksTemp,
@@ -546,7 +568,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     },
                   })
                 } catch (ex) {
-                  console.log(ex);
+                  console.log("Error bulding links page: ", reviewUrlTemp, ex);
+
                 }
               }
 
@@ -572,7 +595,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                     },
                   })
                 } catch (ex) {
-                  console.log(ex);
+                  console.log("Error bulding modules page: ", reviewUrlTemp, ex);
                 }
               }
 
@@ -590,6 +613,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   // topTwoWriters.forEach((writer) => {
                   let writerUrlTemp = writer.name.toLowerCase();
                   writerUrlTemp = writerUrlTemp.split(' ').join('-');
+                  console.log("createPage:Writer:", reviewUrlTemp, writerUrlTemp)
                   try {
                     createPage({
                       path: `/expert-advisors/${reviewUrlTemp}/${writerUrlTemp}`,
@@ -602,7 +626,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                       },
                     })
                   } catch (ex) {
-                    console.log(ex);
+                    console.log("Error bulding writer page: ", reviewUrlTemp,writerUrlTemp, ex);
                   }
                 }));
               }
@@ -645,6 +669,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     // BUILDS THE VERY TOP LEVEL CLINICIAL AREAS PAGES (WITH THE CLINICAL AREA MENU)
     const clinicalAreasContent = find(umbracoContent, { "Node": "Clinical Areas" });
     try {
+      console.log("createPage:cinical-areas top-page:")
       createPage({
         path: `/clinical-areas/`,
         component: clinicalAreasTemp,
@@ -659,12 +684,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top clinicial-area page: ", ex);
+
     }
 
     // BUILDS THE VERY TOP LEVEL EXPERT WRITERS PAGE (WITH THE CLINICAL AREA MENU)
     const expertWritersContent = find(umbracoContent, { "Node": "Expert Writers" });
     try {
+      console.log("createPage:Expert-Advisors  top-page:")
       createPage({
         path: `/expert-advisors/`,
         component: expertWritersTemp,
@@ -680,12 +707,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top expert-advisers page: ", ex);
     }
 
     // BUILD MAIN PODCASTS PAGE
     const watchContent = find(umbracoContent, { "Node": "Watch" });
     try {
+      console.log("Create Page:watch  top-page")
       createPage({
         path: `/watch/`,
         component: podcastsTreeTemp,
@@ -700,10 +728,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top watch page: ", ex);
     }
     const linkContent = find(umbracoContent, { "Node": "Links" });
     try {
+      console.log("Create Page:links  top-page")
       createPage({
         path: `/links/`,
         component: linksTreeTemp,
@@ -718,12 +747,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top links  page: ", ex);
     }
     // NEEDS TO CHANGE TO MATCH CLINICAL AREA TREE
     const professionalDevelopmentContent = find(umbracoContent, { "Node": "Professional Development" });
     const modulesContent = find(professionalDevelopmentContent.Children, { "Node": "CME" });
     try {
+      console.log("Create Page:modules  top-page")
       createPage({
         path: `/modules`,
         component: modulesTreeTemp,
@@ -736,7 +766,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top modules page: ", ex);
     }
     // const modulesContent = find(professionalDevelopmentContent.Children, { "Node": "CME" });
     // createPage({
@@ -751,6 +781,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     // })
 
     try {
+      console.log("Create Page:subscriptions  top-page")
       createPage({
         path: `/subscriptions/`,
         component: subscriptionsTemp,
@@ -761,12 +792,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top subsriptions page: ", ex);
     }
     // BUILDS HOME PAGE
     const homeContent = find(umbracoContent, { "Node": "Home" });
     const featuredArticleContent = find(umbracoContent, { "Node": "Featured Article" });
     try {
+      console.log("Create Page:root  top-page")
       createPage({
         path: `/`,
         component: indexTemplate,
@@ -780,11 +812,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding root page: ", ex);
+
     }
     // BUILDS TOP LEVEL PROFESSIONAL DEVLOPMENT PAGE
     const partnersContent = find(professionalDevelopmentContent.Children, { "Node": "CPD" });
     try {
+      console.log("Create Page:partners  top-page")
       createPage({
         path: `/partners`,
         component: partnersTemplate,
@@ -796,11 +830,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top partners page: ", ex);
+
     }
     const sampleReviewsContent = find(umbracoContent, { "Node": "Sample Reviews" });
     const sampleReviewsTemp = path.resolve(`./src/templates/sample-reviews.js`)
     try {
+      console.log("Create Page:sample-reviews  top-page")
       createPage({
         path: `/sample-reviews`,
         component: sampleReviewsTemp,
@@ -812,11 +848,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top sample-reviews page: ", ex);
+
     }
     const termsAndConditionsContent = find(umbracoContent, { "Node": "Terms And Conditions" });
     const termsAndConditionsTemp = path.resolve(`./src/templates/terms-and-conditions.js`)
     try {
+      console.log("Create Page:terms-and-conditions  top-page")
       createPage({
         path: `/terms-and-conditions`,
         component: termsAndConditionsTemp,
@@ -827,12 +865,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top terms and conditions page: ", ex);
+
     }
     // BUILDS CONTACT US PAGE
     const contactUsTemp = path.resolve(`./src/templates/contact-us.js`)
     const contactUsContent = find(umbracoContent, { "Node": "Contact Us" });
     try {
+      console.log("Create Page:contact-us  top-page")
       createPage({
         path: `/contact-us/`,
         component: contactUsTemp,
@@ -843,12 +883,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top contact page: ", ex);
+
     }
     // Create Join Research Review Page
     const JoinRRTemp = path.resolve(`./src/templates/join-rr.js`)
     const joinRRContent = find(umbracoContent, { "Node": "Join Research Review" });
     try {
+      console.log("Create Page:join-research-review  top-page")
       createPage({
         path: `/join-research-review/`,
         component: JoinRRTemp,
@@ -862,7 +904,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         },
       })
     } catch (ex) {
-      console.log(ex);
+      console.log("Error bulding top join page: ", ex);
+
     }
   }
 

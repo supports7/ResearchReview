@@ -8,6 +8,7 @@ import Cookies from "universal-cookie";
 
 import { Container, Row, Col } from "react-bootstrap"
 import { remove } from 'lodash';
+import { CircularProgress } from "@mui/material";
 
 const SubscriptionsTemplate = ({ pageContext, location }) => {
   const siteTitle = `Subscriptions`
@@ -16,10 +17,10 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
   const [subscriptionListWithReviews, setSubscriptionListWithReviews] = useState([]);
   //TODO: Rename variables
   const [fullAreaForCheckboxes, setFullAreaForCheckboxes] = useState([]);
-  //const [subscriptionListOfIds, setSubscriptionListOfIds] = useState([]);
-
+  const [subscriptionListOfIds, setSubscriptionListOfIds] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
-  
+
   const bundleReviews = (clinicalArea, reviews) => {
     if (clinicalArea.children) {
       clinicalArea.children.forEach((clinicalAreaChild) => {
@@ -38,21 +39,17 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
 
   useEffect(() => {
     const userDataFromCookies = cookies.get("userData")
-    console.log("userDataFromCookies:",userDataFromCookies);
-    if(!userDataFromCookies) {
+    if (!userDataFromCookies) {
       navigate("/");
     }
-    if(userDataFromCookies.custom_Data) {
+    if (userDataFromCookies.subscriptions) {
+      console.log("userDataFromCookies:", userDataFromCookies.subscriptions);
       //Scan custom data for IDs then add to list
-      //setSubscriptionListOfIds(listOfSelectedSubscriptions);
-      if(userDataFromCookies.custom_Data.length>0)
-      {
-        setSelectedIds(userDataFromCookies.custom_Data);
-
-      }
+      setSubscriptionListOfIds(userDataFromCookies.subscriptions);
+      setSelectedIds(userDataFromCookies.subscriptions);
     }
-    console.log("subscriptionList:",subscriptionList);
-    
+    console.log("subscriptionList:", subscriptionList);
+
     subscriptionList.forEach((clinicalArea) => {
       let reviews = [];
       if (clinicalArea.children) {
@@ -97,8 +94,7 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
     }
   }, [subscriptionListWithReviews])
 
-  const toggleSelect = (event,id)=>
-  {
+  const toggleSelect = (event, id) => {
     //event.preventDefault();
     let currentSelected = [...selectedIds];
     var index = currentSelected.indexOf(id);
@@ -134,15 +130,16 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
   // }
 
   const handleSubmit = () => {
+    setLoading(true);
     const userDataFromCookies = cookies.get("userData")
     const loginToken = cookies.get("LoginToken");
-    
+
     const jsonData = {
       UserId: userDataFromCookies.id,
       //Subscriptions: subscriptionListOfIds,
       ReviewIds: selectedIds,
     }
-fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
+    fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
 
       method: "PUT",
       // mode: 'no-cors',
@@ -152,27 +149,34 @@ fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
       },
       body: JSON.stringify(jsonData),
     })
-    .then(res => console.log(res.json()))
-    .then(
-      result => {
-        console.log("result", result);
-          userDataFromCookies.custom_Data=selectedIds;
+      .then(res => console.log(res.json()))
+      .then(
+        result => {
+          console.log("result", result);
+          userDataFromCookies.subscriptions = selectedIds;
 
-        cookies.set("userData", userDataFromCookies, {
-          path: "/",
-          expires: new Date(Date.now() + 8640000),
-        })
-        //setIsEditingProfile(false);
-        //setProfileData(result)
-        //setProfileData(userDataFromCookies)
-        navigate('/profile')
+          cookies.set("userData", userDataFromCookies, {
+            path: "/",
+            expires: new Date(Date.now() + 8640000),
+          })
+          //setIsEditingProfile(false);
+          //setProfileData(result)
+          //setProfileData(userDataFromCookies)
+          setLoading(false);
+          navigate('/profile')
 
-      },
+        },
 
-      error => {
-        console.log("error", error);
-      }
-    )
+        error => {
+          console.log("error", error);
+        }
+      )
+      .catch(error => {
+        // Handle all other errors, including the ones we explicitly threw
+        console.log("STRAIGHT ERROR");
+        console.error("error message", error.message);
+        // setErrorMessageTemp(error.message);
+      });
   }
 
   return (
@@ -205,7 +209,7 @@ fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
                                 // checked={review.isAdded}
                                 // onChange={(e) => onAddingItem(e, review, index, i)}
                                 checked={isSelected(review.id)}
-                                onChange={(e) => toggleSelect(e,review.id)}
+                                onChange={(e) => toggleSelect(e, review.id)}
 
                               />
                               <label className="review-label" htmlFor={review.name}>{review.name}</label>
@@ -221,7 +225,13 @@ fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/subscriptions`, {
             )}
             <Col xs={12}>
               <div className="save-changes-button-div">
-                <button onClick={handleSubmit} className="btn btn-primary">Save Changes</button>
+                {!loading ? (
+                  <button onClick={handleSubmit} className="btn btn-primary">Save Changes</button>
+                ) : (
+                  <div className="search-loading">
+                    <CircularProgress />
+                  </div>
+                )}
               </div>
             </Col>
           </Row>

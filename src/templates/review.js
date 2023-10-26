@@ -15,6 +15,7 @@ import randomImage from "../components/randomImages";
 import FullScreenAd from "../components/fullScreenAd";
 import DoubleAd from "../components/doubleAd";
 import { find } from 'lodash';
+import BreadcrumbComponent from "../components/breadcrumbComponent";
 
 const ReviewTemplate = ({
   location,
@@ -62,6 +63,9 @@ const ReviewTemplate = ({
       <Container>
         <section className="home-page-connect-section">
           <Row>
+            <Col xs={12} className="pb-md-5">
+              <BreadcrumbComponent tempUrlPath={`/clinical-areas/${pageContext.review.url}`}/>
+            </Col>
             <Col xs={12}>
               <h2>Issues</h2>
             </Col>
@@ -69,42 +73,52 @@ const ReviewTemplate = ({
 
             <Col xs={12}>
               <Row>
-                {issuesShownOnScreen.map((issue, index) => {
-                  let reviewUrlTemp = pageContext.review.url
-                  return (
-                    <Col md={4} sm={6} xs={12} key={index}>
-                      <div className="promoted-content">
-                        <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
-                          <div className="promoted-content-image">
-                            <img
-                              alt="medical practice"
-                              src={randomImage(index)}
-                              className="img-fluid"
-                              width="400"
-                              height="250"
-                            />
+                {issuesShownOnScreen.length > 0 ? (
+                  <div>
+
+
+                    {issuesShownOnScreen.map((issue, index) => {
+                      let reviewUrlTemp = pageContext.review.url
+                      return (
+                        <Col md={4} sm={6} xs={12} key={index}>
+                          <div className="promoted-content">
+                            <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
+                              <div className="promoted-content-image">
+                                <img
+                                  alt="medical practice"
+                                  src={randomImage(index)}
+                                  className="img-fluid"
+                                  width="400"
+                                  height="250"
+                                />
+                              </div>
+                              <div className="promoted-content-content">
+                                <h3>{issue.issue1}</h3>
+                                {issue.issue_No &&
+                                  <p>
+                                    Issue No: {issue.issue_No}
+                                  </p>
+                                }
+                                <span className="btn btn-primary" href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>Read More</span>
+                              </div>
+                            </a>
                           </div>
-                          <div className="promoted-content-content">
-                            <h3>{issue.issue1}</h3>
-                            {issue.issue_No &&
-                              <p>
-                                Issue No: {issue.issue_No}
-                              </p>
-                            }
-                            <span className="btn btn-primary" href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>Read More</span>
-                          </div>
-                        </a>
-                      </div>
-                    </Col>
-                  )
-                })}
-                {!hideShowMoreButton &&
-                  <Col xs={12}>
-                    <div className="full-width-button">
-                      <a onClick={showMoreIssues} className="btn btn-secondary load-more-button">LOAD MORE</a>
-                    </div>
-                  </Col>
-                }
+                        </Col>
+                      )
+                    })}
+                    {!hideShowMoreButton &&
+                      <Col xs={12}>
+                        <div className="full-width-button">
+                          <a onClick={showMoreIssues} className="btn btn-secondary load-more-button">LOAD MORE</a>
+                        </div>
+                      </Col>
+                    }
+                  </div>
+                ) : (
+                  <div>
+                    <p>Currently, there are no issues available for this clinical area. Please <a href="/join-research-review/">register here</a> to receive notifications when new issues become available.</p>
+                  </div>
+                )}
               </Row>
             </Col>
           </Row>
@@ -116,7 +130,7 @@ const ReviewTemplate = ({
 
       <Container fluid>
         <Row>
-          {pageContext.advertisements && 
+          {pageContext.advertisements &&
             <FullScreenAd advertisements={pageContext.advertisements} />
           }
 
@@ -188,13 +202,13 @@ const ReviewTemplate = ({
                   </Col>
                 }
 
-                
+
                 <Col md={4} sm={6} xs={12}>
                   <h3>Download</h3>
-                  <p style={{marginBottom: 0}}>Download a sample publication below</p>
+                  <p style={{ marginBottom: 0 }}>Download a sample publication below</p>
                   <a href='/sample-reviews/'>Click Here</a>
                 </Col>
-                
+
               </Row>
             </Container>
           </section>
@@ -203,7 +217,7 @@ const ReviewTemplate = ({
         </Row>
       </Container>
       <Container>
-        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
+        <JoinRR signUpFormContent={pageContext.signUpFormContent} />
       </Container>
     </Layout>
   )

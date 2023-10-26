@@ -510,6 +510,12 @@ button.btn {
   color: #fff;
 }
 
+.full-width-button p.load-more-button:hover {
+  background-color: #bfbebe !important;
+  border: 1px solid #bfbebe !important;
+  color: white !important;
+}
+
 .full-width-button .load-more-button {
   width: 100%;
   background-color: #bfbebe !important;

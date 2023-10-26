@@ -149,7 +149,7 @@ function LoginForm() {
       {!loadingLogin && (
         <div>
           {!loggedIn && (
-            <form onSubmit={handleSubmit} id="navbar-login">
+            <form onSubmit={handleSubmit} class="navbar-login-form">
               <Row>
                 <Col className="offset-md-2 col-md-10" style={{height: '24px'}}>
                   {errorMessage}

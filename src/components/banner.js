@@ -47,11 +47,11 @@ const Banner = ({ bannerContent }) => {
       >
         <Container>
           <Row>
-            <Col xs={12} sm={8} md={6}>
+            <Col xs={12} sm={8} md={`${bannerContent.isHome ? 6 : 12}`}>
               <div className="banner-content">
                 <h1>{bannerContent.bannerText}</h1>
                 {bannerContent.buttonLink && bannerContent.buttonText &&
-                  <a className="btn btn-primary" href={`${bannerContent.buttonLink}`} target="_blank" rel="noreferrer">
+                  <a className="btn btn-primary" href={`${bannerContent.buttonLink}`} target={`${bannerContent.buttonLink == "/join-research-review/" ? "" : "_blank"}`} rel="noreferrer">
                     {bannerContent.buttonText}
                   </a>
                 }

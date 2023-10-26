@@ -11,6 +11,7 @@ import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-
 import parse from 'html-react-parser'
 import Cookies from "universal-cookie"
 import decrypt from "../utilities/decrypt"
+import BreadcrumbComponent from "../components/breadcrumbComponent";
 
 const ArticleTemplate = ({ pageContext, location }) => {
   const [decryptedComment, setDecryptedComment] = useState("");
@@ -18,7 +19,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
   const siteTitle = `${pageContext.article.title}`
 
   useEffect(() => {
-    //console.log(pageContext)
+    console.log("pageContext", pageContext)
     const encryptionKey = cookies.get('EncryptionKey');
 
     if (encryptionKey) {
@@ -30,7 +31,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
       // Hide register button
     }
   }, [pageContext, cookies])
-  
+
   const bannerContent = {
     bannerImage: bannerImage,
     bannerText: pageContext.article.title,
@@ -41,12 +42,14 @@ const ArticleTemplate = ({ pageContext, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <div className="article-banner">
-      <Banner bannerContent={bannerContent} />
+        <Banner bannerContent={bannerContent} />
       </div>
       <Container>
         <section className="article-page-top-section">
           <Col xs={12} className="pb-md-5">
-            <a className="btn btn-primary" href={pageContext.tempUrlPath}>Back to Issue</a>
+            {pageContext.breadcrumbs &&
+              <BreadcrumbComponent breadcrumbs={pageContext.breadcrumbs} />
+            }
           </Col>
           <Row>
             <Col lg={8} xs={12}>
@@ -65,7 +68,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
               {decryptedComment ?
                 <div>
                   <div className="encrypted-panel">
-                    <strong className="bold">Comment: </strong><div className="encrypted-data">{decryptedComment && <div  dangerouslySetInnerHTML={{ __html: decryptedComment }} ></div>}</div>
+                    <strong className="bold">Comment: </strong><div className="encrypted-data">{decryptedComment && <div dangerouslySetInnerHTML={{ __html: decryptedComment }} ></div>}</div>
                   </div>
                   {pageContext.article.reference &&
                     <div className="encrypted-panel">
@@ -81,7 +84,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
                 :
                 <div className="full-width-button not-logged-in">
                   <div className="">
-                    <a className="btn btn-secondary load-more-button" href="/join-research-review/">Register to see our summary content</a>
+                    <p className="btn btn-secondary load-more-button"><a href="#navbar">Login</a> or <a href="/join-research-review/">Register</a> to see our summary content</p>
                   </div>
                 </div>
               }
@@ -198,7 +201,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
       </section>
 
       <Container>
-        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
+        <JoinRR signUpFormContent={pageContext.signUpFormContent} />
       </Container>
     </Layout>
   )

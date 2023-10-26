@@ -27,6 +27,33 @@ module.exports = {
         path: `${__dirname}/src/assets/img`,
       },
     },
+    // {
+    //   resolve: "gatsby-plugin-favicon",
+    //   options: {
+    //     logo: "./src/images/favicon.ico",
+    //     appName: "Research Review",
+    //     appDescription: "",
+    //     dir: "auto",
+    //     lang: "en-US",
+    //     background: "#fff",
+    //     theme_color: "#000",
+    //     display: "standalone",
+    //     orientation: "portrait",
+    //     start_url: "/",
+    //     version: "1.0",
+    //     logging: false,
+    //     icons: {
+    //       android: true,
+    //       appleIcon: true,
+    //       appleStartup: true,
+    //       coast: false,
+    //       favicons: true,
+    //       firefox: true,
+    //       windows: true,
+    //       yandex: false,
+    //     },
+    //   },
+    // },
     {
       resolve: "gatsby-source-apiserver",
       options: {

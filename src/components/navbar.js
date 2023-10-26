@@ -93,7 +93,7 @@ const ResearchReviewNavbar = () => {
   }
 
   return (
-    <div className="full-navbar">
+    <div className="full-navbar" id="navbar">
       <div className="top-navbar">
         <Container>
           <Row>
