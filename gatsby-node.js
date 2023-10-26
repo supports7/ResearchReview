@@ -499,7 +499,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                           advertisements: ads,
                           breadcrumbs: [
                             { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
-                            { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },
+                            // { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },
                           ],
                           tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                         },
@@ -526,7 +526,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                               breadcrumbs: [
                                 { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
                                 { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },
-                                { name: article.title, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}` },
+                                // { name: article.title, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}` },
                               ],
                               tempUrlPath: `/clinical-areas/${reviewUrlTemp}/${issue.name}/`
                             },
