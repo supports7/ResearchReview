@@ -8,7 +8,7 @@ const BreadcrumbComponent = ({ breadcrumbs }) => {
         <Breadcrumb.Item
           key={index}
           href={breadcrumb.url} // Assuming each breadcrumb item has a 'url' property
-          active={index === breadcrumbs.length - 1} // Mark the last item as active
+          //active={index === breadcrumbs.length - 1} // Mark the last item as active
         >
           {breadcrumb.name}
         </Breadcrumb.Item>
