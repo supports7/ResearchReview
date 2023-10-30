@@ -27,7 +27,7 @@ function SearchForm() {
 
   return (
     <div className="search-form">
-      <form onSubmit={handleSearchSubmit} class="navbar-serach">
+      <form onSubmit={handleSearchSubmit} className="navbar-serach">
         <Row>
           <Col xs={12}>
             <div className="search-form-input-div">

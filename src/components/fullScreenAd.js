@@ -7,6 +7,7 @@ const FullScreenAd = ({ advertisements }) => {
   const [largeAd, setLargeAd] = useState();
 
   useEffect(() => {
+    console.log("advertisements", advertisements)
     const tempLargeAdverts = filter(advertisements, { "DocType": "fullWidthAdvertisement" })
     if (tempLargeAdverts.length > 0) {
 

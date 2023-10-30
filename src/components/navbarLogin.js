@@ -149,13 +149,13 @@ function LoginForm() {
       {!loadingLogin && (
         <div>
           {!loggedIn && (
-            <form onSubmit={handleSubmit} class="navbar-login-form">
+            <form onSubmit={handleSubmit} className="navbar-login-form">
               <Row>
                 <Col className="offset-md-2 col-md-10" style={{height: '24px'}}>
                   {errorMessage}
                 </Col>
                 <Col xs={12} md={2} style={{display: 'grid'}}>
-                  <h6 style={{alignSelf: 'center', textAlign: 'end'}}>LOGIN</h6>    
+                  <h6 style={{alignSelf: 'center', textAlign: 'end', marginBottom: 0}}>LOGIN</h6>    
                 </Col>
                 <Col xs={12} md={5}>
                   <div className="form-group login-form-username-div">
@@ -191,6 +191,9 @@ function LoginForm() {
                       </button>
                     )}
                   </div>
+                </Col>
+                <Col xs={12}>
+                  <a className="float-end" href="/forgotten-password">Forgot your password?</a>
                 </Col>
               </Row>
             </form>
