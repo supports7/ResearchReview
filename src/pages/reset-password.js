@@ -3,10 +3,12 @@ import React, { useEffect, useState, useCallback } from "react"
 import { Container, Row, Col } from "react-bootstrap"
 import Layout from "../components/layout"
 import { navigate } from "gatsby";
+import Cookies from "universal-cookie";
 //import Supporters from "../components/supporters"
 // import JoinRR from "../components/JoinRR"
 
 const ResetPassword = () => {
+  const cookies = new Cookies()
   const [newPassword, setPassword] = useState("");
   const [confirmNewPassword, setConfirmPassword] = useState("");
   const [passwordResetToken, setPasswordResetToken] = useState("");
