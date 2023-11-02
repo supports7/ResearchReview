@@ -188,12 +188,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                   moduleName
                   text
                   link
-                  first_Name
-                  last_Name
-                  initials
-                  email
-                  writerImage
-                  bio
                   bannerText
                   bannerImage
                   buttonText
