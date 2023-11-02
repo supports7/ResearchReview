@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Navbar, Container, Nav, NavDropdown, Row, Col } from "react-bootstrap"
-import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
 import { Link } from "gatsby"
 import SearchForm from "./navbarSearch"
 import LoginForm from "./navbarLogin"
-
+import config from "../../config";
 // import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const config = require("../../config")
+//LOGO SELECTOR
+import logoResearchReviewAu from "../images/logos/RRAUS leader no subs.png";
+const selectLogo = (countryCode) => {
+  if (countryCode === "AU") {
+    return logoResearchReviewAu;
+  } else {
+    // Return a default logo or handle other cases
+    return ""; // Define your default logo path
+  }
+}
 
 function DesktopNavbar() {
   return (
@@ -46,6 +54,8 @@ function DesktopNavbar() {
 
 
 const ResearchReviewNavbar = () => {
+  const logoPath = selectLogo(config.countryCode);
+  
   function MobileNavbar() {
     return (
       <div className="mobile bottom-navbar">
@@ -102,7 +112,7 @@ const ResearchReviewNavbar = () => {
                 <Link className="navbar-brand" to="/">
                   <img
                     alt="research review logo"
-                    src={logoResearchReview}
+                    src={logoPath}
                     className="img-fluid" />
                 </Link>
               </div>

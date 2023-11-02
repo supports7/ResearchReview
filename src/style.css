@@ -692,6 +692,15 @@ section {
   font-style: italic;
 }
 
+.forgotten-password-link {
+  color: #1cb2a9 !important;
+  text-decoration: none;
+}
+
+.forgotten-password-link:hover {
+  text-decoration: underline;
+}
+
 .login-form-title-div a.logout-button {
   margin-left: 5px;
   text-decoration: none;

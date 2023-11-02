@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/layout";
 import SectionLine from "../components/sectionLine";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Modal, Button } from "react-bootstrap";
 import Supporters from "../components/supporters";
 import ReCAPTCHA from "react-google-recaptcha";
 import Cookies from "universal-cookie";
@@ -30,11 +30,24 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
   const [recaptchaData, setRecaptchaData] = useState();
   const recaptchaRef = React.createRef();
   const introText = he.decode(pageContext.joinRRContent.introText);
-
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState({
+    heading: 'Get Free publications straight to your inbox.',
+    text: 'Thank you for subscribing. Your account is under review, and you will receive an email from our database team within 48 hours confirming which publications you would like to subscribe to.',
+  });
 
   const handleConfirmTAndCsChange = (e) => {
     setConfirmTAndCs(e.target.value);
   };
+
+  const showSuccessMessage = () => {
+    setShowSuccessPopup(true);
+  };
+
+  const hideSuccessMessage = () => {
+    setShowSuccessPopup(false);
+  };
+
 
   const handleSubmit = async event => {
     event.preventDefault()
@@ -100,7 +113,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
             console.log("error", error);
           }
         ).then(
-          navigate('/')
+          showSuccessMessage()
         )
     }
   }
@@ -109,12 +122,11 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
     setRecaptchaData(value);
   }
   useEffect(() => {
-    //console.log(pageContext)
+    // console.log("pageContext", pageContext)
   }, [pageContext])
 
   return (
     <Layout>
-      {/* <JoinResearchReviewForm /> */}
       <section
         id="join-research-review-page"
         className="join-research-review"
@@ -330,6 +342,19 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
             </Col>
           </Row>
         </Container>
+        <Modal show={showSuccessPopup} onHide={hideSuccessMessage} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>{popupContent.heading}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{popupContent.text}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={hideSuccessMessage}>
+              Continue
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </section>
       <Container>
         <section className="join-rr-second-section">

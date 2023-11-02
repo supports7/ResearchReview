@@ -26,20 +26,18 @@ const ChangePassword = () => {
   const submitLogin = useCallback((event) => {
     setErrorMessage("");
     const userDataFromCookies = cookies.get("userData")
-    const { oldPassword, newPassword, confirmNewPassword } = document.forms[2]
-    console.log(oldPassword, newPassword, confirmNewPassword)
     event.preventDefault();
 
-    if (oldPassword.value && newPassword.value && confirmNewPassword.value && userDataFromCookies.id) {
-      if (newPassword.value != confirmNewPassword.value) {
+    if (oldPassword && newPassword && confirmNewPassword && userDataFromCookies.id) {
+      if (newPassword != confirmNewPassword) {
         setErrorMessage("New password does not match. Please try again");
         return
       }
 
       const jsonData = {
         Id: userDataFromCookies.id,
-        OldPassword: oldPassword.value,
-        NewPassword: newPassword.value,
+        OldPassword: oldPassword,
+        NewPassword: newPassword,
       }
 
 

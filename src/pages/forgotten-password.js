@@ -10,7 +10,7 @@ const ForgottenPassword = () => {
   const [confirmEmail, setConfirmEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  
+
   useEffect(() => {
 
   }, []);
@@ -26,8 +26,14 @@ const ForgottenPassword = () => {
         return
       }
 
+      const currentURL = window.location.href;
+      // Use JavaScript's substring method to get the URL before "/forgotten-password"
+      const urlBeforeSegment = currentURL.substring(0, currentURL.indexOf('/forgotten-password'));
+      console.log("pathAfterFirstSlash", urlBeforeSegment);
+      
       const jsonData = {
         Email: email,
+        SiteURL: urlBeforeSegment,
       }
 
 

@@ -1,13 +1,25 @@
 import React from "react"
 import { Navbar, Container, Nav, NavDropdown, Row, Col } from "react-bootstrap"
-import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
 import { Link } from "gatsby"
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { FaXTwitter } from 'react-icons/fa6';
+import config from "../../config";
+
+//LOGO SELECTOR
+import logoResearchReviewAu from "../images/logos/RRAUS leader no subs.png";
+const selectLogo = (countryCode) => {
+  if (countryCode === "AU") {
+    return logoResearchReviewAu;
+  } else {
+    // Return a default logo or handle other cases
+    return ""; // Define your default logo path
+  }
+}
 
 const ResearchReviewFooter = () => {
+  const logoPath = selectLogo(config.countryCode);
   return (
     <footer id="footer">
       <Container>
@@ -17,7 +29,7 @@ const ResearchReviewFooter = () => {
               <Link className="footer-brand" to="/">
                 <img 
                   alt="research review logo"
-                  src={logoResearchReview} 
+                  src={logoPath} 
                   className="img-fluid" />
               </Link>
             </div>

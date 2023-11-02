@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Row, Col } from "react-bootstrap"
+import { Row, Col, Modal, Button } from "react-bootstrap"
 import SectionLine from "./sectionLine"
 import logoResearchReview from "../images/logos/RRAUS leader no subs.png"
 //import { navigate } from "gatsby";
@@ -24,9 +24,23 @@ const JoinRR = (signUpFormContent) => {
   const [registerError, setRegisterError] = useState();
   const [recaptchaData, setRecaptchaData] = useState();
   const recaptchaRef = React.createRef();
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState({
+    heading: 'Get Free publications straight to your inbox.',
+    text: 'Thank you for subscribing. Your account is under review, and you will receive an email from our database team within 48 hours confirming which publications you would like to subscribe to.',
+  });
+  const [ locations, setLocations ] = useState();
+  const [ professions, setProfessions ] = useState();
+
 
   useEffect(() => {
-   // console.log();
+    console.log("signUpFormContent", signUpFormContent.signUpFormContent.locations)
+    if(signUpFormContent && signUpFormContent.signUpFormContent && signUpFormContent.signUpFormContent.locations){
+      setLocations(signUpFormContent.signUpFormContent.locations);
+    }
+    if(signUpFormContent && signUpFormContent.signUpFormContent && signUpFormContent.signUpFormContent.professions){
+      setProfessions(signUpFormContent.signUpFormContent.professions);
+    }
   }, [])
 
   const handleConfirmTAndCsChange = (e) => {
@@ -90,14 +104,12 @@ const JoinRR = (signUpFormContent) => {
               path: "/",
               expires: new Date(Date.now() + 8640000),
             })
-
+            showSuccessMessage()
           },
 
           error => {
             console.log("error", error);
           }
-        ).then(
-          window.location.reload()
         )
     }
   }
@@ -105,6 +117,14 @@ const JoinRR = (signUpFormContent) => {
   function onChangeRecaptcha(value) {
     setRecaptchaData(value);
   }
+
+  const showSuccessMessage = () => {
+    setShowSuccessPopup(true);
+  };
+
+  const hideSuccessMessage = () => {
+    setShowSuccessPopup(false);
+  };
 
   return (
     <section className="join-research-review-form-section">
@@ -180,7 +200,7 @@ const JoinRR = (signUpFormContent) => {
                     required
                     value={organisation}
                     onChange={e => setOrganisation(e.target.value)}
-                    ></input>
+                  ></input>
                 </div>
               </Col>
               {config.countryCode === "AU" &&
@@ -242,7 +262,7 @@ const JoinRR = (signUpFormContent) => {
                     onChange={e => setLocation(e.target.value)}
                   >
                     <option value="Select Location" className="placeholder-option">Select Location</option>
-                    {signUpFormContent && signUpFormContent.locations && signUpFormContent.locations.Children.map((locationOption, index) => (
+                    {locations && locations.Children.map((locationOption, index) => (
                       <option key={index} value={locationOption.Node}>
                         {locationOption.Node}
                       </option>
@@ -259,7 +279,7 @@ const JoinRR = (signUpFormContent) => {
                     onChange={e => setProfession(e.target.value)}
                   >
                     <option value="Select Profession" className="placeholder-option">Select Profession</option>
-                    {signUpFormContent && signUpFormContent.professions && signUpFormContent.professions.Children.map((professionOption, index) => (
+                    {professions && professions.Children.map((professionOption, index) => (
                       <option key={index} value={professionOption.Node}>
                         {professionOption.Node}
                       </option>
@@ -286,7 +306,7 @@ const JoinRR = (signUpFormContent) => {
                     name="confirmTAndCs"
                     checked={confirmTAndCs}
                     onChange={handleConfirmTAndCsChange}
-                    style={{marginRight: '10px'}}
+                    style={{ marginRight: '10px' }}
                   />
                   I have read and agree with the <a href="/terms-and-conditions">Terms and Conditions</a>
                 </label>
@@ -316,6 +336,20 @@ const JoinRR = (signUpFormContent) => {
           </div>
         </Col>
       </Row>
+
+      <Modal show={showSuccessPopup} onHide={hideSuccessMessage} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{popupContent.heading}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{popupContent.text}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideSuccessMessage}>
+            Continue
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </section>
   )
 }

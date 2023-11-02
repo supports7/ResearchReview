@@ -14,17 +14,18 @@ const ResetPassword = () => {
   const [passwordResetToken, setPasswordResetToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  
+  const [passwordResetTokenErrorMessage, setPasswordResetTokenErrorMessage] = useState("");
+
   useEffect(() => {
+    setPasswordResetTokenErrorMessage("");
     const params = new URLSearchParams(window.location.search);
     const query = params.get("passwordResetToken");
-    if(query) {
+    if (query) {
       setPasswordResetToken(query);
     } else {
-      navigate("/");
+      setPasswordResetTokenErrorMessage("Oops! It looks like the password reset link is missing or expired. Please check your email for the latest reset password link from us. If you didn't receive an email, please make sure to also check your spam or junk folder. If you continue to face issues, you can request another reset password link.");
       return;
     }
-
   }, []);
 
   const submitLogin = useCallback((event) => {
@@ -80,7 +81,7 @@ const ResetPassword = () => {
           }
         )
         .then(
-          setSuccessMessage("Success! Your request to reset your password has been received. Please check your newPassword for a message containing a link to reset your password. If you don't receive the newPassword in a few minutes, make sure to check your spam folder.")
+          setSuccessMessage("Success! Your password has been reset.")
         )
     }
     else {
@@ -97,38 +98,46 @@ const ResetPassword = () => {
             <section className="password-page-form-section">
               <Row className="justify-content-center">
                 <Col xs={6} className="password-page-form-main-div">
-                  {successMessage &&
+                  {passwordResetTokenErrorMessage ? (
                     <Col xs={12}>
-                      <div className="alert alert-success">
-                        <p>{successMessage}</p>
-                      </div>
-                    </Col>
-                  }
-                  {!successMessage &&
-                    <div>
-                      <div>
-                        <p>Please create a new password to secure your account.</p>
-                      </div>
-                      <form onSubmit={submitLogin} className="password-page-form">
-                        <Col xs={12}>
-                          <input type="password" placeholder="New Password" value={newPassword} onChange={(e) => setPassword(e.target.value)} />
-                        </Col>
-                        <Col xs={12}>
-                          <input type="password" placeholder="Confirm New Password" value={confirmNewPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                        </Col>
-                        {errorMessage &&
-                          <Col xs={12}>
-                            <div className="alert alert-danger">
-                              <p>{errorMessage}</p>
-                            </div>
-                          </Col>
-                        }
-                        <Col xs={12}>
-                          <button type="submit" className="btn btn-primary">Confirm New Password</button>
-                        </Col>
-                      </form>
+                    <div className="alert alert-danger">
+                      <p>{passwordResetTokenErrorMessage}</p>
                     </div>
-                  }
+                  </Col>
+                  ) : (<div>
+                    {successMessage &&
+                      <Col xs={12}>
+                        <div className="alert alert-success">
+                          <p>{successMessage}</p>
+                        </div>
+                      </Col>
+                    }
+                    {!successMessage &&
+                      <div>
+                        <div>
+                          <p>Please create a new password to secure your account.</p>
+                        </div>
+                        <form onSubmit={submitLogin} className="password-page-form">
+                          <Col xs={12}>
+                            <input type="password" placeholder="New Password" value={newPassword} onChange={(e) => setPassword(e.target.value)} />
+                          </Col>
+                          <Col xs={12}>
+                            <input type="password" placeholder="Confirm New Password" value={confirmNewPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                          </Col>
+                          {errorMessage &&
+                            <Col xs={12}>
+                              <div className="alert alert-danger">
+                                <p>{errorMessage}</p>
+                              </div>
+                            </Col>
+                          }
+                          <Col xs={12}>
+                            <button type="submit" className="btn btn-primary">Confirm New Password</button>
+                          </Col>
+                        </form>
+                      </div>
+                    }
+                  </div>)}
                 </Col>
               </Row>
             </section>

@@ -193,7 +193,7 @@ function LoginForm() {
                   </div>
                 </Col>
                 <Col xs={12}>
-                  <a className="float-end" href="/forgotten-password">Forgot your password?</a>
+                  <a className="forgotten-password-link float-end" href="/forgotten-password">Forgot your password?</a>
                 </Col>
               </Row>
             </form>
