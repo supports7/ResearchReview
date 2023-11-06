@@ -490,6 +490,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                           issue: issue,
                           articles: articles,
                           partnersMacroContent: partnersLogoListContent,
+                          signUpFormContent: signUpFormContent,
                           advertisements: ads,
                           breadcrumbs: [
                             { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
