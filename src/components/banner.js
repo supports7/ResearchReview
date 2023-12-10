@@ -58,9 +58,9 @@ const Banner = ({ bannerContent }) => {
 
               </div>
             </Col>
-            <Col xs={12} sm={8} md={6}>
-              <div className="banner-content">
-                {bannerContent.isHome && bannerContent.homeBannerLinks &&
+            {bannerContent.isHome && bannerContent.homeBannerLinks &&
+              <Col xs={12} sm={8} md={6}>
+                <div className="banner-content">
                   <ul className="banner-links">
                     {bannerContent.homeBannerLinks.map((homeBannerLink) => {
                       return (
@@ -75,10 +75,9 @@ const Banner = ({ bannerContent }) => {
                       )
                     })}
                   </ul>
-                }
-              </div>
-
-            </Col>
+                </div>
+              </Col>
+            }
           </Row>
         </Container>
       </Container>

@@ -540,7 +540,7 @@ button.btn {
 }
 
 section {
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
 .issue-page-top-section, .article-page-top-section {
@@ -1719,4 +1719,34 @@ color:black;
     padding: 8px;
     margin-right: 10px;
 }
-  
+
+.abbreviations-section {
+  padding-top: 30px;
+}
+
+.articles-section {
+  padding-top: 30px;
+}
+
+.articles-section .article-main-div a {
+  text-decoration: none;
+}
+
+.articles-section .article-main-div a:hover {
+  text-decoration: underline;
+}
+
+.articles-section .article-main-div .article-title p {
+  color: black !important;
+  margin-bottom: 0.5em;
+}
+
+.review-more-content div a {
+  color: black !important;
+  margin-bottom: 0.5em;
+  text-decoration: none;
+}
+
+.review-more-content div a:hover {
+  text-decoration: underline;
+}

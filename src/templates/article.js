@@ -46,12 +46,42 @@ const ArticleTemplate = ({ pageContext, location }) => {
       </div>
       <Container>
         <section className="article-page-top-section">
-          <Col xs={12} className="pb-md-5">
-            {pageContext.breadcrumbs &&
-              <BreadcrumbComponent breadcrumbs={pageContext.breadcrumbs} />
-            }
-          </Col>
           <Row>
+            <Col xs={12}>
+              {pageContext.breadcrumbs &&
+                <BreadcrumbComponent breadcrumbs={pageContext.breadcrumbs} />
+              }
+            </Col>
+            <Col lg={4} xs={12}>
+              {pageContext.otherArticles && pageContext.otherArticles.length > 0 &&
+                <div className="other-articles">
+                  <h3>In This Issue</h3>
+                  <SectionLine />
+                  {pageContext.otherArticles.map((article, index) => {
+                    if (article.id != pageContext.article.id) {
+
+                      return (
+                        <p className="other-article" key={index}>
+                          <a href={`${pageContext.tempUrlPath}${article.name}`}>{article.title}</a>
+                        </p>
+                      )
+                    }
+                  })}
+                </div>
+              }
+              <div className="abbreviations-section">
+                <h3>Abbreviations</h3>
+                <SectionLine />
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+                <p><strong>ABC</strong> Auckland Business Council</p>
+              </div>
+            </Col>
             <Col lg={8} xs={12}>
               <SectionLine />
               <h3>{pageContext.article.longTitle}</h3>
@@ -89,36 +119,14 @@ const ArticleTemplate = ({ pageContext, location }) => {
                 </div>
               }
             </Col>
-            <Col lg={4} xs={12}>
-              {/* <div className="section-ad-image">
-                <img
-                  alt="placeholder"
-                  src="https://via.placeholder.com/400x300"
-                  className="img-fluid" />
-              </div> */}
-              {pageContext.otherArticles && pageContext.otherArticles.length > 0 &&
-                <div className="other-articles">
-                  <h3>Also in this issue</h3>
-                  {pageContext.otherArticles.map((article, index) => {
-                    if (article.id != pageContext.article.id) {
 
-                      return (
-                        <p className="other-article" key={index}>
-                          <a href={`${pageContext.tempUrlPath}${article.name}`}>{article.title}</a>
-                        </p>
-                      )
-                    }
-                  })}
-                </div>
-              }
-            </Col>
             <Col xs={12}>
 
             </Col>
           </Row>
         </section>
 
-        <DoubleAd advertisements={pageContext.advertisements} />
+        {/* <DoubleAd advertisements={pageContext.advertisements} /> */}
 
         {/* <section className="section-list-area-selection">
           <Row>

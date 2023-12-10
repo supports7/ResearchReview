@@ -67,7 +67,7 @@ const ReviewTemplate = ({
               <BreadcrumbComponent tempUrlPath={`/clinical-areas/${pageContext.review.url}`} />
             </Col>
             <Col xs={12}>
-              <h2>Issues</h2>
+              <h2>Latest Issues</h2>
             </Col>
             <SectionLine />
 
@@ -103,13 +103,13 @@ const ReviewTemplate = ({
                       </Col>
                     )
                   })}
-                  {!hideShowMoreButton &&
+                  {/* {!hideShowMoreButton &&
                     <Col xs={12}>
                       <div className="full-width-button">
                         <a onClick={showMoreIssues} className="btn btn-secondary load-more-button">LOAD MORE</a>
                       </div>
                     </Col>
-                  }
+                  } */}
                 </Row>
               ) : (
                 <Row>
@@ -119,16 +119,104 @@ const ReviewTemplate = ({
             </Col>
           </Row>
         </section>
-        {pageContext.advertisements &&
+        {/* {pageContext.advertisements &&
           <DoubleAd advertisements={pageContext.advertisements} />
-        }
+        } */}
+      </Container>
+      <Container>
+        <Row>
+          <Col lg={8} xs={12} className="review-more-content">
+            <h3>More content</h3>
+            <SectionLine />
+            <div>
+              <h3>Previous Reviews</h3>
+              <hr />
+                {issuesShownOnScreen.map((issue, index) => {
+                  let reviewUrlTemp = pageContext.review.url
+                  return (
+                    <Row>
+                      <Col xs={10}>
+                        <div className="issue-main-div">
+                          <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
+                            <div className="article-title">
+                              <p>
+                                · {issue.issue1}
+                              </p>
+                            </div>
+                          </a>
+                        </div>
+                      </Col>
+                      <Col xs={2}>
+                        <a href="#">Download PDF</a>
+                      </Col>
+                    </Row>
+                  )
+                })}
+              <p><a href="/">See all</a></p>
+            </div>
+
+            <div>
+              <h3>Conference Reviews</h3>
+              <hr />
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <p><a href="/">See all</a></p>
+            </div>
+
+            <div>
+              <h3>Relevant Articles</h3>
+              <hr />
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <p><a href="/">See all</a></p>
+            </div>
+
+            <div>
+              <h3>Watch</h3>
+              <hr />
+              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
+              <p><a href="/">See all</a></p>
+            </div>
+
+            <div>
+              <h3>Related Links</h3>
+              <hr />
+              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
+              <p><a href="/">See all</a></p>
+            </div>
+          </Col>
+          
+          <Col lg={4} xs={12}>
+            <div className="join-now-section mb-5">
+              <h3>Join Now</h3>
+              <SectionLine />
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque mi sem, posuere nec auctor quis, congue non diam.</p>
+              <a className="btn btn-primary" href='/sample-reviews/'>Join Now</a>
+            </div>
+            <hr />
+          </Col>
+        </Row>
       </Container>
 
-      <Container fluid>
+      {/*<Container fluid>
         <Row>
-          {pageContext.advertisements &&
+           {pageContext.advertisements &&
             <FullScreenAd advertisements={pageContext.advertisements} />
-          }
+          } 
 
           {pageContext.podcasts && pageContext.podcasts.length > 0 &&
             <section className="home-page-connect-section">
@@ -211,9 +299,9 @@ const ReviewTemplate = ({
 
           <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
         </Row>
-      </Container>
+      </Container>*/}
       <Container>
-        <JoinRR signUpFormContent={pageContext.signUpFormContent} />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent} />  
       </Container>
     </Layout>
   )
