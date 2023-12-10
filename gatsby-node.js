@@ -362,10 +362,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               // PULL CONTENT FROM UMBRACO
               const currentReviewUmbracoContent = find(reviewsContent, { "zohoId": review.alternative_id });
               if (currentReviewUmbracoContent) {
-                podcasts = filter(currentReviewUmbracoContent.Children, { "DocType": "podcast" });
+                // Podcasts from Umbraco
+                // podcasts = filter(currentReviewUmbracoContent.Children, { "DocType": "podcast" });
                 modulesByReview = filter(currentReviewUmbracoContent.Children, { "DocType": "modules" });
                 linksByReview = filter(currentReviewUmbracoContent.Children, { "DocType": "link" });
               }
+              // Podcasts from Zoho
+              podcasts = await getPodcasts(review.alternative_id);
 
               //PHIL - Add
               let currentReviewAdvertisements = filter(allAdvertisements, { "zohoId": review.alternative_id }, []);
