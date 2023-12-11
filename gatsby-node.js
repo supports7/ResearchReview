@@ -367,8 +367,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 modulesByReview = filter(currentReviewUmbracoContent.Children, { "DocType": "modules" });
                 linksByReview = filter(currentReviewUmbracoContent.Children, { "DocType": "link" });
               }
-              // Podcasts from Zoho
-              podcasts = await getPodcasts(review.alternative_id);
 
               //PHIL - Add
               let currentReviewAdvertisements = filter(allAdvertisements, { "zohoId": review.alternative_id }, []);
@@ -383,9 +381,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               //Change all the other create pages to siteWideAdvertisements.
 
 
+              let allIssues = [];
               let issues = [];
-              issues = await getIssues(review.alternative_id);
-
+              allIssues = await getIssues(review.alternative_id);
+              // Filter isses by review_Type - "Regular Review"
+              issues = filter(allIssues, { "review_Type": "Regular Review" }, []);
+              // Filter isses by review_Type - "Podcast"
+              podcasts = filter(allIssues, { "review_Type": "Podcast" }, []);
+              
               review['writersByReview'] = await getWritersByReview(review.alternative_id);
               // double call is because this re-using the same data was causing gatsby issues
               let writersByReview = [];
@@ -450,7 +453,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 }
                 // BUILD podcast pages
                 await Promise.all(podcasts.map(async (podcast) => {
-                  let podcastUrlTemp = podcast.title.toLowerCase();
+                  let podcastUrlTemp = podcast.name.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
                   //Filter podcast ads from podcast children
                   //Swap advertisements: advertisementsContent ---> advertisements: podcastAds,

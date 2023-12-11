@@ -19,19 +19,22 @@ const PodcastDetailsTemplate = ({
   location,
   pageContext
 }) => {
-  const [videoUrl, setVideoUrl] = useState();
+  const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
    // console.log("pageContext", pageContext);
-    let tempUrl = pageContext.podcast.link;
-    let newUrl = tempUrl;
-    if (tempUrl.includes("youtu.be")) {
-      newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");
+   if(pageContext.podcast.ExternalRef) {
+     let tempUrl = pageContext.podcast.ExternalRef
+     ;
+     let newUrl = tempUrl;
+     if (tempUrl.includes("youtu.be")) {
+       newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");
+      }
+      if (tempUrl.includes("youtube.com/watch")) {
+        newUrl = tempUrl.replace("youtube.com/watch", "youtube.com/embed/watch");
+      }
+      setVideoUrl(newUrl);
     }
-    if (tempUrl.includes("youtube.com/watch")) {
-      newUrl = tempUrl.replace("youtube.com/watch", "youtube.com/embed/watch");
-    }
-    setVideoUrl(newUrl);
   }, [pageContext]);
 
   const bannerContent = {
@@ -59,7 +62,7 @@ const PodcastDetailsTemplate = ({
         <section>
           <Row>
           <Col xs={2} style={{textAlign:'center'}}>
-              {pageContext.advertisements && pageContext.advertisements.length > 0 &&
+              {/* {pageContext.advertisements && pageContext.advertisements.length > 0 &&
                 <a href={pageContext.advertisements[0].link} target="_blank" >
 
                   <img
@@ -68,7 +71,7 @@ const PodcastDetailsTemplate = ({
                     className="img-fluid featured-image"
                   />
                 </a>
-              }
+              } */}
             </Col>
             <Col xs={8}>
               <div className="podcast-embedded-video">
@@ -83,7 +86,7 @@ const PodcastDetailsTemplate = ({
               </div>
             </Col>
             <Col xs={2} style={{textAlign:'center'}}>
-              {pageContext.advertisements && pageContext.advertisements.length > 1 &&
+              {/* {pageContext.advertisements && pageContext.advertisements.length > 1 &&
                 <a href={pageContext.advertisements[1].link} target="_blank" >
 
                   <img
@@ -93,7 +96,7 @@ const PodcastDetailsTemplate = ({
 
                   />
                 </a>
-              }
+              } */}
             </Col>
           </Row>
         </section>

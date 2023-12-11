@@ -51,7 +51,7 @@ const PodcastTemplate = ({
             <Col xs={12}>
               <Row>
                 {sortedPodcasts && sortedPodcasts.map((podcast, index) => {
-                  let podcastUrlTemp = podcast.title.toLowerCase();
+                  let podcastUrlTemp = podcast.name.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
                   return (
@@ -68,8 +68,8 @@ const PodcastTemplate = ({
                             />
                           </div>
                           <div className="promoted-content-content">
-                            <h3>{podcast.title}</h3>
-                            <p>{podcast.introText}</p>
+                            <h3>{podcast.issue1}</h3>
+                            <span className="btn btn-primary">View Podcast</span>
                           </div>
                         </a>
                       </div>
