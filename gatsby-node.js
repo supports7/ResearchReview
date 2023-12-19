@@ -333,6 +333,9 @@ console.log("clinicalAreas - ", clinicalAreas)
           // Setup clinical area
           childClinicalArea.PodCasts = [];
           childClinicalArea.PodCastCount = 0;
+          childClinicalArea.ModulesCount = 0;
+          childClinicalArea.WritersCount = 0;
+          childClinicalArea.LinksCount = 0;
           // start build review section - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
           if (reviewResult.data.allZohoReviews.nodes) {
             let reviews = [...reviewResult.data.allZohoReviews.nodes];
@@ -377,6 +380,7 @@ console.log("clinicalAreas - ", clinicalAreas)
               allIssues = await getIssues(review.alternative_id);
               issues = filter(allIssues, { "review_Type": "Regular Review" }, []);
               podcasts = filter(allIssues, { "review_Type": "Podcast" }, []);
+              modulesByReview = filter(allIssues, { "review_Type": "Module" }, []);
 
               review['writersByReview'] = await getWritersByReview(review.alternative_id);
               // double call is because this re-using the same data was causing gatsby issues
@@ -479,6 +483,25 @@ console.log("clinicalAreas - ", clinicalAreas)
                   try {
                     let articles = [];
                     articles = await getArticles(issue.id);
+                    // Get PublicContent value
+                    const publicContent = issue.publicContent;
+                    // Set values to true or false
+                    let showMenu = false;
+                    let showSummary = false;
+                    let showComment = false;
+                    if(publicContent == "All") {
+                      showMenu = true;
+                      showSummary = true;
+                      showComment = true;
+                    }
+                    else if (publicContent == "Menu & Summary") {
+                      showMenu = true;
+                      showSummary = true;
+                    }
+                    else if (publicContent == "Menu Only") {
+                      showMenu = true;
+                    }
+                    // send values to issue page and article page
 
                     try {
                       console.log("createPage:Issue:", reviewUrlTemp, issue.name)
@@ -491,6 +514,9 @@ console.log("clinicalAreas - ", clinicalAreas)
                           partnersMacroContent: partnersLogoListContent,
                           signUpFormContent: signUpFormContent,
                           advertisements: ads,
+                          showMenu: showMenu,
+                          showSummary: showSummary,
+                          showComment: showComment,
                           breadcrumbs: [
                             { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
                             // { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },
@@ -517,6 +543,9 @@ console.log("clinicalAreas - ", clinicalAreas)
                               partnersMacroContent: partnersLogoListContent,
                               signUpFormContent: signUpFormContent,
                               advertisements: ads,
+                              showMenu: showMenu,
+                              showSummary: showSummary,
+                              showComment: showComment,
                               breadcrumbs: [
                                 { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
                                 { name: issue.issue1, url: `/clinical-areas/${reviewUrlTemp}/${issue.name}` },

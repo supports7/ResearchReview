@@ -17,11 +17,26 @@ const ArticleTemplate = ({ pageContext, location }) => {
   const [decryptedComment, setDecryptedComment] = useState("");
   const cookies = new Cookies();
   const siteTitle = `${pageContext.article.title}`
+  
+  
+  const [showMenu, setShowMenu] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     console.log("pageContext", pageContext)
     const encryptionKey = cookies.get('EncryptionKey');
-
+    
+    if(pageContext.showContent) {
+      setShowContent(true)
+    } 
+    if(pageContext.showSummary) {
+      setShowSummary(true)
+    } 
+    if(pageContext.showMenu) {
+      setShowMenu(true)
+    }
+    
     if (encryptionKey) {
       // Decrypt
       const tempDecryptedComment = decrypt(pageContext.article.comment, encryptionKey);
@@ -29,7 +44,11 @@ const ArticleTemplate = ({ pageContext, location }) => {
       setDecryptedComment(sanitizedHTML);
       // Show that section
       // Hide register button
+      setShowContent(true)
+      setShowSummary(true)
+      setShowMenu(true)
     }
+
   }, [pageContext, cookies])
 
   const bannerContent = {
@@ -53,7 +72,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
               }
             </Col>
             <Col lg={4} xs={12}>
-              {pageContext.otherArticles && pageContext.otherArticles.length > 0 &&
+              {showMenu && pageContext.otherArticles && pageContext.otherArticles.length > 0 &&
                 <div className="other-articles">
                   <h3>In This Issue</h3>
                   <SectionLine />
@@ -69,18 +88,20 @@ const ArticleTemplate = ({ pageContext, location }) => {
                   })}
                 </div>
               }
-              <div className="abbreviations-section">
-                <h3>Abbreviations</h3>
-                <SectionLine />
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-                <p><strong>ABC</strong> Auckland Business Council</p>
-              </div>
+              {showMenu &&
+                <div className="abbreviations-section">
+                  <h3>Abbreviations</h3>
+                  <SectionLine />
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                  <p><strong>ABC</strong> Auckland Business Council</p>
+                </div>
+              }
             </Col>
             <Col lg={8} xs={12}>
               <SectionLine />
@@ -90,7 +111,8 @@ const ArticleTemplate = ({ pageContext, location }) => {
                   <strong className="bold">Author: </strong>{pageContext.article.authors}
                 </div>
               }
-              {pageContext.article.summary2 &&
+              
+              {showSummary && pageContext.article.summary2 &&
                 <div className="article-summary">
                   <strong className="bold">Summary: </strong>{pageContext.article.summary2.includes(">") ? parse(pageContext.article.summary2) : pageContext.article.summary2}
                 </div>
