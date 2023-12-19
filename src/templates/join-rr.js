@@ -273,7 +273,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                               onChange={e => setLocation(e.target.value)}
                             >
                               <option value="Select Location" className="placeholder-option">Select Location</option>
-                              {pageContext.signUpFormContent && pageContext.signUpFormContent.locations.Children.map((locationOption, index) => (
+                              {pageContext.signUpFormContent && pageContext.signUpFormContent.locations && pageContext.signUpFormContent.locations.Children.map((locationOption, index) => (
                                 <option key={index} value={locationOption.Node}>
                                   {locationOption.Node}
                                 </option>
@@ -290,7 +290,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                               onChange={e => setProfession(e.target.value)}
                             >
                               <option value="Select Profession" className="placeholder-option">Select Profession</option>
-                              {pageContext.signUpFormContent && pageContext.signUpFormContent.professions.Children.map((professionOption, index) => (
+                              {pageContext.signUpFormContent && pageContext.signUpFormContent.professions && pageContext.signUpFormContent.professions.Children.map((professionOption, index) => (
                                 <option key={index} value={professionOption.Node}>
                                   {professionOption.Node}
                                 </option>
