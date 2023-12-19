@@ -22,10 +22,9 @@ const PodcastDetailsTemplate = ({
   const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
-   // console.log("pageContext", pageContext);
-   if(pageContext.podcast.ExternalRef) {
-     let tempUrl = pageContext.podcast.ExternalRef
-     ;
+   console.log("pageContext", pageContext);
+   if(pageContext.podcast.externalLink) {
+     let tempUrl = pageContext.podcast.externalLink;
      let newUrl = tempUrl;
      if (tempUrl.includes("youtu.be")) {
        newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");
@@ -51,10 +50,11 @@ const PodcastDetailsTemplate = ({
         <section className="home-page-connect-section">
           <Row>
             <Col xs={12}>
-              <p>{pageContext.podcast.introText}</p>
+              <div className="issue-description">
+                <SectionLine />
+                {pageContext.podcast.description &&  <p>{pageContext.podcast.description}</p>}
+              </div>
             </Col>
-            <SectionLine />
-
           </Row>
         </section>
       </Container>
@@ -82,7 +82,7 @@ const PodcastDetailsTemplate = ({
                   title={`Research Review | ${pageContext.podcast.title}`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullscreen></iframe>
+                  allowFullScreen></iframe>
               </div>
             </Col>
             <Col xs={2} style={{textAlign:'center'}}>

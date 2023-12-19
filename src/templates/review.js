@@ -14,14 +14,15 @@ import JoinRR from "../components/joinRR"
 import randomImage from "../components/randomImages";
 import FullScreenAd from "../components/fullScreenAd";
 import DoubleAd from "../components/doubleAd";
-import { find } from 'lodash';
+import { find, filter } from 'lodash';
 import BreadcrumbComponent from "../components/breadcrumbComponent";
 
 const ReviewTemplate = ({
   location,
   pageContext
 }) => {
-  const [issuesShownOnScreen, setIssuesShownOnScreen] = useState([]);
+  const [featuredIssues, setFeaturedIssues] = useState([]);
+  const [issues, setIssues] = useState([]);
   const [currentNumberOfIssuesShowing, setCurrentNumberOfIssuesShowing] = useState(0);
   const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
   const [latestPDf, setLatestPDF] = useState(false);
@@ -29,21 +30,14 @@ const ReviewTemplate = ({
   useEffect(() => {
     console.log("pageContext", pageContext);
     if (pageContext.issues) {
-      showMoreIssues();
+      setIssues(pageContext.issues);
+    }
+    if (pageContext.allIssues) {
+      const temporaryFeaturedIssues = filter(pageContext.allIssues, { 'isFeatured': true }, []);
+      setFeaturedIssues(temporaryFeaturedIssues);
       setLatestIssueForPDFDownload();
     }
   }, [pageContext]);
-
-  const showMoreIssues = () => {
-    console.log(currentNumberOfIssuesShowing, issuesShownOnScreen);
-    let numberOfIssuesToShow = currentNumberOfIssuesShowing + 3;
-    setCurrentNumberOfIssuesShowing(numberOfIssuesToShow);
-    let tempIssuesArray = pageContext.issues.slice(0, numberOfIssuesToShow);
-    setIssuesShownOnScreen(tempIssuesArray);
-    if (pageContext.issues.length <= numberOfIssuesToShow) {
-      setHideShowMoreButton(true);
-    }
-  }
 
   const setLatestIssueForPDFDownload = () => {
     const latestPDFForDownload = find(pageContext.issues, 'pdfDownloadUrl');
@@ -66,15 +60,23 @@ const ReviewTemplate = ({
             <Col xs={12} className="pb-md-5">
               <BreadcrumbComponent tempUrlPath={`/clinical-areas/${pageContext.review.url}`} />
             </Col>
+
+            <Col xs={12}>
+              <div className="issue-description">
+                <SectionLine />
+                {pageContext.review.description && <p>{pageContext.review.description}</p>}
+              </div>
+            </Col>
+
             <Col xs={12}>
               <h2>Latest Issues</h2>
             </Col>
             <SectionLine />
 
             <Col xs={12}>
-              {issuesShownOnScreen.length > 0 ? (
+              {featuredIssues && featuredIssues.length > 0 ? (
                 <Row>
-                  {issuesShownOnScreen.map((issue, index) => {
+                  {featuredIssues.map((issue, index) => {
                     let reviewUrlTemp = pageContext.review.url
                     return (
                       <Col md={4} sm={6} xs={12} key={index}>
@@ -113,7 +115,7 @@ const ReviewTemplate = ({
                 </Row>
               ) : (
                 <Row>
-                  <p>Currently, there are no issues available for this clinical area. Please <a href="/join-research-review/">register here</a> to receive notifications when new issues become available.</p>
+                  <p>Currently, there are no featured issues available for this clinical area. Please <a href="/join-research-review/">register here</a> to receive notifications when new issues become available.</p>
                 </Row>
               )}
             </Col>
@@ -131,27 +133,29 @@ const ReviewTemplate = ({
             <div>
               <h3>Previous Reviews</h3>
               <hr />
-                {issuesShownOnScreen.map((issue, index) => {
-                  let reviewUrlTemp = pageContext.review.url
-                  return (
-                    <Row>
-                      <Col xs={10}>
-                        <div className="issue-main-div">
-                          <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
-                            <div className="article-title">
-                              <p>
-                                · {issue.issue1}
-                              </p>
-                            </div>
-                          </a>
-                        </div>
-                      </Col>
+              {issues.map((issue, index) => {
+                let reviewUrlTemp = pageContext.review.url
+                return (
+                  <Row key={index}>
+                    <Col xs={10}>
+                      <div className="issue-main-div">
+                        <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
+                          <div className="article-title">
+                            <p>
+                              · {issue.issue1}
+                            </p>
+                          </div>
+                        </a>
+                      </div>
+                    </Col>
+                    {issue.pdfDownloadUrl &&
                       <Col xs={2}>
-                        <a href="#">Download PDF</a>
+                        <a href={issue.pdfDownloadUrl}>Download PDF</a>
                       </Col>
-                    </Row>
-                  )
-                })}
+                    }
+                  </Row>
+                )
+              })}
               <p><a href="/">See all</a></p>
             </div>
 
@@ -176,30 +180,34 @@ const ReviewTemplate = ({
               <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
               <p><a href="/">See all</a></p>
             </div>
+            {pageContext.podcasts && pageContext.podcasts.length > 0 &&
+              <div>
+                <h3>Watch</h3>
+                <hr />
+                {pageContext.podcasts.map((podcast, index) => {
+                  let podcastUrlTemp = pageContext.review.url
+                  const podcastName = podcast.name.toLowerCase();
+                  podcastUrlTemp = podcastUrlTemp + "/" + podcastName;
+                  return (
+                    <a key={index} href={`/watch/${podcastUrlTemp}`}><p>{podcast.issue1}</p></a>
+                  )
+                })}
+                <p><a href="/">See all</a></p>
+              </div>
+            }
 
-            <div>
-              <h3>Watch</h3>
-              <hr />
-              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Watch DATA</p></a>
-              <p><a href="/">See all</a></p>
-            </div>
-
-            <div>
-              <h3>Related Links</h3>
-              <hr />
-              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Related Links DATA</p></a>
-              <p><a href="/">See all</a></p>
-            </div>
+            {pageContext.linksByReview && pageContext.linksByReview.length > 0 &&
+              <div>
+                <h3>Related Links</h3>
+                <hr />
+                {pageContext.linksByReview.map((link, index) => (
+                  <a key={index} href={link.url}><p>{link.title}</p></a>
+                ))}
+                <p><a href="/">See all</a></p>
+              </div>
+            }
           </Col>
-          
+
           <Col lg={4} xs={12}>
             <div className="join-now-section mb-5">
               <h3>Join Now</h3>
@@ -301,7 +309,7 @@ const ReviewTemplate = ({
         </Row>
       </Container>*/}
       <Container>
-        <JoinRR signUpFormContent={pageContext.signUpFormContent} />  
+        <JoinRR signUpFormContent={pageContext.signUpFormContent} />
       </Container>
     </Layout>
   )

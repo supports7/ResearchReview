@@ -59,7 +59,7 @@ module.exports = {
       options: {
         // Type prefix of entities from server
         typePrefix: "zoho__",
-        url: `https://researchreview.dev.s05.system7.co.nz/api/clinicalAreas`,
+        url: `https://researchreview.dev.s05.system7.co.nz/api/clinicalareas`,
         method: "get",
         headers: {
           "Content-Type": "application/json",
