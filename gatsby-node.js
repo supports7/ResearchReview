@@ -377,7 +377,6 @@ console.log("clinicalAreas - ", clinicalAreas)
               allIssues = await getIssues(review.alternative_id);
               issues = filter(allIssues, { "review_Type": "Regular Review" }, []);
               podcasts = filter(allIssues, { "review_Type": "Podcast" }, []);
-              speakerSeries = filter(allIssues, { "review_Type": "Speaker Series" }, []);
 
               review['writersByReview'] = await getWritersByReview(review.alternative_id);
               // double call is because this re-using the same data was causing gatsby issues
