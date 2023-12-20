@@ -26,6 +26,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const podcastsTreeTemp = path.resolve(`./src/templates/podcasts-tree.js`)
   const writerTemp = path.resolve(`./src/templates/writer.js`)
   const issueTemp = path.resolve(`./src/templates/issue.js`)
+  const seeAllIssuesTemp = path.resolve(`./src/templates/see-all-issues.js`)
   const articleTemp = path.resolve(`./src/templates/article.js`)
   const linksTemp = path.resolve(`./src/templates/links.js`)
   const modulesTemp = path.resolve(`./src/templates/modules.js`)
@@ -375,13 +376,23 @@ console.log("clinicalAreas - ", clinicalAreas)
               let issues = [];
               let podcasts = [];
               let speakerSeries = [];
+              let conferenceReviews = [];
+              let practiceReviews = [];
 
               // Filter isses by review_Type
               allIssues = await getIssues(review.alternative_id);
               issues = filter(allIssues, { "review_Type": "Regular Review" }, []);
               podcasts = filter(allIssues, { "review_Type": "Podcast" }, []);
               modulesByReview = filter(allIssues, { "review_Type": "Module" }, []);
-
+              conferenceReviews = filter(allIssues, { "review_Type": "Conference Review" }, []);
+              const relevantArticlesIssues = filter(allIssues, function(issue) {
+                if (issue.review_Type == "Conference Review" || issue.review_Type == "Regular Review" || issue.review_Type == "Podcast") {
+                  return false;
+                }
+                else {
+                  return true;
+                }
+              });
               review['writersByReview'] = await getWritersByReview(review.alternative_id);
               // double call is because this re-using the same data was causing gatsby issues
               let writersByReview = [];
@@ -419,6 +430,61 @@ console.log("clinicalAreas - ", clinicalAreas)
                 })
               } catch (ex) {
                 console.log("Error bulding review page: ", reviewUrlTemp, ex);
+              }
+              if(issues) {
+                console.log("createPage:allIssues:", reviewUrlTemp)
+                const title = "All " + review.name + " Issues"
+                createPage({
+                  path: `/clinical-areas/${reviewUrlTemp}/all-issues`,
+                  component: seeAllIssuesTemp,
+                  context: {
+                    title: title,
+                    review: review,
+                    issues: issues,
+                    advertisements: ads,
+                    issueUrl: `/clinical-areas/${reviewUrlTemp}/`,
+                    partnersMacroContent: partnersLogoListContent,
+                    breadcrumbs: [
+                      { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
+                    ],
+                  },
+                })
+              }
+              if(conferenceReviews) {
+                console.log("createPage:allIssues:", reviewUrlTemp)
+                const title = "All " + review.name + " Conference Reviews"
+                createPage({
+                  path: `/clinical-areas/${reviewUrlTemp}/all-conference-reviews`,
+                  component: seeAllIssuesTemp,
+                  context: {
+                    title: title,
+                    review: review,
+                    issues: conferenceReviews,
+                    advertisements: ads,
+                    partnersMacroContent: partnersLogoListContent,
+                    breadcrumbs: [
+                      { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
+                    ],
+                  },
+                })
+              }
+              if(relevantArticlesIssues) {
+                console.log("createPage:allIssues:", reviewUrlTemp)
+                const title = "All " + review.name + " Relevant Articles"
+                createPage({
+                  path: `/clinical-areas/${reviewUrlTemp}/all-relevant-articles`,
+                  component: seeAllIssuesTemp,
+                  context: {
+                    title: title,
+                    review: review,
+                    issues: relevantArticlesIssues,
+                    advertisements: ads,
+                    partnersMacroContent: partnersLogoListContent,
+                    breadcrumbs: [
+                      { name: review.name, url: `/clinical-areas/${reviewUrlTemp}` },
+                    ],
+                  },
+                })
               }
               //Check if any podcasts related to this review
               if (podcasts) {

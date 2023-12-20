@@ -174,7 +174,7 @@ const ReviewTemplate = ({
                     </Row>
                   )
                 })}
-                <p><a href="/">See all</a></p>
+                <p><a href={`/clinical-areas/${pageContext.review.url}/all-issues`}>See all</a></p>
               </div>
             }
 
@@ -194,7 +194,7 @@ const ReviewTemplate = ({
                     </a>
                   )
                 })}
-                <p><a href="/">See all</a></p>
+                <p><a href={`/clinical-areas/${pageContext.review.url}/all-conference-reviews`}>See all</a></p>
               </div>
             }
 
@@ -214,7 +214,7 @@ const ReviewTemplate = ({
                     </a>
                   )
                 })}
-                <p><a href="/">See all</a></p>
+                <p><a href={`/clinical-areas/${pageContext.review.url}/all-relevant-articles`}>See all</a></p>
               </div>
             }
 
@@ -236,7 +236,7 @@ const ReviewTemplate = ({
                     </a>
                   )
                 })}
-                <p><a href="/">See all</a></p>
+                <p><a href={`/watch/${pageContext.review.url}/`}>See all</a></p>
               </div>
             }
 
@@ -253,7 +253,7 @@ const ReviewTemplate = ({
                     </div>
                   </a>
                 ))}
-                <p><a href="/">See all</a></p>
+                <p><a href={`/links/${pageContext.review.url}/`}>See all</a></p>
               </div>
             }
           </Col>
