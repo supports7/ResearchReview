@@ -16,10 +16,10 @@ const SampleReviewsTemplate = ({
 	}, [pageContext]);
 
 	const bannerContent = {
-		bannerImage: pageContext.sampleReviews.bannerImage,
-		bannerText: pageContext.sampleReviews.bannerText,
-		buttonLink: pageContext.sampleReviews.buttonLink,
-		buttonText: pageContext.sampleReviews.buttonText,
+		bannerImage: pageContext.content.bannerImage,
+		bannerText: pageContext.content.bannerText,
+		buttonLink: pageContext.content.buttonLink,
+		buttonText: pageContext.content.buttonText,
 	};
 
 	return (
