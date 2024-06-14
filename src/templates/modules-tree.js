@@ -25,7 +25,7 @@ const ModulesTreeTemplate = ({ pageContext, location }) => {
   const introTextRight = he.decode(pageContext.modulesContent.introTextRight);
 
   useEffect(() => {
-   console.log("pageContext", pageContext);
+   // console.log("pageContext", pageContext);
   }, [])
 
   const TopLevelClinicalArea = ({ clinicalArea, index }) => {

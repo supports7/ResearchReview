@@ -1,3 +1,12 @@
+KEY PAGES
+ - /config.js           - site settings, including Country
+ - /gatsby-config.js    - ALL API queries used to load initial data
+ - /gatsby-node.js      - builds pages
+
+ HELPFUL API TEST CALLS
+ - Review Issues: https://researchreview.dev.s05.system7.co.nz/api/reviews/4956793000007001123/issues
+- Issue Sections: https://researchreview.dev.s05.system7.co.nz/api/issues/4956793000004690139/sections
+
 Great explination of the project structure.
 https://www.gatsbyjs.com/docs/reference/gatsby-project-structure/
 

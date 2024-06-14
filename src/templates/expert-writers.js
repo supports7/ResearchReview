@@ -27,7 +27,7 @@ const ExpertWritersTemplate = ({ pageContext, location }) => {
   const introTextRight = he.decode(pageContext.content.introTextRight);
 
   useEffect(() => {
-   // console.log("pageContext", pageContext);
+   console.log("pageContext", pageContext);
     //const writersFromId = find(pageContext.testClinicalAreas, { "alternative_id": "4956793000000450112" });
     //console.log("writers", pageContext.allWritersByReview);
   }, [])

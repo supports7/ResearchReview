@@ -43,6 +43,8 @@ const SubscriptionsTemplate = ({ pageContext, location }) => {
       navigate("/");
       return;
     }
+    console.log("userDataFromCookies:", userDataFromCookies);
+    
     if (userDataFromCookies && userDataFromCookies.subscriptions) {
       console.log("userDataFromCookies:", userDataFromCookies.subscriptions);
       //Scan custom data for IDs then add to list

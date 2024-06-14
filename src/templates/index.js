@@ -18,33 +18,33 @@ const Index = ({ pageContext }) => {
   const [expertWebinars, setExpertWebinars] = useState([])
   useEffect(() => {
     //console.log(pageContext);
-    if(pageContext.homeContent.Children){
-      const homeBannerLinksFromHomeContent = filter(pageContext.homeContent.Children, { "DocType": "homeBannerLink" });
-      const expertWebinarsFromHomeContent = filter(pageContext.homeContent.Children, { "DocType": "homeExpertWebinars" });
+    if(pageContext.content.Children){
+      const homeBannerLinksFromHomeContent = filter(pageContext.content.Children, { "DocType": "homeBannerLink" });
+      const expertWebinarsFromHomeContent = filter(pageContext.content.Children, { "DocType": "homeExpertWebinars" });
       setHomeBannerLinks(homeBannerLinksFromHomeContent)
       setExpertWebinars(expertWebinarsFromHomeContent)
     }
   }, [])
 
   const bannerContent = {
-    bannerImage: pageContext.homeContent.bannerImage,
-    bannerText: pageContext.homeContent.bannerText,
-    buttonLink: pageContext.homeContent.buttonLink,
-    buttonText: pageContext.homeContent.buttonText,
+    bannerImage: pageContext.content.bannerImage,
+    bannerText: pageContext.content.bannerText,
+    buttonLink: pageContext.content.buttonLink,
+    buttonText: pageContext.content.buttonText,
     isHome:true,
     bannerHeight:"600px",
     homeBannerLinks: homeBannerLinks,
   };
 
-  const clinicalAreasText = he.decode(pageContext.homeContent.clinicalAreasText);
-  const signUpText = he.decode(pageContext.homeContent.signUpText);
-  const aboutTextLeftSide = he.decode(pageContext.homeContent.aboutTextLeftSide);
-  const aboutTextRightSide = he.decode(pageContext.homeContent.aboutTextRightSide);
+  const clinicalAreasText = he.decode(pageContext.content.clinicalAreasText);
+  const signUpText = he.decode(pageContext.content.signUpText);
+  const aboutTextLeftSide = he.decode(pageContext.content.aboutTextLeftSide);
+  const aboutTextRightSide = he.decode(pageContext.content.aboutTextRightSide);
 
   return (
     <Layout>
       <Banner bannerContent={bannerContent} />
-      {/* <Banner name={pageContext.homeContent.bannerHeading} links={links} bannerImage={bannerImage} /> */}
+      {/* <Banner name={pageContext.content.bannerHeading} links={links} bannerImage={bannerImage} /> */}
 
       <Container>
         {pageContext.featuredArticle &&
@@ -123,7 +123,7 @@ const Index = ({ pageContext }) => {
                   />
                 </div>
                 <div className="connect-section-content">
-                  <h3>{pageContext.homeContent.expertWebinarsTitle}</h3>
+                  <h3>{pageContext.content.expertWebinarsTitle}</h3>
                   <div className="latest-videos">
                     {expertWebinars && expertWebinars.map((podcast) => {
                       return (

@@ -24,14 +24,14 @@ const ModulesTemplate = ({
   //const [loadingLogin, setLoadingLogin] = useState(true);
 
   useEffect(() => {
-    console.log("pageContext", pageContext);
+   // console.log("pageContext", pageContext);
 
     //setLoadingLogin(true);
     const encryptionKey = cookies.get("EncryptionKey")
     if (encryptionKey) {
+      setLoggedIn(true);
     }
-    setLoggedIn(true);
-    // setLoadingLogin(false);
+   // setLoadingLogin(false);
   }, []);
 
   const bannerContent = {
@@ -45,7 +45,7 @@ const ModulesTemplate = ({
     <Layout>
       <Banner bannerContent={bannerContent} />
       <Container>
-        <section className="home-page-about-section pb-0">
+        <section className="home-page-about-section">
           <Row>
             <Col xs={12}>
               <h2>Modules</h2>
@@ -58,25 +58,31 @@ const ModulesTemplate = ({
           <Row>
             {loggedIn ?
               <div>
-                {pageContext.modules && pageContext.modules.length > 0 &&
+                {pageContext.modules.Children &&
                   <div>
-                    {pageContext.modules.map((module, index) => {
-                      return (
-                        <Col key={index} xs={12}>
-                          <div className="module">
-                            <a href={module.pdfDownloadUr} target="_blank" rel="noreferrer">
-                              <Row>
-                                <Col md={12} xs={12}>
-                                  <h3>{module.issue1}</h3>
-                                  <p>{module.description}</p>
-                                </Col>
-                              </Row>
-                            </a>
-                          </div>
-                        </Col>
-                      )
-                    })}
+                    <Col xs={12}>
+                      <h2>All Modules</h2>
+                    </Col>
+                    <SectionLine />
                   </div>
+                }
+                {pageContext.modules &&
+                  pageContext.modules.map((module, index) => {
+                    return (
+                      <Col key={index} xs={12}>
+                        <div className="module">
+                          <a href={module.link} target="_blank" rel="noreferrer">
+                            <Row>
+                              <Col md={12} xs={12}>
+                                <h3>{module.moduleName}</h3>
+                                <p>{module.text}</p>
+                              </Col>
+                            </Row>
+                          </a>
+                        </div>
+                      </Col>
+                    )
+                  })
                 }
               </div>
               :
@@ -96,7 +102,7 @@ const ModulesTemplate = ({
         </Row>
       </Container>
       <Container>
-        <JoinRR signUpFormContent={pageContext.signUpFormContent} />
+        <JoinRR signUpFormContent={pageContext.signUpFormContent}/>
       </Container>
     </Layout>
   )

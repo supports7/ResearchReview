@@ -59,14 +59,14 @@ module.exports = {
       options: {
         // Type prefix of entities from server
         typePrefix: "zoho__",
-        url: `https://researchreview.dev.s05.system7.co.nz/api/clinicalareas`,
+        url: `https://researchreview.dev.s05.system7.co.nz/api/clinicalareagroups`,
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          // "Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
-        name: `ClinicalAreas`,
+        name: `ClinicalAreaGroups`,
         verboseOutput: true, // For debugging purposes
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }
@@ -80,8 +80,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
         name: `Writers`,
         verboseOutput: true, // For debugging purposes
@@ -93,14 +93,14 @@ module.exports = {
       options: {
         // Type prefix of entities from server
         typePrefix: "zoho__",
-        url: `https://researchreview.dev.s05.system7.co.nz/api/reviews`,
+        url: `https://researchreview.dev.s05.system7.co.nz/api/clinicalareas`,
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          // "Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
-        name: `Reviews`,
+        name: `ClinicalAreas`,
         verboseOutput: true, // For debugging purposes
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }
@@ -114,7 +114,7 @@ module.exports = {
     //     method: "get",
     //     headers: {
     //       "Content-Type": "application/json",
-    //       //"Country": config.countryCode,
+    //       //"Country": config.country,
     //       "Country": "Australia",
     //     },
     //     name: `FeaturedArticle`,
@@ -149,8 +149,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
         name: `Modules`,
         verboseOutput: true, // For debugging purposes
@@ -166,8 +166,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
         name: `Partners`,
         verboseOutput: true, // For debugging purposes
@@ -183,8 +183,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
         name: `Home`,
         verboseOutput: true, // For debugging purposes
@@ -200,8 +200,8 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
         name: `Join`,
         verboseOutput: true, // For debugging purposes
@@ -217,10 +217,44 @@ module.exports = {
         method: "get",
         headers: {
           "Content-Type": "application/json",
-          //"Country": config.countryCode,
-          "Country": "Australia",
+          "Country": config.country,
+          // "Country": "Australia",
         },
         name: `Advertisements`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/countries/${config.country}/locations`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.country,
+          // "Country": "Australia",
+        },
+        name: `Locations`,
+        verboseOutput: true, // For debugging purposes
+        skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
+      }
+    },
+    {
+      resolve: "gatsby-source-apiserver",
+      options: {
+        // Type prefix of entities from server
+        typePrefix: "zoho__",
+        url: `https://researchreview.dev.s05.system7.co.nz/api/countries/${config.country}/professions`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Country": config.country,
+          // "Country": "Australia",
+        },
+        name: `Professions`,
         verboseOutput: true, // For debugging purposes
         skipCreateNode: false, // skip import to graphQL, only use if localSave is all you want
       }
@@ -235,7 +269,7 @@ module.exports = {
     //     ]
     //   },
     //   headers: {
-    //     "Country": `${config.countryCode}`
+    //     "Country": `${config.country}`
     //   },
     // },
     {

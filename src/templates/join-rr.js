@@ -9,16 +9,20 @@ import DoubleAd from "../components/doubleAd";
 import FullScreenAd from "../components/fullScreenAd";
 import config from "../../config";
 import { navigate } from "gatsby";
+import { find } from 'lodash';
 import he from 'he';
 
 const JoinResearchReviewTemplate = ({ pageContext }) => {
+  console.log("pageContext", pageContext);
   const cookies = new Cookies()
   //const siteTitle = `Join Research Review`
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
-  const [profession, setProfession] = useState();
-  const [location, setLocation] = useState();
+  const [profession, setProfession] = useState("");
+  const [subProfession, setSubProfession] = useState("");
+  const [subProfessionArray, setSubProfessionArray] = useState([]);
+  const [location, setLocation] = useState("");
   const [registerPassword, setRegisterPassword] = useState();
   const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState();
   const [organisation, setOrganisation] = useState('');
@@ -29,7 +33,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
   const [registerError, setRegisterError] = useState();
   const [recaptchaData, setRecaptchaData] = useState();
   const recaptchaRef = React.createRef();
-  const introText = he.decode(pageContext.joinRRContent.introText);
+  const introText = he.decode(pageContext.content.introText);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [popupContent, setPopupContent] = useState({
     heading: 'Get Free publications straight to your inbox.',
@@ -47,7 +51,12 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
   const hideSuccessMessage = () => {
     setShowSuccessPopup(false);
   };
-
+  
+  const handleProfessionChange = (e) => {
+    setProfession(e.target.value);
+    const selectedProfession = find(pageContext.signUpFormContent.professions, { name: e.target.value });
+    setSubProfessionArray(selectedProfession.sub_Specialties);
+  };
 
   const handleSubmit = async event => {
     event.preventDefault()
@@ -71,19 +80,28 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
         setRegisterError("reCAPTCHA not complete.")
         return;
       }
+      if(profession == "") {
+        setRegisterError("Please select your profession")
+        return
+      }
+      const customData = {
+        AHPRANumber: ahpraNumber,
+        Phone: phoneNumber,
+      };
+      const customDataJSON = JSON.stringify(customData);
+
       const jsonData = {
         First_Name: firstName,
         Last_Name: lastName,
         Email: email,
         Password_Hash: registerPassword,
         Health_Professional: healthProfessional,
-        Custom_Data: {
-          Location: location,
-          AHPRANumber: ahpraNumber
-        },
+        Custom_Data: customDataJSON,
         Profession: profession,
-        Phone: phoneNumber,
+        Sub_Specialty: subProfession,
         Organisation: organisation,
+        Country_of_Practice: config.country,
+        Location: location,
       }
 
       fetch(`https://researchreview.dev.s05.system7.co.nz/api/users/register`, {
@@ -131,7 +149,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
         id="join-research-review-page"
         className="join-research-review"
         style={{
-          backgroundImage: `url('${pageContext.joinRRContent.bannerImage}')`,
+          backgroundImage: `url('${pageContext.content.bannerImage}')`,
           height: "800px",
           backgroundSize: "cover",
         }}
@@ -195,7 +213,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                             <input
                               type="text"
                               name="phoneNumber"
-                              placeholder="Home/Work Phone Number *"
+                              placeholder="Home/Work Phone Number"
                               required
                               value={phoneNumber}
                               onChange={e => setPhoneNumber(e.target.value)}
@@ -207,7 +225,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                             <input
                               type="text"
                               name="organisation"
-                              placeholder="Organisation *"
+                              placeholder="Organisation"
                               required
                               value={organisation}
                               onChange={e => setOrganisation(e.target.value)}
@@ -233,7 +251,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                             <input
                               type="password"
                               name="registerPassword"
-                              placeholder="Password"
+                              placeholder="Password *"
                               required
                               value={registerPassword}
                               onChange={e => setRegisterPassword(e.target.value)}
@@ -245,7 +263,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                             <input
                               type="password"
                               name="registerPasswordConfirm"
-                              placeholder="Confirm Password"
+                              placeholder="Confirm Password *"
                               required
                               value={registerPasswordConfirm}
                               onChange={e => setRegisterPasswordConfirm(e.target.value)}
@@ -273,9 +291,9 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                               onChange={e => setLocation(e.target.value)}
                             >
                               <option value="Select Location" className="placeholder-option">Select Location</option>
-                              {pageContext.signUpFormContent && pageContext.signUpFormContent.locations && pageContext.signUpFormContent.locations.Children.map((locationOption, index) => (
-                                <option key={index} value={locationOption.Node}>
-                                  {locationOption.Node}
+                              {pageContext.signUpFormContent && pageContext.signUpFormContent.locations.locations.map((locationOption, index) => (
+                                <option key={index} value={locationOption}>
+                                  {locationOption}
                                 </option>
                               ))}
                             </select>
@@ -287,12 +305,29 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                               name="profession"
                               required
                               value={profession}
-                              onChange={e => setProfession(e.target.value)}
+                              onChange={e => handleProfessionChange(e)}
                             >
                               <option value="Select Profession" className="placeholder-option">Select Profession</option>
-                              {pageContext.signUpFormContent && pageContext.signUpFormContent.professions && pageContext.signUpFormContent.professions.Children.map((professionOption, index) => (
-                                <option key={index} value={professionOption.Node}>
-                                  {professionOption.Node}
+                              {pageContext.signUpFormContent && pageContext.signUpFormContent.professions.map((professionOption, index) => (
+                                <option key={index} value={professionOption.name}>
+                                  {professionOption.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </Col>
+                        <Col xs={12} md={6}>
+                          <div className="form-group form-profession-div">
+                            <select
+                              name="subProfession"
+                              required
+                              value={subProfession}
+                              onChange={e => setSubProfession(e.target.value)}
+                            >
+                              <option value="Select a Sub Profession" className="placeholder-option">Select a Sub Profession</option>
+                              {subProfessionArray && subProfessionArray.map((subProfessionOption, index) => (
+                                <option key={index} value={subProfessionOption}>
+                                  {subProfessionOption}
                                 </option>
                               ))}
                             </select>
@@ -363,7 +398,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
               <div className="join-rr-left-side">
                 <img
                   alt="placeholder"
-                  src={pageContext.joinRRContent.introImage}
+                  src={pageContext.content.introImage}
                   className="img-fluid"
                 />
               </div>
@@ -376,13 +411,13 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
             </Col>
           </Row>
         </section>
-        {pageContext.joinRRContent.Children &&
+        {pageContext.content.Children &&
           <section className="join-rr-promoted-content">
             <Row>
               <SectionLine />
               <Col xs={12}>
                 <Row>
-                  {pageContext.joinRRContent.Children.map((service) => {
+                  {pageContext.content.Children.map((service) => {
                     return (
                       <Col md={4} sm={6} xs={12}>
                         <div className="promoted-content">
@@ -406,69 +441,8 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
                       </Col>
                     )
                   })}
-                  {/* <Col md={4} sm={6} xs={12}>
-                    <div className="promoted-content">
-                      <div className="promoted-content-image">
-                        <img
-                          alt="placeholder"
-                          src={JoinRR2}
-                          className="img-fluid"
-                        />
-                      </div>
-                      <div className="promoted-content-content">
-                        <h3>{pageContext.Children.podcastsTitle}</h3>
-                        <p>
-                          {pageContext.Children.podcastsText}
-                        </p>
-                        <a href="/podcasts" className="btn btn-primary">
-                          See all
-                        </a>
-                      </div>
-                    </div>
-                  </Col>
-
-                  <Col md={4} sm={6} xs={12}>
-                    <div className="promoted-content">
-                      <div className="promoted-content-image">
-                        <img
-                          alt="placeholder"
-                          src={pageContext.joinRRContent.introImage}
-                          className="img-fluid"
-                        />
-                      </div>
-                      <div className="promoted-content-content">
-                        <h3>{pageContext.content[0].speakerEventsTitle}</h3>
-                        <p>
-                          {pageContext.content[0].speakerEventsText}
-                        </p>
-                      </div>
-                    </div>
-                  </Col>
-
-                  <Col md={4} sm={6} xs={12}>
-                    <div className="promoted-content">
-                      <div className="promoted-content-image">
-                        <img
-                          alt="placeholder"
-                          src={JoinRR4}
-                          className="img-fluid"
-                        />
-                      </div>
-                      <div className="promoted-content-content">
-                        <h3>{pageContext.content[0].productReviewsTitle}</h3>
-                        <p>
-                          {pageContext.content[0].productReviewsText}
-                        </p>
-                      </div>
-                    </div>
-                  </Col> */}
                 </Row>
               </Col>
-              {/* {pageContext.clinicalAreas.map((clinicalArea, index) => (
-                <Col xs={3} key={index}>
-                <p>{clinicalArea.node.name}</p>
-                </Col>
-                ))} */}
             </Row>
           </section>
         }

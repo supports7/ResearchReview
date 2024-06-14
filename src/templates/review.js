@@ -23,9 +23,6 @@ const ReviewTemplate = ({
 }) => {
   const [featuredIssues, setFeaturedIssues] = useState([]);
   const [issues, setIssues] = useState([]);
-  const [conferenceReviews, setConferenceReviews] = useState([]);
-  const [relevantReviews, setRelevantReviews] = useState([]);
-  const [showMoreContent, setShowMoreContent] = useState(false);
   const [currentNumberOfIssuesShowing, setCurrentNumberOfIssuesShowing] = useState(0);
   const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
   const [latestPDf, setLatestPDF] = useState(false);
@@ -36,26 +33,10 @@ const ReviewTemplate = ({
       setIssues(pageContext.issues);
     }
     if (pageContext.allIssues) {
-      if (pageContext.allIssues.length > 0) {
-        setShowMoreContent(true);
-      }
       const temporaryFeaturedIssues = filter(pageContext.allIssues, { 'isFeatured': true }, []);
       setFeaturedIssues(temporaryFeaturedIssues);
       setLatestIssueForPDFDownload();
-      const conferenceReviewIssues = filter(pageContext.allIssues, { 'review_Type': "Conference Review" }, []);
-      setConferenceReviews(conferenceReviewIssues);
-      // const relevantReviewsIssues = filter(pageContext.allIssues, { 'review_Type': "Conference Review" }, []);
-      const relevantReviewsIssues = pageContext.allIssues.filter(issue => {
-        if (issue.review_Type == "Conference Review" || issue.review_Type == "Regular Review" || issue.review_Type == "Podcast") {
-          return false;
-        }
-        else {
-          return true;
-        }
-      });
-      setRelevantReviews(relevantReviewsIssues);
     }
-
   }, [pageContext]);
 
   const setLatestIssueForPDFDownload = () => {
@@ -65,7 +46,7 @@ const ReviewTemplate = ({
 
   const bannerContent = {
     bannerImage: bannerImage,
-    bannerText: pageContext.review.name,
+    bannerText: pageContext.clinicalArea.name,
     buttonLink: latestPDf?.pdfDownloadUrl,
     buttonText: "Download Latest Issue",
   };
@@ -77,58 +58,61 @@ const ReviewTemplate = ({
         <section className="home-page-connect-section">
           <Row>
             <Col xs={12} className="pb-md-5">
-              <BreadcrumbComponent tempUrlPath={`/clinical-areas/${pageContext.review.url}`} />
+              <BreadcrumbComponent tempUrlPath={`/clinical-areas/${pageContext.clinicalArea.url}`} />
             </Col>
 
             <Col xs={12}>
               <div className="issue-description">
-                {pageContext.review.description &&
-                  <div>
-                    <SectionLine />
-                    <p>{pageContext.review.description}</p>
-                  </div>
-                }
+                <SectionLine />
+                {pageContext.clinicalArea.description && <p>{pageContext.clinicalArea.description}</p>}
               </div>
             </Col>
 
+            <Col xs={12}>
+              <h2>Latest Issues</h2>
+            </Col>
+            <SectionLine />
 
             <Col xs={12}>
               {featuredIssues && featuredIssues.length > 0 ? (
-                <Col xs={12}>
-                  <h2>Latest Issues</h2>
-                  <SectionLine />
-                  <Row>
-                    {featuredIssues.map((issue, index) => {
-                      let reviewUrlTemp = pageContext.review.url
-                      return (
-                        <Col md={4} sm={6} xs={12} key={index}>
-                          <div className="promoted-content">
-                            <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
-                              <div className="promoted-content-image">
-                                <img
-                                  alt="medical practice"
-                                  src={randomImage(index)}
-                                  className="img-fluid"
-                                  width="400"
-                                  height="250"
-                                />
-                              </div>
-                              <div className="promoted-content-content">
-                                <h3>{issue.issue1}</h3>
-                                {issue.issue_No &&
-                                  <p>
-                                    Issue No: {issue.issue_No}
-                                  </p>
-                                }
-                                <span className="btn btn-primary" href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>Read More</span>
-                              </div>
-                            </a>
-                          </div>
-                        </Col>
-                      )
-                    })}
-                  </Row>
-                </Col>
+                <Row>
+                  {featuredIssues.map((issue, index) => {
+                    let reviewUrlTemp = pageContext.clinicalArea.url
+                    return (
+                      <Col md={4} sm={6} xs={12} key={index}>
+                        <div className="promoted-content">
+                          <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
+                            <div className="promoted-content-image">
+                              <img
+                                alt="medical practice"
+                                src={randomImage(index)}
+                                className="img-fluid"
+                                width="400"
+                                height="250"
+                              />
+                            </div>
+                            <div className="promoted-content-content">
+                              <h3>{issue.issue1}</h3>
+                              {issue.issue_No &&
+                                <p>
+                                  Issue No: {issue.issue_No}
+                                </p>
+                              }
+                              <span className="btn btn-primary" href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>Read More</span>
+                            </div>
+                          </a>
+                        </div>
+                      </Col>
+                    )
+                  })}
+                  {/* {!hideShowMoreButton &&
+                    <Col xs={12}>
+                      <div className="full-width-button">
+                        <a onClick={showMoreIssues} className="btn btn-secondary load-more-button">LOAD MORE</a>
+                      </div>
+                    </Col>
+                  } */}
+                </Row>
               ) : (
                 <Row>
                   <p>Currently, there are no featured issues available for this clinical area. Please <a href="/join-research-review/">register here</a> to receive notifications when new issues become available.</p>
@@ -137,106 +121,78 @@ const ReviewTemplate = ({
             </Col>
           </Row>
         </section>
-      </Container >
+        {/* {pageContext.advertisements &&
+          <DoubleAd advertisements={pageContext.advertisements} />
+        } */}
+      </Container>
       <Container>
         <Row>
           <Col lg={8} xs={12} className="review-more-content">
-            {showMoreContent &&
-              <div>
-                <h3>More content</h3>
-                <SectionLine />
-              </div>
-            }
-            {issues && issues.length > 0 &&
-              <div>
-                <h3>Previous Reviews</h3>
-                <hr />
-                {issues.map((issue, index) => {
-                  let reviewUrlTemp = pageContext.review.url
-                  return (
-                    <Row key={index}>
-                      <Col xs={10}>
-                        <div className="issue-main-div">
-                          <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
-                            <div className="article-title">
-                              <p>
-                                · {issue.issue1}
-                              </p>
-                            </div>
-                          </a>
-                        </div>
+            <h3>More content</h3>
+            <SectionLine />
+            <div>
+              <h3>Previous Reviews</h3>
+              <hr />
+              {issues.map((issue, index) => {
+                let reviewUrlTemp = pageContext.clinicalArea.url
+                return (
+                  <Row key={index}>
+                    <Col xs={10}>
+                      <div className="issue-main-div">
+                        <a href={`/clinical-areas/${reviewUrlTemp}/${issue.name}`}>
+                          <div className="article-title">
+                            <p>
+                              · {issue.issue1}
+                            </p>
+                          </div>
+                        </a>
+                      </div>
+                    </Col>
+                    {issue.pdfDownloadUrl &&
+                      <Col xs={2}>
+                        <a href={issue.pdfDownloadUrl}>Download PDF</a>
                       </Col>
-                      {issue.pdfDownloadUrl &&
-                        <Col xs={2}>
-                          <a href={issue.pdfDownloadUrl}>Download PDF</a>
-                        </Col>
-                      }
-                    </Row>
-                  )
-                })}
-                <p><a href={`/clinical-areas/${pageContext.review.url}/all-issues`}>See all</a></p>
-              </div>
-            }
+                    }
+                  </Row>
+                )
+              })}
+              <p><a href="/">See all</a></p>
+            </div>
 
-            {conferenceReviews && conferenceReviews.length > 0 &&
-              <div>
-                <h3>Conference Reviews</h3>
-                <hr />
-                {conferenceReviews.map((conferenceReview, index) => {
-                  let reviewUrlTemp = pageContext.review.url
-                  return (
-                    <a key={index} href={`/clinical-areas/${reviewUrlTemp}/${conferenceReview.name}`}>
-                      <div className="article-title">
-                        <p>
-                          · {conferenceReview.issue1}
-                        </p>
-                      </div>
-                    </a>
-                  )
-                })}
-                <p><a href={`/clinical-areas/${pageContext.review.url}/all-conference-reviews`}>See all</a></p>
-              </div>
-            }
+            <div>
+              <h3>Conference Reviews</h3>
+              <hr />
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
+              <p><a href="/">See all</a></p>
+            </div>
 
-            {relevantReviews && relevantReviews.length > 0 &&
-              <div>
-                <h3>Relevant Articles</h3>
-                <hr />
-                {relevantReviews.map((relevantReview, index) => {
-                  let reviewUrlTemp = pageContext.review.url
-                  return (
-                    <a key={index} href={`/clinical-areas/${reviewUrlTemp}/${relevantReview.name}`}>
-                      <div className="article-title">
-                        <p>
-                          · {relevantReview.issue1}
-                        </p>
-                      </div>
-                    </a>
-                  )
-                })}
-                <p><a href={`/clinical-areas/${pageContext.review.url}/all-relevant-articles`}>See all</a></p>
-              </div>
-            }
-
+            <div>
+              <h3>Relevant Articles</h3>
+              <hr />
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
+              <p><a href="/">See all</a></p>
+            </div>
             {pageContext.podcasts && pageContext.podcasts.length > 0 &&
               <div>
                 <h3>Watch</h3>
                 <hr />
                 {pageContext.podcasts.map((podcast, index) => {
-                  let podcastUrlTemp = pageContext.review.url
+                  let podcastUrlTemp = pageContext.clinicalArea.url
                   const podcastName = podcast.name.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp + "/" + podcastName;
                   return (
-                    <a key={index} href={`/watch/${podcastUrlTemp}`}>
-                      <div className="article-title">
-                        <p>
-                          · {podcast.issue1}
-                        </p>
-                      </div>
-                    </a>
+                    <a key={index} href={`/watch/${podcastUrlTemp}`}><p>{podcast.issue1}</p></a>
                   )
                 })}
-                <p><a href={`/watch/${pageContext.review.url}/`}>See all</a></p>
+                <p><a href="/">See all</a></p>
               </div>
             }
 
@@ -245,15 +201,9 @@ const ReviewTemplate = ({
                 <h3>Related Links</h3>
                 <hr />
                 {pageContext.linksByReview.map((link, index) => (
-                  <a key={index} href={link.url}>
-                    <div className="article-title">
-                      <p>
-                        · {link.title}
-                      </p>
-                    </div>
-                  </a>
+                  <a key={index} href={link.url}><p>{link.title}</p></a>
                 ))}
-                <p><a href={`/links/${pageContext.review.url}/`}>See all</a></p>
+                <p><a href="/">See all</a></p>
               </div>
             }
           </Col>
@@ -270,11 +220,119 @@ const ReviewTemplate = ({
         </Row>
       </Container>
 
+      {/*<Container fluid>
+        <Row>
+           {pageContext.advertisements &&
+            <FullScreenAd advertisements={pageContext.advertisements} />
+          } 
+
+          {pageContext.podcasts && pageContext.podcasts.length > 0 &&
+            <section className="home-page-connect-section">
+              <Container>
+                <Row>
+                  <Col xs={12}>
+                    <h2>Podcasts</h2>
+                  </Col>
+                  <SectionLine />
+                  <Col xs={12}>
+                    <Row>
+                      {pageContext.podcasts.map((podcast, index) => {
+                        let reviewUrlTemp = pageContext.review.url
+
+                        let podcastUrlTemp = podcast.title.toLowerCase();
+                        podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
+
+                        return (
+
+                          <Col md={4} sm={6} xs={12} key={index}>
+                            <div className="promoted-content">
+                              <a href={`/watch/${reviewUrlTemp}/${podcastUrlTemp}`}>
+                                <div className="promoted-content-image">
+                                  <img
+                                    alt="research review image showing a medical practice"
+                                    src={randomImage(index)}
+                                    className="img-fluid"
+                                    width="400"
+                                    height="230"
+                                  />
+                                </div>
+                                <div className="promoted-content-content">
+                                  <h3>{podcast.title}</h3>
+                                  <p>
+                                    {podcast.introText}
+                                  </p>
+                                  <span className="btn btn-primary" href={`/watch/${reviewUrlTemp}/${podcastUrlTemp}`}>Watch</span>
+                                </div>
+                              </a>
+                            </div>
+                          </Col>
+                        )
+                      })}
+
+                    </Row>
+                  </Col>
+                </Row>
+              </Container>
+            </section>
+          }
+
+          <section className="home-page-connect-section promoted-content">
+            <Container>
+              <Row>
+                {pageContext.linksByReview && pageContext.linksByReview.length > 0 &&
+                  <Col md={4} sm={6} xs={12}>
+                    <h3>Useful Links</h3>
+                    {pageContext.linksByReview.map((link, index) => {
+                      return (
+                        <div key={index}>
+                          <a href={link.url}>
+                            <p>{link.title}</p>
+                          </a>
+                        </div>
+                      )
+                    })}
+                  </Col>
+                }
+
+
+                <Col md={4} sm={6} xs={12}>
+                  <h3>Download</h3>
+                  <p style={{ marginBottom: 0 }}>Download a sample publication below</p>
+                  <a href='/sample-reviews/'>Click Here</a>
+                </Col>
+
+              </Row>
+            </Container>
+          </section>
+
+          <Supporters partnersMacroContent={pageContext.partnersMacroContent} />
+        </Row>
+      </Container>*/}
       <Container>
         <JoinRR signUpFormContent={pageContext.signUpFormContent} />
       </Container>
-    </Layout >
+    </Layout>
   )
 }
 
+// export const Head = ({ data: { markdownRemark: post } }) => {
+//   return (
+//     <Seo
+//       title={post.frontmatter.title}
+//       description={post.frontmatter.description || post.excerpt}
+//     />
+//   )
+// }
+
 export default ReviewTemplate
+
+// export const pageQuery = graphql`
+//   query allRestApiApiReviews($filter: {clinical_Area_Id: {eq: "$endpointId"}}) {
+//     nodes {
+//       endpointId
+//       name
+//       clinical_Area_Id
+//       modified_Time
+//     }
+//   }
+// `

@@ -16,26 +16,16 @@ import FullScreenAd from "../components/fullScreenAd";
 import DoubleAd from "../components/doubleAd";
 import BreadcrumbComponent from "../components/breadcrumbComponent";
 // import testAd from "../assets/img/Ads/AU-RR-Facebook-web-ad.jpg";
-import Cookies from "universal-cookie"
+
 const IssueTemplate = ({
   location,
   pageContext
 }) => {
   const [reviewPageURL, setReviewPageURL] = useState();
-  const [showMenu, setShowMenu] = useState(false);
-  const [showSummary, setShowSummary] = useState(false);
-  const [showContent, setShowContent] = useState(false);
-  const cookies = new Cookies();
+
   useEffect(() => {
     console.log("pageContext", pageContext);
-    const encryptionKey = cookies.get('EncryptionKey');
-    if (pageContext.showMenu) {
-      setShowMenu(true)
-    }
-    if (encryptionKey) {
-      // Checks if user is logged in
-      setShowMenu(true)
-    }
+
     // Need to adjust the tempURLPath to get the original review URL for the back button.
     let originalURL = pageContext.tempUrlPath;
     // Split the URL by "/"
@@ -44,7 +34,6 @@ const IssueTemplate = ({
     urlParts.splice(-2, 2);
     let adjustedReviewPageURL = urlParts.join("/");
     setReviewPageURL(adjustedReviewPageURL);
-
   }, [pageContext]);
 
   const bannerContent = {
@@ -67,15 +56,11 @@ const IssueTemplate = ({
             </Col>
             <Col lg={8} xs={12}>
               <div className="issue-description">
-                {pageContext.issue.description &&
-                  <div>
-                    <SectionLine />
-                    <p>{pageContext.issue.description}</p>
-                  </div>
-                }
+                <SectionLine />
+                {pageContext.issue.description &&  <p>{pageContext.issue.description}</p>}
               </div>
               <div className="articles-section">
-                {showMenu && pageContext.articles.length > 0 &&
+                {pageContext.articles.length > 0 &&
                   <div>
                     <h3>In this issue</h3>
                     <SectionLine />
@@ -107,15 +92,53 @@ const IssueTemplate = ({
                     })}
                   </div>
                 }
-                {!showMenu &&
-                  <div className="full-width-button not-logged-in">
-                    <div className="">
-                      <p className="btn btn-secondary load-more-button"><a href="#navbar">Login</a> or <a href="/join-research-review/">Register</a> to see our summary content</p>
-                    </div>
-                  </div>
-                }
               </div>
+              {/* <Row>
+                {pageContext.articles.map((article, index) => {
+                  const maxTitleLength = 75; // Set your desired maximum title length
+                  
+                  // Function to shorten the title if it's too long
+                  // THIS IS FAILING if title is NULL
+                  //  Update to check for a null value
+                  const shortenTitle = (title, maxLength) => {
+                    if(!title)
+                    {
+                      return "";
+                    }
+                    if (title.length > maxLength) {
+                      return title.substring(0, maxLength) + ' more...';
+                    }
+                    return title;
+                  }
 
+                  return (
+                    <Col md={4} sm={6} xs={12} key={index}>
+                      <div className="promoted-content">
+                        <a href={`${pageContext.tempUrlPath}${article.name}`}>
+                          <div className="promoted-content-image">
+                            <img
+                              alt="medical practice"
+                              src={randomImage(index)}
+                              className="img-fluid"
+                              width="400"
+                              height="230"
+                            />
+                          </div>
+                          <div className="promoted-content-content">
+                            <h3>{shortenTitle(article.title, maxTitleLength)}</h3>
+                            {article.authors &&
+                              <p>
+                                Authors: {article.authors}
+                              </p>
+                            }
+                            <span href={`${pageContext.tempUrlPath}${article.name}`} className="btn btn-primary">Read More</span>
+                          </div>
+                        </a>
+                      </div>
+                    </Col>
+                  )
+                })}
+              </Row> */}
             </Col>
             <Col md={4} xs={12}>
               <div className="download-section mb-5">

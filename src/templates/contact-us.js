@@ -14,16 +14,16 @@ const ContactUsTemplate = ({ pageContext, location }) => {
   //const siteTitle = `Clinical Areas`
 
   const bannerContent = {
-    bannerImage: pageContext.contactUsContent.bannerImage,
-    bannerText: pageContext.contactUsContent.bannerText,
-    buttonLink: pageContext.contactUsContent.buttonLink,
-    buttonText: pageContext.contactUsContent.buttonText,
+    bannerImage: pageContext.content.bannerImage,
+    bannerText: pageContext.content.bannerText,
+    buttonLink: pageContext.content.buttonLink,
+    buttonText: pageContext.content.buttonText,
   };
 
-  const introTextLeft = he.decode(pageContext.contactUsContent.introTextLeft);
-  const introTextRight = he.decode(pageContext.contactUsContent.introTextRight);
+  const introTextLeft = he.decode(pageContext.content.introTextLeft);
+  const introTextRight = he.decode(pageContext.content.introTextRight);
 
-  const sites = pageContext.contactUsContent.Children;
+  const sites = pageContext.content.Children;
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
