@@ -104,7 +104,7 @@ const PodcastsTreeTemplate = ({ pageContext, location }) => {
     }
 
     //check if the pill should show
-    let showPill = clinicalArea.PodCastCount > 0 || isReview;
+    let showPill = clinicalArea.PodCastCount > 0;
 
     if (showPill) {
       return (

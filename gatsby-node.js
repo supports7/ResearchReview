@@ -205,13 +205,23 @@ const queries = {
                 url
                 zohoId
                 Children {
+                  DocType
+                  LastModified
                   Node
+                  bannerImage
+                  bannerText
+                  buttonLink
+                  buttonText
                   information
+                  introText
+                  link
+                  moduleName
                   partnerLink
                   partnerLogo
                   partnerName
                   partnerText
-                  DocType
+                  text
+                  title
                 }
                 DocType
               }
@@ -341,19 +351,42 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           childClinicalArea.ModuleCount = 0;
 
           await Promise.all(clinicalAreas.map(async (clinicalArea) => {
+            clinicalArea.PodCasts = [];
+            clinicalArea.PodCastCount = 0;
+            clinicalArea.Links = [];
+            clinicalArea.LinksCount = 0;
+            clinicalArea.Writers = [];
+            clinicalArea.WritersCount = 0;
+            clinicalArea.Module = [];
+            clinicalArea.ModuleCount = 0;
+
             clinicalArea.name = clinicalArea.name.split(" (")[0];
             let reviewUrlTemp = clinicalArea.name.toLowerCase().split(' ').join('-');
             reviewUrlTemp = `${clinicalAreaUrl}/${reviewUrlTemp}`;
 
+            let podcasts = [];
+            let modulesByReview = [];
+
             const currentReviewUmbracoContent = find(reviewsContent, { zohoId: clinicalArea.alternative_id });
-            const podcasts = currentReviewUmbracoContent ? filter(currentReviewUmbracoContent.Children, { DocType: "podcast" }) : [];
-            const modulesByReview = currentReviewUmbracoContent ? filter(currentReviewUmbracoContent.Children, { DocType: "modules" }) : [];
-            const linksByReview = currentReviewUmbracoContent ? filter(currentReviewUmbracoContent.Children, { DocType: "link" }) : [];
+            podcasts = currentReviewUmbracoContent ? filter(currentReviewUmbracoContent.Children, { DocType: "podcast" }) : [];
+            modulesByReview = currentReviewUmbracoContent ? filter(currentReviewUmbracoContent.Children, { DocType: "modules" }) : [];
             const currentReviewAdvertisements = filter(allAdvertisements, { zohoId: clinicalArea.alternative_id }, []);
             const ads = currentReviewAdvertisements.length > 0 ? currentReviewAdvertisements : siteWideAdvertisements;
-
+            // const linksByReview = currentReviewUmbracoContent ? filter(currentReviewUmbracoContent.Children, { DocType: "link" }) : [];
+            // const podcasts = await getPodcasts(clinicalArea.alternative_id);
+            
             const issues = await getIssues(clinicalArea.alternative_id);
             const writersByReview = await getWritersByReview(clinicalArea.alternative_id);
+            const linksByReview = await getLinksByReview(clinicalArea.alternative_id);
+
+            // if(writersByReview.length > 0) {  
+            //   console.log("writersByReview", writersByReview)
+            //   console.log("clinicalArea", clinicalArea)
+            // }
+            // if(podcasts.length > 0) {  
+            //   console.log("podcasts", podcasts)
+            //   console.log("clinicalArea", clinicalArea)
+            // }
 
             createPage({
               path: `/clinical-areas/${reviewUrlTemp}/`,
@@ -374,6 +407,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             if (podcasts.length > 0) {
               childClinicalArea.PodCasts.push(...podcasts);
               childClinicalArea.PodCastCount += podcasts.length;
+
+              clinicalArea.PodCasts = podcasts;
+              clinicalArea.PodCastCount = podcasts.length;
 
               createPage({
                 path: `/watch/${reviewUrlTemp}/`,
@@ -427,9 +463,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 });
 
                 if (articles.length > 0) {
-                console.log("clinicalArea with issues", clinicalArea)
-                console.log("issue with article", issue)
-
                   await Promise.all(articles.map((article) => {
                     createPage({
                       path: `/clinical-areas/${reviewUrlTemp}/${issue.name}/${article.name}`,
@@ -458,6 +491,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               childClinicalArea.Links.push(...linksByReview);
               childClinicalArea.LinksCount = (childClinicalArea.LinksCount || 0) + linksByReview.length;
 
+              clinicalArea.Links = linksByReview;
+              clinicalArea.LinksCount = linksByReview.length;
+
               createPage({
                 path: `/links/${reviewUrlTemp}/`,
                 component: templates.links,
@@ -475,6 +511,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               childClinicalArea.Modules = childClinicalArea.Modules || [];
               childClinicalArea.Modules.push(...modulesByReview);
               childClinicalArea.ModulesCount = (childClinicalArea.ModulesCount || 0) + modulesByReview.length;
+
+              clinicalArea.Modules = modulesByReview;
+              clinicalArea.ModulesCount = modulesByReview.length;
 
               createPage({
                 path: `/modules/${reviewUrlTemp}/`,
@@ -494,6 +533,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               childClinicalArea.Writers.push(...writersByReview);
               childClinicalArea.WritersCount = (childClinicalArea.WritersCount || 0) + writersByReview.length;
 
+              clinicalArea.Writers = writersByReview;
+              clinicalArea.WritersCount = writersByReview.length;
+
               await Promise.all(writersByReview.map((writer) => {
                 const writerUrlTemp = writer.name.toLowerCase().split(' ').join('-');
 
@@ -512,6 +554,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
             clinicalArea.url = reviewUrlTemp;
           }));
+
           
           childClinicalArea.children = clinicalAreas;
         }

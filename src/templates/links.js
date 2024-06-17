@@ -9,11 +9,11 @@ import Banner from "../components/banner"
 import bannerImage from "../images/banner/national-cancer-institute-L8tWZT4CcVQ-unsplash.jpg"
 
 const LinksTemplate = ({ pageContext, location }) => {
-  const siteTitle = `${pageContext.review.name}`
+  const siteTitle = `${pageContext.clinicalArea.name}`
 
   const bannerContent = {
     bannerImage: bannerImage,
-    bannerText: pageContext.review.name + " Links",
+    bannerText: pageContext.clinicalArea.name + " Links",
     buttonLink: "",
     buttonText: "",
   };
@@ -26,7 +26,7 @@ const LinksTemplate = ({ pageContext, location }) => {
         <section className="section-top-content">
           <Row>
             <Col xs={12}>
-              <h2>{pageContext.review.name}</h2>
+              <h2>{pageContext.clinicalArea.name}</h2>
               <SectionLine />
               <div className="list-links">
                 {pageContext.links.map((link,index) => (

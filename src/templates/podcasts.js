@@ -33,7 +33,7 @@ const PodcastTemplate = ({
 
   const bannerContent = {
     bannerImage: bannerImage,
-    bannerText: pageContext.review.name,
+    bannerText: pageContext.podcasts.name,
     buttonLink: "",
     buttonText: "",
   };
@@ -51,7 +51,7 @@ const PodcastTemplate = ({
             <Col xs={12}>
               <Row>
                 {sortedPodcasts && sortedPodcasts.map((podcast, index) => {
-                  let podcastUrlTemp = podcast.name.toLowerCase();
+                  let podcastUrlTemp = podcast.title.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp.split(' ').join('-');
 
                   return (
@@ -68,7 +68,7 @@ const PodcastTemplate = ({
                             />
                           </div>
                           <div className="promoted-content-content">
-                            <h3>{podcast.issue1}</h3>
+                            <h3>{podcast.title}</h3>
                             <span className="btn btn-primary">View Podcast</span>
                           </div>
                         </a>

@@ -105,7 +105,7 @@ const LinksTreeTemplate = ({ pageContext, location }) => {
     }
 
     //check if the pill should show
-    let showPill = clinicalArea.LinksCount > 0 || isReview;
+    let showPill = clinicalArea.LinksCount > 0;
 
     if (showPill) {
       return (

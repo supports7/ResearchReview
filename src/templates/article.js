@@ -69,7 +69,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
                   })}
                 </div>
               }
-              <div className="abbreviations-section">
+              {/* <div className="abbreviations-section">
                 <h3>Abbreviations</h3>
                 <SectionLine />
                 <p><strong>ABC</strong> Auckland Business Council</p>
@@ -80,7 +80,7 @@ const ArticleTemplate = ({ pageContext, location }) => {
                 <p><strong>ABC</strong> Auckland Business Council</p>
                 <p><strong>ABC</strong> Auckland Business Council</p>
                 <p><strong>ABC</strong> Auckland Business Council</p>
-              </div>
+              </div> */}
             </Col>
             <Col lg={8} xs={12}>
               <SectionLine />

@@ -23,8 +23,8 @@ const PodcastDetailsTemplate = ({
 
   useEffect(() => {
    console.log("pageContext", pageContext);
-   if(pageContext.podcast.externalLink) {
-     let tempUrl = pageContext.podcast.externalLink;
+   if(pageContext.podcast.link) {
+     let tempUrl = pageContext.podcast.link;
      let newUrl = tempUrl;
      if (tempUrl.includes("youtu.be")) {
        newUrl = tempUrl.replace("youtu.be", "www.youtube.com/embed");

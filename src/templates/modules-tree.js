@@ -105,7 +105,7 @@ const ModulesTreeTemplate = ({ pageContext, location }) => {
     }
 
     //check if the pill should show
-    let showPill = clinicalArea.ModulesCount > 0 || isReview;
+    let showPill = clinicalArea.ModulesCount > 0;
 
     if (showPill) {
       return (

@@ -159,37 +159,27 @@ const ReviewTemplate = ({
               <p><a href="/">See all</a></p>
             </div>
 
-            <div>
+            {/* <div>
               <h3>Conference Reviews</h3>
               <hr />
-              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Conference Reviews DATA</p></a>
               <p><a href="/">See all</a></p>
             </div>
 
             <div>
               <h3>Relevant Articles</h3>
               <hr />
-              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
-              <a href={`/clinical-areas/`}><p>· TESTING Relevant Articles DATA</p></a>
               <p><a href="/">See all</a></p>
-            </div>
+            </div> */}
             {pageContext.podcasts && pageContext.podcasts.length > 0 &&
               <div>
                 <h3>Watch</h3>
                 <hr />
                 {pageContext.podcasts.map((podcast, index) => {
                   let podcastUrlTemp = pageContext.clinicalArea.url
-                  const podcastName = podcast.name.toLowerCase();
+                  const podcastName = podcast.title.toLowerCase();
                   podcastUrlTemp = podcastUrlTemp + "/" + podcastName;
                   return (
-                    <a key={index} href={`/watch/${podcastUrlTemp}`}><p>{podcast.issue1}</p></a>
+                    <a key={index} href={`/watch/${podcastUrlTemp}`}><p>{podcast.title}</p></a>
                   )
                 })}
                 <p><a href="/">See all</a></p>

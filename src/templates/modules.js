@@ -24,7 +24,7 @@ const ModulesTemplate = ({
   //const [loadingLogin, setLoadingLogin] = useState(true);
 
   useEffect(() => {
-   // console.log("pageContext", pageContext);
+   console.log("pageContext", pageContext);
 
     //setLoadingLogin(true);
     const encryptionKey = cookies.get("EncryptionKey")
@@ -36,7 +36,7 @@ const ModulesTemplate = ({
 
   const bannerContent = {
     bannerImage: bannerImage,
-    bannerText: pageContext.review.name + " Modules",
+    bannerText: pageContext.clinicalArea.name + " Modules",
     buttonLink: "",
     buttonText: "",
   };

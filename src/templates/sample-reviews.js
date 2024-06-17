@@ -37,8 +37,8 @@ const SampleReviewsTemplate = ({
 
 				<section className="modules-page-modules-list pt-0">
 					<Row>
-						{pageContext.sampleReviews && pageContext.sampleReviews.Children &&
-							pageContext.sampleReviews.Children.map((sampleReview, index) => {
+						{pageContext.content && pageContext.content.Children &&
+							pageContext.content.Children.map((sampleReview, index) => {
 								return (
 									<a key={index} target="_blank" href={`https://rrcms.s05.system7.co.nz${sampleReview.file}`}><p>{sampleReview.title}</p></a>
 								)

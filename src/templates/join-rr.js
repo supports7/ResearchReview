@@ -51,7 +51,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
   const hideSuccessMessage = () => {
     setShowSuccessPopup(false);
   };
-  
+
   const handleProfessionChange = (e) => {
     setProfession(e.target.value);
     const selectedProfession = find(pageContext.signUpFormContent.professions, { name: e.target.value });
@@ -80,7 +80,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
         setRegisterError("reCAPTCHA not complete.")
         return;
       }
-      if(profession == "") {
+      if (profession == "") {
         setRegisterError("Please select your profession")
         return
       }
@@ -115,7 +115,7 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
         .then(res => res.json())
         .then(
           result => {
-          //  console.log("result", result)
+            //  console.log("result", result)
             cookies.set("userData", result, {
               path: "/",
               expires: new Date(Date.now() + 8640000),
@@ -418,28 +418,30 @@ const JoinResearchReviewTemplate = ({ pageContext }) => {
               <Col xs={12}>
                 <Row>
                   {pageContext.content.Children.map((service) => {
-                    return (
-                      <Col md={4} sm={6} xs={12}>
-                        <div className="promoted-content">
-                          <div className="promoted-content-image">
-                            <img
-                              alt="placeholder"
-                              src={service.serviceImage}
-                              className="img-fluid"
-                            />
+                    if (service.serviceImage) {
+                      return (
+                        <Col md={4} sm={6} xs={12}>
+                          <div className="promoted-content">
+                            <div className="promoted-content-image">
+                              <img
+                                alt="placeholder"
+                                src={service.serviceImage}
+                                className="img-fluid"
+                              />
+                            </div>
+                            <div className="promoted-content-content">
+                              <h3>{service.title}</h3>
+                              <p>
+                                {service.text}
+                              </p>
+                              <a href={service.link} className="btn btn-primary">
+                                See all
+                              </a>
+                            </div>
                           </div>
-                          <div className="promoted-content-content">
-                            <h3>{service.title}</h3>
-                            <p>
-                              {service.text}
-                            </p>
-                            <a href={service.link} className="btn btn-primary">
-                              See all
-                            </a>
-                          </div>
-                        </div>
-                      </Col>
-                    )
+                        </Col>
+                      )
+                    }
                   })}
                 </Row>
               </Col>
